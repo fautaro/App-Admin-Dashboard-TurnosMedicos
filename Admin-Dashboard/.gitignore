@@ -1,0 +1,48 @@
+# Carpeta de salida de compilación
+/bin/
+/obj/
+
+# Archivos de configuración local
+/appsettings.Development.json
+/appsettings.Local.json
+
+# Archivos de usuario
+.vs/
+*.user
+
+# Archivos de registro
+*.log
+
+# Archivos de respaldo de Visual Studio
+*.bak
+*.bak2
+*.bak3
+*.bak4
+*.bak5
+*.bak6
+*.bak7
+*.bak8
+*.bak9
+
+# Archivos de caché y binarios
+*.cache
+*.dll
+*.exe
+*.pdb
+
+# Archivos generados automáticamente
+/appsettings.json.save
+/appsettings.Production.json.save
+/appsettings.Staging.json.save
+
+# Archivos de migración
+**/*.Designer.cs
+**/*.edmx
+
+# Archivos de prueba
+/TestResults/
+/[Bb]in/[Dd]ebug/
+/[Oo]bj/
+/*.vspscc
+/*.vssscc
+/*.*proj.user
