@@ -1,0 +1,140 @@
+D:\TurnsoMedicos\App-turnos-medicos\Admin-Dashboard\bin\Debug\net6.0\appsettings.Development.json
+D:\TurnsoMedicos\App-turnos-medicos\Admin-Dashboard\bin\Debug\net6.0\appsettings.json
+D:\TurnsoMedicos\App-turnos-medicos\Admin-Dashboard\bin\Debug\net6.0\Admin-Dashboard.staticwebassets.runtime.json
+D:\TurnsoMedicos\App-turnos-medicos\Admin-Dashboard\bin\Debug\net6.0\Admin-Dashboard.exe
+D:\TurnsoMedicos\App-turnos-medicos\Admin-Dashboard\bin\Debug\net6.0\Admin-Dashboard.deps.json
+D:\TurnsoMedicos\App-turnos-medicos\Admin-Dashboard\bin\Debug\net6.0\Admin-Dashboard.runtimeconfig.json
+D:\TurnsoMedicos\App-turnos-medicos\Admin-Dashboard\bin\Debug\net6.0\Admin-Dashboard.dll
+D:\TurnsoMedicos\App-turnos-medicos\Admin-Dashboard\bin\Debug\net6.0\Admin-Dashboard.pdb
+D:\TurnsoMedicos\App-turnos-medicos\Admin-Dashboard\bin\Debug\net6.0\Humanizer.dll
+D:\TurnsoMedicos\App-turnos-medicos\Admin-Dashboard\bin\Debug\net6.0\Microsoft.AspNetCore.Cryptography.Internal.dll
+D:\TurnsoMedicos\App-turnos-medicos\Admin-Dashboard\bin\Debug\net6.0\Microsoft.AspNetCore.Cryptography.KeyDerivation.dll
+D:\TurnsoMedicos\App-turnos-medicos\Admin-Dashboard\bin\Debug\net6.0\Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore.dll
+D:\TurnsoMedicos\App-turnos-medicos\Admin-Dashboard\bin\Debug\net6.0\Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll
+D:\TurnsoMedicos\App-turnos-medicos\Admin-Dashboard\bin\Debug\net6.0\Microsoft.AspNetCore.Identity.UI.dll
+D:\TurnsoMedicos\App-turnos-medicos\Admin-Dashboard\bin\Debug\net6.0\Microsoft.Data.SqlClient.dll
+D:\TurnsoMedicos\App-turnos-medicos\Admin-Dashboard\bin\Debug\net6.0\Microsoft.EntityFrameworkCore.dll
+D:\TurnsoMedicos\App-turnos-medicos\Admin-Dashboard\bin\Debug\net6.0\Microsoft.EntityFrameworkCore.Abstractions.dll
+D:\TurnsoMedicos\App-turnos-medicos\Admin-Dashboard\bin\Debug\net6.0\Microsoft.EntityFrameworkCore.Design.dll
+D:\TurnsoMedicos\App-turnos-medicos\Admin-Dashboard\bin\Debug\net6.0\Microsoft.EntityFrameworkCore.Relational.dll
+D:\TurnsoMedicos\App-turnos-medicos\Admin-Dashboard\bin\Debug\net6.0\Microsoft.EntityFrameworkCore.SqlServer.dll
+D:\TurnsoMedicos\App-turnos-medicos\Admin-Dashboard\bin\Debug\net6.0\Microsoft.Extensions.Caching.Memory.dll
+D:\TurnsoMedicos\App-turnos-medicos\Admin-Dashboard\bin\Debug\net6.0\Microsoft.Extensions.FileProviders.Embedded.dll
+D:\TurnsoMedicos\App-turnos-medicos\Admin-Dashboard\bin\Debug\net6.0\Microsoft.Extensions.Identity.Core.dll
+D:\TurnsoMedicos\App-turnos-medicos\Admin-Dashboard\bin\Debug\net6.0\Microsoft.Extensions.Identity.Stores.dll
+D:\TurnsoMedicos\App-turnos-medicos\Admin-Dashboard\bin\Debug\net6.0\Microsoft.Identity.Client.dll
+D:\TurnsoMedicos\App-turnos-medicos\Admin-Dashboard\bin\Debug\net6.0\Microsoft.IdentityModel.JsonWebTokens.dll
+D:\TurnsoMedicos\App-turnos-medicos\Admin-Dashboard\bin\Debug\net6.0\Microsoft.IdentityModel.Logging.dll
+D:\TurnsoMedicos\App-turnos-medicos\Admin-Dashboard\bin\Debug\net6.0\Microsoft.IdentityModel.Protocols.dll
+D:\TurnsoMedicos\App-turnos-medicos\Admin-Dashboard\bin\Debug\net6.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+D:\TurnsoMedicos\App-turnos-medicos\Admin-Dashboard\bin\Debug\net6.0\Microsoft.IdentityModel.Tokens.dll
+D:\TurnsoMedicos\App-turnos-medicos\Admin-Dashboard\bin\Debug\net6.0\Microsoft.Win32.SystemEvents.dll
+D:\TurnsoMedicos\App-turnos-medicos\Admin-Dashboard\bin\Debug\net6.0\System.Configuration.ConfigurationManager.dll
+D:\TurnsoMedicos\App-turnos-medicos\Admin-Dashboard\bin\Debug\net6.0\System.Drawing.Common.dll
+D:\TurnsoMedicos\App-turnos-medicos\Admin-Dashboard\bin\Debug\net6.0\System.IdentityModel.Tokens.Jwt.dll
+D:\TurnsoMedicos\App-turnos-medicos\Admin-Dashboard\bin\Debug\net6.0\System.Runtime.Caching.dll
+D:\TurnsoMedicos\App-turnos-medicos\Admin-Dashboard\bin\Debug\net6.0\System.Security.Cryptography.ProtectedData.dll
+D:\TurnsoMedicos\App-turnos-medicos\Admin-Dashboard\bin\Debug\net6.0\System.Security.Permissions.dll
+D:\TurnsoMedicos\App-turnos-medicos\Admin-Dashboard\bin\Debug\net6.0\System.Windows.Extensions.dll
+D:\TurnsoMedicos\App-turnos-medicos\Admin-Dashboard\bin\Debug\net6.0\runtimes\unix\lib\netcoreapp3.1\Microsoft.Data.SqlClient.dll
+D:\TurnsoMedicos\App-turnos-medicos\Admin-Dashboard\bin\Debug\net6.0\runtimes\win\lib\netcoreapp3.1\Microsoft.Data.SqlClient.dll
+D:\TurnsoMedicos\App-turnos-medicos\Admin-Dashboard\bin\Debug\net6.0\runtimes\win-arm\native\Microsoft.Data.SqlClient.SNI.dll
+D:\TurnsoMedicos\App-turnos-medicos\Admin-Dashboard\bin\Debug\net6.0\runtimes\win-arm64\native\Microsoft.Data.SqlClient.SNI.dll
+D:\TurnsoMedicos\App-turnos-medicos\Admin-Dashboard\bin\Debug\net6.0\runtimes\win-x64\native\Microsoft.Data.SqlClient.SNI.dll
+D:\TurnsoMedicos\App-turnos-medicos\Admin-Dashboard\bin\Debug\net6.0\runtimes\win-x86\native\Microsoft.Data.SqlClient.SNI.dll
+D:\TurnsoMedicos\App-turnos-medicos\Admin-Dashboard\bin\Debug\net6.0\runtimes\win\lib\netcoreapp3.0\Microsoft.Win32.SystemEvents.dll
+D:\TurnsoMedicos\App-turnos-medicos\Admin-Dashboard\bin\Debug\net6.0\runtimes\unix\lib\netcoreapp3.0\System.Drawing.Common.dll
+D:\TurnsoMedicos\App-turnos-medicos\Admin-Dashboard\bin\Debug\net6.0\runtimes\win\lib\netcoreapp3.0\System.Drawing.Common.dll
+D:\TurnsoMedicos\App-turnos-medicos\Admin-Dashboard\bin\Debug\net6.0\runtimes\win\lib\netstandard2.0\System.Runtime.Caching.dll
+D:\TurnsoMedicos\App-turnos-medicos\Admin-Dashboard\bin\Debug\net6.0\runtimes\win\lib\netstandard2.0\System.Security.Cryptography.ProtectedData.dll
+D:\TurnsoMedicos\App-turnos-medicos\Admin-Dashboard\bin\Debug\net6.0\runtimes\win\lib\netcoreapp3.0\System.Windows.Extensions.dll
+D:\TurnsoMedicos\App-turnos-medicos\Admin-Dashboard\obj\Debug\net6.0\Admin-Dashboard.csproj.AssemblyReference.cache
+D:\TurnsoMedicos\App-turnos-medicos\Admin-Dashboard\obj\Debug\net6.0\Admin-Dashboard.GeneratedMSBuildEditorConfig.editorconfig
+D:\TurnsoMedicos\App-turnos-medicos\Admin-Dashboard\obj\Debug\net6.0\Admin-Dashboard.AssemblyInfoInputs.cache
+D:\TurnsoMedicos\App-turnos-medicos\Admin-Dashboard\obj\Debug\net6.0\Admin-Dashboard.AssemblyInfo.cs
+D:\TurnsoMedicos\App-turnos-medicos\Admin-Dashboard\obj\Debug\net6.0\Admin-Dashboard.csproj.CoreCompileInputs.cache
+D:\TurnsoMedicos\App-turnos-medicos\Admin-Dashboard\obj\Debug\net6.0\Admin-Dashboard.MvcApplicationPartsAssemblyInfo.cs
+D:\TurnsoMedicos\App-turnos-medicos\Admin-Dashboard\obj\Debug\net6.0\Admin-Dashboard.MvcApplicationPartsAssemblyInfo.cache
+D:\TurnsoMedicos\App-turnos-medicos\Admin-Dashboard\obj\Debug\net6.0\Admin-Dashboard.RazorAssemblyInfo.cache
+D:\TurnsoMedicos\App-turnos-medicos\Admin-Dashboard\obj\Debug\net6.0\Admin-Dashboard.RazorAssemblyInfo.cs
+D:\TurnsoMedicos\App-turnos-medicos\Admin-Dashboard\obj\Debug\net6.0\staticwebassets.build.json
+D:\TurnsoMedicos\App-turnos-medicos\Admin-Dashboard\obj\Debug\net6.0\staticwebassets.development.json
+D:\TurnsoMedicos\App-turnos-medicos\Admin-Dashboard\obj\Debug\net6.0\scopedcss\Views\Shared\_Layout.cshtml.rz.scp.css
+D:\TurnsoMedicos\App-turnos-medicos\Admin-Dashboard\obj\Debug\net6.0\scopedcss\bundle\Admin-Dashboard.styles.css
+D:\TurnsoMedicos\App-turnos-medicos\Admin-Dashboard\obj\Debug\net6.0\scopedcss\projectbundle\Admin-Dashboard.bundle.scp.css
+D:\TurnsoMedicos\App-turnos-medicos\Admin-Dashboard\obj\Debug\net6.0\Admin-Dashboard.csproj.CopyComplete
+D:\TurnsoMedicos\App-turnos-medicos\Admin-Dashboard\obj\Debug\net6.0\Admin-Dashboard.dll
+D:\TurnsoMedicos\App-turnos-medicos\Admin-Dashboard\obj\Debug\net6.0\refint\Admin-Dashboard.dll
+D:\TurnsoMedicos\App-turnos-medicos\Admin-Dashboard\obj\Debug\net6.0\Admin-Dashboard.pdb
+D:\TurnsoMedicos\App-turnos-medicos\Admin-Dashboard\obj\Debug\net6.0\Admin-Dashboard.genruntimeconfig.cache
+D:\TurnsoMedicos\App-turnos-medicos\Admin-Dashboard\obj\Debug\net6.0\ref\Admin-Dashboard.dll
+C:\Users\Fautaro\Desktop\Turnos Medicos\App-Admin-Dashboard-TurnosMedicos\Admin-Dashboard\bin\Debug\net6.0\appsettings.Development.json
+C:\Users\Fautaro\Desktop\Turnos Medicos\App-Admin-Dashboard-TurnosMedicos\Admin-Dashboard\bin\Debug\net6.0\appsettings.json
+C:\Users\Fautaro\Desktop\Turnos Medicos\App-Admin-Dashboard-TurnosMedicos\Admin-Dashboard\bin\Debug\net6.0\Admin-Dashboard.staticwebassets.runtime.json
+C:\Users\Fautaro\Desktop\Turnos Medicos\App-Admin-Dashboard-TurnosMedicos\Admin-Dashboard\bin\Debug\net6.0\Admin-Dashboard.exe
+C:\Users\Fautaro\Desktop\Turnos Medicos\App-Admin-Dashboard-TurnosMedicos\Admin-Dashboard\bin\Debug\net6.0\Admin-Dashboard.deps.json
+C:\Users\Fautaro\Desktop\Turnos Medicos\App-Admin-Dashboard-TurnosMedicos\Admin-Dashboard\bin\Debug\net6.0\Admin-Dashboard.runtimeconfig.json
+C:\Users\Fautaro\Desktop\Turnos Medicos\App-Admin-Dashboard-TurnosMedicos\Admin-Dashboard\bin\Debug\net6.0\Admin-Dashboard.dll
+C:\Users\Fautaro\Desktop\Turnos Medicos\App-Admin-Dashboard-TurnosMedicos\Admin-Dashboard\bin\Debug\net6.0\Admin-Dashboard.pdb
+C:\Users\Fautaro\Desktop\Turnos Medicos\App-Admin-Dashboard-TurnosMedicos\Admin-Dashboard\bin\Debug\net6.0\Humanizer.dll
+C:\Users\Fautaro\Desktop\Turnos Medicos\App-Admin-Dashboard-TurnosMedicos\Admin-Dashboard\bin\Debug\net6.0\Microsoft.AspNetCore.Cryptography.Internal.dll
+C:\Users\Fautaro\Desktop\Turnos Medicos\App-Admin-Dashboard-TurnosMedicos\Admin-Dashboard\bin\Debug\net6.0\Microsoft.AspNetCore.Cryptography.KeyDerivation.dll
+C:\Users\Fautaro\Desktop\Turnos Medicos\App-Admin-Dashboard-TurnosMedicos\Admin-Dashboard\bin\Debug\net6.0\Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore.dll
+C:\Users\Fautaro\Desktop\Turnos Medicos\App-Admin-Dashboard-TurnosMedicos\Admin-Dashboard\bin\Debug\net6.0\Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll
+C:\Users\Fautaro\Desktop\Turnos Medicos\App-Admin-Dashboard-TurnosMedicos\Admin-Dashboard\bin\Debug\net6.0\Microsoft.AspNetCore.Identity.UI.dll
+C:\Users\Fautaro\Desktop\Turnos Medicos\App-Admin-Dashboard-TurnosMedicos\Admin-Dashboard\bin\Debug\net6.0\Microsoft.Data.SqlClient.dll
+C:\Users\Fautaro\Desktop\Turnos Medicos\App-Admin-Dashboard-TurnosMedicos\Admin-Dashboard\bin\Debug\net6.0\Microsoft.EntityFrameworkCore.dll
+C:\Users\Fautaro\Desktop\Turnos Medicos\App-Admin-Dashboard-TurnosMedicos\Admin-Dashboard\bin\Debug\net6.0\Microsoft.EntityFrameworkCore.Abstractions.dll
+C:\Users\Fautaro\Desktop\Turnos Medicos\App-Admin-Dashboard-TurnosMedicos\Admin-Dashboard\bin\Debug\net6.0\Microsoft.EntityFrameworkCore.Design.dll
+C:\Users\Fautaro\Desktop\Turnos Medicos\App-Admin-Dashboard-TurnosMedicos\Admin-Dashboard\bin\Debug\net6.0\Microsoft.EntityFrameworkCore.Relational.dll
+C:\Users\Fautaro\Desktop\Turnos Medicos\App-Admin-Dashboard-TurnosMedicos\Admin-Dashboard\bin\Debug\net6.0\Microsoft.EntityFrameworkCore.SqlServer.dll
+C:\Users\Fautaro\Desktop\Turnos Medicos\App-Admin-Dashboard-TurnosMedicos\Admin-Dashboard\bin\Debug\net6.0\Microsoft.Extensions.Caching.Memory.dll
+C:\Users\Fautaro\Desktop\Turnos Medicos\App-Admin-Dashboard-TurnosMedicos\Admin-Dashboard\bin\Debug\net6.0\Microsoft.Extensions.FileProviders.Embedded.dll
+C:\Users\Fautaro\Desktop\Turnos Medicos\App-Admin-Dashboard-TurnosMedicos\Admin-Dashboard\bin\Debug\net6.0\Microsoft.Extensions.Identity.Core.dll
+C:\Users\Fautaro\Desktop\Turnos Medicos\App-Admin-Dashboard-TurnosMedicos\Admin-Dashboard\bin\Debug\net6.0\Microsoft.Extensions.Identity.Stores.dll
+C:\Users\Fautaro\Desktop\Turnos Medicos\App-Admin-Dashboard-TurnosMedicos\Admin-Dashboard\bin\Debug\net6.0\Microsoft.Identity.Client.dll
+C:\Users\Fautaro\Desktop\Turnos Medicos\App-Admin-Dashboard-TurnosMedicos\Admin-Dashboard\bin\Debug\net6.0\Microsoft.IdentityModel.JsonWebTokens.dll
+C:\Users\Fautaro\Desktop\Turnos Medicos\App-Admin-Dashboard-TurnosMedicos\Admin-Dashboard\bin\Debug\net6.0\Microsoft.IdentityModel.Logging.dll
+C:\Users\Fautaro\Desktop\Turnos Medicos\App-Admin-Dashboard-TurnosMedicos\Admin-Dashboard\bin\Debug\net6.0\Microsoft.IdentityModel.Protocols.dll
+C:\Users\Fautaro\Desktop\Turnos Medicos\App-Admin-Dashboard-TurnosMedicos\Admin-Dashboard\bin\Debug\net6.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+C:\Users\Fautaro\Desktop\Turnos Medicos\App-Admin-Dashboard-TurnosMedicos\Admin-Dashboard\bin\Debug\net6.0\Microsoft.IdentityModel.Tokens.dll
+C:\Users\Fautaro\Desktop\Turnos Medicos\App-Admin-Dashboard-TurnosMedicos\Admin-Dashboard\bin\Debug\net6.0\Microsoft.Win32.SystemEvents.dll
+C:\Users\Fautaro\Desktop\Turnos Medicos\App-Admin-Dashboard-TurnosMedicos\Admin-Dashboard\bin\Debug\net6.0\System.Configuration.ConfigurationManager.dll
+C:\Users\Fautaro\Desktop\Turnos Medicos\App-Admin-Dashboard-TurnosMedicos\Admin-Dashboard\bin\Debug\net6.0\System.Drawing.Common.dll
+C:\Users\Fautaro\Desktop\Turnos Medicos\App-Admin-Dashboard-TurnosMedicos\Admin-Dashboard\bin\Debug\net6.0\System.IdentityModel.Tokens.Jwt.dll
+C:\Users\Fautaro\Desktop\Turnos Medicos\App-Admin-Dashboard-TurnosMedicos\Admin-Dashboard\bin\Debug\net6.0\System.Runtime.Caching.dll
+C:\Users\Fautaro\Desktop\Turnos Medicos\App-Admin-Dashboard-TurnosMedicos\Admin-Dashboard\bin\Debug\net6.0\System.Security.Cryptography.ProtectedData.dll
+C:\Users\Fautaro\Desktop\Turnos Medicos\App-Admin-Dashboard-TurnosMedicos\Admin-Dashboard\bin\Debug\net6.0\System.Security.Permissions.dll
+C:\Users\Fautaro\Desktop\Turnos Medicos\App-Admin-Dashboard-TurnosMedicos\Admin-Dashboard\bin\Debug\net6.0\System.Windows.Extensions.dll
+C:\Users\Fautaro\Desktop\Turnos Medicos\App-Admin-Dashboard-TurnosMedicos\Admin-Dashboard\bin\Debug\net6.0\runtimes\unix\lib\netcoreapp3.1\Microsoft.Data.SqlClient.dll
+C:\Users\Fautaro\Desktop\Turnos Medicos\App-Admin-Dashboard-TurnosMedicos\Admin-Dashboard\bin\Debug\net6.0\runtimes\win\lib\netcoreapp3.1\Microsoft.Data.SqlClient.dll
+C:\Users\Fautaro\Desktop\Turnos Medicos\App-Admin-Dashboard-TurnosMedicos\Admin-Dashboard\bin\Debug\net6.0\runtimes\win-arm\native\Microsoft.Data.SqlClient.SNI.dll
+C:\Users\Fautaro\Desktop\Turnos Medicos\App-Admin-Dashboard-TurnosMedicos\Admin-Dashboard\bin\Debug\net6.0\runtimes\win-arm64\native\Microsoft.Data.SqlClient.SNI.dll
+C:\Users\Fautaro\Desktop\Turnos Medicos\App-Admin-Dashboard-TurnosMedicos\Admin-Dashboard\bin\Debug\net6.0\runtimes\win-x64\native\Microsoft.Data.SqlClient.SNI.dll
+C:\Users\Fautaro\Desktop\Turnos Medicos\App-Admin-Dashboard-TurnosMedicos\Admin-Dashboard\bin\Debug\net6.0\runtimes\win-x86\native\Microsoft.Data.SqlClient.SNI.dll
+C:\Users\Fautaro\Desktop\Turnos Medicos\App-Admin-Dashboard-TurnosMedicos\Admin-Dashboard\bin\Debug\net6.0\runtimes\win\lib\netcoreapp3.0\Microsoft.Win32.SystemEvents.dll
+C:\Users\Fautaro\Desktop\Turnos Medicos\App-Admin-Dashboard-TurnosMedicos\Admin-Dashboard\bin\Debug\net6.0\runtimes\unix\lib\netcoreapp3.0\System.Drawing.Common.dll
+C:\Users\Fautaro\Desktop\Turnos Medicos\App-Admin-Dashboard-TurnosMedicos\Admin-Dashboard\bin\Debug\net6.0\runtimes\win\lib\netcoreapp3.0\System.Drawing.Common.dll
+C:\Users\Fautaro\Desktop\Turnos Medicos\App-Admin-Dashboard-TurnosMedicos\Admin-Dashboard\bin\Debug\net6.0\runtimes\win\lib\netstandard2.0\System.Runtime.Caching.dll
+C:\Users\Fautaro\Desktop\Turnos Medicos\App-Admin-Dashboard-TurnosMedicos\Admin-Dashboard\bin\Debug\net6.0\runtimes\win\lib\netstandard2.0\System.Security.Cryptography.ProtectedData.dll
+C:\Users\Fautaro\Desktop\Turnos Medicos\App-Admin-Dashboard-TurnosMedicos\Admin-Dashboard\bin\Debug\net6.0\runtimes\win\lib\netcoreapp3.0\System.Windows.Extensions.dll
+C:\Users\Fautaro\Desktop\Turnos Medicos\App-Admin-Dashboard-TurnosMedicos\Admin-Dashboard\obj\Debug\net6.0\Admin-Dashboard.csproj.AssemblyReference.cache
+C:\Users\Fautaro\Desktop\Turnos Medicos\App-Admin-Dashboard-TurnosMedicos\Admin-Dashboard\obj\Debug\net6.0\Admin-Dashboard.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Fautaro\Desktop\Turnos Medicos\App-Admin-Dashboard-TurnosMedicos\Admin-Dashboard\obj\Debug\net6.0\Admin-Dashboard.AssemblyInfoInputs.cache
+C:\Users\Fautaro\Desktop\Turnos Medicos\App-Admin-Dashboard-TurnosMedicos\Admin-Dashboard\obj\Debug\net6.0\Admin-Dashboard.AssemblyInfo.cs
+C:\Users\Fautaro\Desktop\Turnos Medicos\App-Admin-Dashboard-TurnosMedicos\Admin-Dashboard\obj\Debug\net6.0\Admin-Dashboard.csproj.CoreCompileInputs.cache
+C:\Users\Fautaro\Desktop\Turnos Medicos\App-Admin-Dashboard-TurnosMedicos\Admin-Dashboard\obj\Debug\net6.0\Admin-Dashboard.MvcApplicationPartsAssemblyInfo.cs
+C:\Users\Fautaro\Desktop\Turnos Medicos\App-Admin-Dashboard-TurnosMedicos\Admin-Dashboard\obj\Debug\net6.0\Admin-Dashboard.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\Fautaro\Desktop\Turnos Medicos\App-Admin-Dashboard-TurnosMedicos\Admin-Dashboard\obj\Debug\net6.0\Admin-Dashboard.RazorAssemblyInfo.cache
+C:\Users\Fautaro\Desktop\Turnos Medicos\App-Admin-Dashboard-TurnosMedicos\Admin-Dashboard\obj\Debug\net6.0\Admin-Dashboard.RazorAssemblyInfo.cs
+C:\Users\Fautaro\Desktop\Turnos Medicos\App-Admin-Dashboard-TurnosMedicos\Admin-Dashboard\obj\Debug\net6.0\staticwebassets.build.json
+C:\Users\Fautaro\Desktop\Turnos Medicos\App-Admin-Dashboard-TurnosMedicos\Admin-Dashboard\obj\Debug\net6.0\staticwebassets.development.json
+C:\Users\Fautaro\Desktop\Turnos Medicos\App-Admin-Dashboard-TurnosMedicos\Admin-Dashboard\obj\Debug\net6.0\scopedcss\Views\Shared\_Layout.cshtml.rz.scp.css
+C:\Users\Fautaro\Desktop\Turnos Medicos\App-Admin-Dashboard-TurnosMedicos\Admin-Dashboard\obj\Debug\net6.0\scopedcss\bundle\Admin-Dashboard.styles.css
+C:\Users\Fautaro\Desktop\Turnos Medicos\App-Admin-Dashboard-TurnosMedicos\Admin-Dashboard\obj\Debug\net6.0\scopedcss\projectbundle\Admin-Dashboard.bundle.scp.css
+C:\Users\Fautaro\Desktop\Turnos Medicos\App-Admin-Dashboard-TurnosMedicos\Admin-Dashboard\obj\Debug\net6.0\Admin-Dashboard.csproj.CopyComplete
+C:\Users\Fautaro\Desktop\Turnos Medicos\App-Admin-Dashboard-TurnosMedicos\Admin-Dashboard\obj\Debug\net6.0\Admin-Dashboard.dll
+C:\Users\Fautaro\Desktop\Turnos Medicos\App-Admin-Dashboard-TurnosMedicos\Admin-Dashboard\obj\Debug\net6.0\refint\Admin-Dashboard.dll
+C:\Users\Fautaro\Desktop\Turnos Medicos\App-Admin-Dashboard-TurnosMedicos\Admin-Dashboard\obj\Debug\net6.0\Admin-Dashboard.pdb
+C:\Users\Fautaro\Desktop\Turnos Medicos\App-Admin-Dashboard-TurnosMedicos\Admin-Dashboard\obj\Debug\net6.0\Admin-Dashboard.genruntimeconfig.cache
+C:\Users\Fautaro\Desktop\Turnos Medicos\App-Admin-Dashboard-TurnosMedicos\Admin-Dashboard\obj\Debug\net6.0\ref\Admin-Dashboard.dll
