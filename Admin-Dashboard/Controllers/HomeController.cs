@@ -15,6 +15,7 @@ namespace Admin_Dashboard.Controllers
 
         public IActionResult Index()
         {
+            Redirect("Login");
             return View();
         }
 
