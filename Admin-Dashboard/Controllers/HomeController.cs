@@ -13,10 +13,19 @@ namespace Admin_Dashboard.Controllers
             _logger = logger;
         }
 
+        
         public IActionResult Index()
         {
-            Redirect("Login");
-            return View();
+            if (User.Identity.IsAuthenticated)
+            {
+                // El usuario está autenticado, puedes realizar acciones específicas para usuarios autenticados
+                return View();
+            }
+            else
+            {
+                // El usuario no está autenticado, puedes redirigirlo a la página de inicio de sesión u otra acción
+                return Redirect("~/login");
+            }
         }
 
         public IActionResult Privacy()
