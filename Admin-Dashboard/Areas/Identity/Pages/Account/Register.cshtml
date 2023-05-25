@@ -5,9 +5,6 @@
     Layout = null;
 }
 
-<h1>@ViewData["Title"]</h1>
-
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -34,18 +31,19 @@
 
     <div class="container">
 
-        <div class="card o-hidden border-0 shadow-lg my-5">
+        <div class="card o-hidden border-0 shadow-lg my-5 col-12">
             <div class="card-body p-0">
                 <!-- Nested Row within Card Body -->
                 <div class="row">
-                    <div class="col-lg-5 d-none d-lg-block bg-register-image"></div>
-                    <div class="col-lg-7">
+@*                    <div class="col-lg-5 d-none d-lg-block bg-register-image"></div>
+*@                    <div class="col-lg-12">
                         <div class="p-5">
                             <div class="text-center">
                                 <h1 class="h4 text-gray-900 mb-4">Crear cuenta</h1>
                             </div>
-                            <form class="user">
-                                <div class="form-group row">
+                            <form class="user" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+@*                                <div class="form-group row">
                                     <div class="col-sm-6 mb-3 mb-sm-0">
                                         <input type="text" class="form-control form-control-user" id="exampleFirstName"
                                                placeholder="Nombre">
@@ -54,38 +52,36 @@
                                         <input type="text" class="form-control form-control-user" id="exampleLastName"
                                                placeholder="Apellido">
                                     </div>
-                                </div>
+                                </div>*@
                                 <div class="form-group">
-                                    <input type="email" class="form-control form-control-user" id="exampleInputEmail"
-                                           placeholder="Email">
+                                    <input asp-for="Input.Email" type="email" class="form-control form-control-user" id="exampleInputEmail"
+                                           placeholder="Email" autocomplete="username" aria-required="true">
+                                    <span asp-validation-for="Input.Email" class="text-danger"></span>
                                 </div>
                                 <div class="form-group row">
                                     <div class="col-sm-6 mb-3 mb-sm-0">
-                                        <input type="password" class="form-control form-control-user"
-                                               id="exampleInputPassword" placeholder="Password">
+                                        <input asp-for="Input.Password" type="password" class="form-control form-control-user"
+                                               id="exampleInputPassword" placeholder="Password" autocomplete="new-password">
+                                        <span asp-validation-for="Input.Password" class="text-danger"></span>
                                     </div>
                                     <div class="col-sm-6">
-                                        <input type="password" class="form-control form-control-user"
+                                        <input asp-for="Input.ConfirmPassword" type="password" autocomplete="new-password" class="form-control form-control-user"
                                                id="exampleRepeatPassword" placeholder="Ingrese nuevamente el Password">
+                                        <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+
                                     </div>
                                 </div>
-                                <a href="login.html" class="btn btn-primary btn-user btn-block">
+                                <button type="submit" class="btn btn-primary btn-user btn-block">
                                     Crear cuenta
-                                </a>
+                                </button>
                                 <hr>
-                                <a href="index.html" class="btn btn-google btn-user btn-block">
-                                    <i class="fab fa-google fa-fw"></i> Registrarse con Google
-                                </a>
-                                <a href="index.html" class="btn btn-facebook btn-user btn-block">
-                                    <i class="fab fa-facebook-f fa-fw"></i> Registrarse con Facebook
-                                </a>
                             </form>
                             <hr>
                             <div class="text-center">
-                                <a class="small" href="forgot-password.html">Recuperar contraseña</a>
+                                <a class="small" asp-page="./ForgotPassword">Recuperar contraseña</a>
                             </div>
                             <div class="text-center">
-                                <a class="small" href="login.html">Iniciar sesión</a>
+                                <a class="small" asp-page="/Login">Iniciar sesión</a>
                             </div>
                         </div>
                     </div>
@@ -164,7 +160,6 @@
         </section>
     </div>
 </div>*@
-@*
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
-}*@
+}
