@@ -7,6 +7,8 @@
 <head>
     <meta charset='utf-8' />
     <link href="~/css/sb-admin-2.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.10.0/css/bootstrap-datepicker.min.css" integrity="sha512-34s5cpvaNG3BknEWSuOncX28vz97bRI59UnVtEEpFX536A7BtZSJHsDyFoCl8S7Dt2TPzcrCEoHBGeM4SUBDBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.css">
 </head>
 <body>
 
@@ -40,13 +42,27 @@
                                     </div>
                                     <div class="form-group">
                                         <label for="fecha">Fecha</label>
-                                        <input type="date" class="form-control" id="fecha">
+                                        <div class="input-group date">
+                                            <input type="text" class="form-control datepicker" id="fecha" data-provide="datepicker" placeholder="Seleccione una fecha">
+                                            <div class="input-group-append">
+                                                <span class="input-group-text"><i class="fas fa-calendar"></i></span>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="form-group" style="margin-bottom:40px">
+                                    <div class="form-group">
+                                        <label for="fecha">Hora</label>
+                                        <div class="input-group date">
+                                            <input type="text" class="form-control timepicker" id="hora" placeholder="Seleccione una hora">
+                                            <div class="input-group-append">
+                                                <span class="input-group-text"><i class="fas fa-clock"></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+@*                                    <div class="form-group" style="margin-bottom:40px">
                                         <label for="hora">Hora</label>
                                         <input type="time" class="form-control" id="hora">
-                                    </div>
-                                    <div class ="form-group" style="text-align:center">
+                                    </div>*@
+                                    <div class="form-group" style="text-align:center">
                                         <button type="submit" class="btn btn-primary">Guardar Turno</button>
                                     </div>
                                 </form>
@@ -57,5 +73,31 @@
             </div>
         </div>
     </div>
+
+    <script>
+        $(document).ready(function () {
+            $('.datepicker').datepicker();
+        });
+
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js" integrity="sha512-3gJwYpMe3QewGELv8k/BX9vcqhryRdzRMxVfq6ngyWXwo03GFEzjsUm8Q7RZcHPHksttq7/GFoxjCVUjkjvPdw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.10.0/js/bootstrap-datepicker.min.js" integrity="sha512-LsnSViqQyaXpD4mBBdRYeP6sRwJiJveh2ZIbW41EBrNmKxgr/LFZIiWT6yr+nycvhvauz8c2nYMhrP80YhG7Cw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js"></script>
+    <script>
+
+        $('#hora').timepicker({
+            timeFormat: 'h:mm p',
+            interval: 60,
+            minTime: '10',
+            maxTime: '6:00pm',
+            defaultTime: '11',
+            startTime: '10:00',
+            dynamic: false,
+            dropdown: true,
+            scrollbar: true
+        });
+
+        $('#hora').timepicker();
+    </script>
 </body>
 </html>

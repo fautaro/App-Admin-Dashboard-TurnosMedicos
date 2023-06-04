@@ -28,18 +28,6 @@ namespace Admin_Dashboard.Controllers
                 return Redirect("~/login");
             }
         }
-        public IActionResult ExportarDatos()
-        {
-            if (User.Identity.IsAuthenticated)
-            {
-                // El usuario está autenticado, puedes realizar acciones específicas para usuarios autenticados
-                return View();
-            }
-            else
-            {
-                return Redirect("~/login");
-            }
-        }
         public IActionResult GenerarLink()
         {
             if (User.Identity.IsAuthenticated)
