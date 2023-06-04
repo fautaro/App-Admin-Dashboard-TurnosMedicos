@@ -1,0 +1,103 @@
+﻿@{
+    ViewData["Title"] = "Administrar Horas";
+}
+
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='utf-8' />
+    <link href="~/css/sb-admin-2.min.css" rel="stylesheet">
+</head>
+<body>
+
+
+    <!-- Content Row -->
+    <div class="row">
+        <!-- Area Chart -->
+        <div class="col-xl-12 col-lg-12">
+            <div class="card shadow mb-4">
+                <!-- Card Header - Dropdown -->
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-primary">Configuración de Horarios No Disponibles</h6>
+                </div>
+                <!-- Card Body -->
+                <div class="card-body">
+
+                    <div class="container">
+                        <form>
+                            <div class="form-group">
+                                <label for="dia">Día</label>
+                                <input type="date" class="form-control" id="dia" placeholder="Selecciona un día">
+                            </div>
+                            <div class="form-group">
+                                <label for="horaInicio">Hora de Inicio</label>
+                                <input type="time" class="form-control" id="horaInicio" placeholder="Selecciona una hora de inicio">
+                            </div>
+                            <div class="form-group">
+                                <label for="horaFin">Hora de Fin</label>
+                                <input type="time" class="form-control" id="horaFin" placeholder="Selecciona una hora de fin">
+                            </div>
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary">Guardar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="card shadow mb-4">
+                <!-- Card Header - Dropdown -->
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-primary">Horarios bloqueados</h6>
+                </div>
+                <!-- Card Body -->
+                <div class="card-body">
+                    <div class="container">
+                        <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Día</th>
+                                    <th>Hora de Inicio</th>
+                                    <th>Hora de Fin</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>01/06/2023</td>
+                                    <td>09:00 AM</td>
+                                    <td>10:30 AM</td>
+                                    <td>
+                                        <button class="btn btn-primary btn-sm">Editar</button>
+                                        <button class="btn btn-danger btn-sm">Eliminar</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>02/06/2023</td>
+                                    <td>11:00 AM</td>
+                                    <td>12:30 PM</td>
+                                    <td>
+                                        <button class="btn btn-primary btn-sm">Editar</button>
+                                        <button class="btn btn-danger btn-sm">Eliminar</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>03/06/2023</td>
+                                    <td>02:00 PM</td>
+                                    <td>03:30 PM</td>
+                                    <td>
+                                        <button class="btn btn-primary btn-sm">Editar</button>
+                                        <button class="btn btn-danger btn-sm">Eliminar</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,4 +1,5 @@
 ﻿using Admin_Dashboard.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -12,8 +13,6 @@ namespace Admin_Dashboard.Controllers
         {
             _logger = logger;
         }
-
-        
         public IActionResult Index()
         {
             if (User.Identity.IsAuthenticated)

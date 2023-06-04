@@ -1,0 +1,80 @@
+﻿@{
+    ViewData["Title"] = "Exportar Datos";
+}
+
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='utf-8' />
+    <link href="~/css/sb-admin-2.min.css" rel="stylesheet">
+</head>
+<body>
+
+
+    <!-- Content Row -->
+    <div class="row">
+        <!-- Area Chart -->
+        <div class="col-xl-12 col-lg-12">
+            <div class="card shadow mb-4">
+                <!-- Card Header - Dropdown -->
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-primary">Exportar datos</h6>
+                </div>
+                <!-- Card Body -->
+                <div class="card-body">
+                    <div class="container">
+                        <h2>Turnos Confirmados</h2>
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Fecha</th>
+                                    <th>Título</th>
+                                    <th>Descripción</th>
+                                    <th>Seleccionar</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>2023-06-05 10:00 AM</td>
+                                    <td>Turno 1</td>
+                                    <td>Descripción del turno 1</td>
+                                    <td>
+                                        <input type="checkbox" name="turno" value="turno1">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>2023-06-06 11:30 AM</td>
+                                    <td>Turno 2</td>
+                                    <td>Descripción del turno 2</td>
+                                    <td>
+                                        <input type="checkbox" name="turno" value="turno2">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>2023-06-07 09:15 AM</td>
+                                    <td>Turno 3</td>
+                                    <td>Descripción del turno 3</td>
+                                    <td>
+                                        <input type="checkbox" name="turno" value="turno3">
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <h2>Exportar a Google Calendar</h2>
+                        <div class="form-group">
+                            <label for="turnos">Seleccionar turno(s):</label>
+                            <select class="form-control" id="turnos" name="turnos[]" multiple required>
+                                <option value="turno1">Turno 1</option>
+                                <option value="turno2">Turno 2</option>
+                                <option value="turno3">Turno 3</option>
+                            </select>
+                        </div>
+                        <button type="button" class="btn btn-primary" onclick="exportarACalendar()">Exportar a Google Calendar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

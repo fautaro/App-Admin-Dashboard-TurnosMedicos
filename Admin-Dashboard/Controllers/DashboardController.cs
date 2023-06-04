@@ -6,7 +6,15 @@ namespace Admin_Dashboard.Controllers
     {
         public IActionResult Index()
         {
-            return View();
+            if (User.Identity.IsAuthenticated)
+            {
+                // El usuario está autenticado, puedes realizar acciones específicas para usuarios autenticados
+                return View();
+            }
+            else
+            {
+                return Redirect("~/login");
+            }
         }
     }
 }
