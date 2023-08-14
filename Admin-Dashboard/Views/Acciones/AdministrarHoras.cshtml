@@ -7,6 +7,8 @@
 <head>
     <meta charset='utf-8' />
     <link href="~/css/sb-admin-2.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.10.0/css/bootstrap-datepicker.min.css" integrity="sha512-34s5cpvaNG3BknEWSuOncX28vz97bRI59UnVtEEpFX536A7BtZSJHsDyFoCl8S7Dt2TPzcrCEoHBGeM4SUBDBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="~/lib/jquery-timepicker/jquery.timepicker.css">
 </head>
 <body>
 
@@ -26,17 +28,49 @@
                     <div class="container">
                         <form>
                             <div class="form-group">
-                                <label for="dia">Día</label>
-                                <input type="date" class="form-control" id="dia" placeholder="Selecciona un día">
+                                <label for="fecha">Día de Inicio</label>
+                                <div class="input-group date">
+                                    <input type="text" class="form-control datepicker" id="fechaInicio" data-provide="datepicker" placeholder="Seleccione una fecha de inicio">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text"><i class="fas fa-calendar"></i></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group form-check">
+                                <input type="checkbox" class="form-check-input" id="variosDias">
+                                <label class="form-check-label" for="variosDias">Seleccionar Varios Días</label>
                             </div>
                             <div class="form-group">
-                                <label for="horaInicio">Hora de Inicio</label>
-                                <input type="time" class="form-control" id="horaInicio" placeholder="Selecciona una hora de inicio">
+                                <label for="fecha">Día de Fin</label>
+                                <div class="input-group date">
+                                    <input type="text" class="form-control datepicker" id="fechaFin" data-provide="datepicker" placeholder="Seleccione una fecha de fin" disabled>
+                                    <div class="input-group-append">
+                                        <span class="input-group-text"><i class="fas fa-calendar"></i></span>
+                                    </div>
+                                </div>
                             </div>
                             <div class="form-group">
-                                <label for="horaFin">Hora de Fin</label>
-                                <input type="time" class="form-control" id="horaFin" placeholder="Selecciona una hora de fin">
+                                <label for="fecha">Hora de Inicio</label>
+                                <div class="input-group date">
+                                    <input type="text" class="form-control timepicker" id="horaInicio" placeholder="Seleccione una hora de inicio">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text"><i class="fas fa-clock"></i></span>
+                                    </div>
+                                </div>
                             </div>
+                            <div class="form-group">
+                                <label for="fecha">Hora de Fin</label>
+                                <div class="input-group date">
+                                    <input type="text" class="form-control timepicker" id="horaFin" placeholder="Seleccione una hora de fin">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text"><i class="fas fa-clock"></i></span>
+                                    </div>
+                                </div>
+                            </div>
+                                                            <div class="form-group form-check">
+                                    <input type="checkbox" class="form-check-input" id="diaCompleto">
+                                    <label class="form-check-label" for="diaCompleto">Día Completo</label>
+                                </div>
                             <div class="form-group">
                                 <button type="submit" class="btn btn-primary">Guardar</button>
                             </div>
@@ -53,45 +87,45 @@
                 <div class="card-body">
                     <div class="container">
                         <div class="table-responsive">
-                        <table class="table table-striped">
-                            <thead>
-                                <tr>
-                                    <th>Día</th>
-                                    <th>Hora de Inicio</th>
-                                    <th>Hora de Fin</th>
-                                    <th>Acciones</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>01/06/2023</td>
-                                    <td>09:00 AM</td>
-                                    <td>10:30 AM</td>
-                                    <td>
-                                        <button class="btn btn-primary btn-sm">Editar</button>
-                                        <button class="btn btn-danger btn-sm">Eliminar</button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>02/06/2023</td>
-                                    <td>11:00 AM</td>
-                                    <td>12:30 PM</td>
-                                    <td>
-                                        <button class="btn btn-primary btn-sm">Editar</button>
-                                        <button class="btn btn-danger btn-sm">Eliminar</button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>03/06/2023</td>
-                                    <td>02:00 PM</td>
-                                    <td>03:30 PM</td>
-                                    <td>
-                                        <button class="btn btn-primary btn-sm">Editar</button>
-                                        <button class="btn btn-danger btn-sm">Eliminar</button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Día</th>
+                                        <th>Hora de Inicio</th>
+                                        <th>Hora de Fin</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>01/06/2023</td>
+                                        <td>09:00 AM</td>
+                                        <td>10:30 AM</td>
+                                        <td>
+                                            <button class="btn btn-primary btn-sm">Editar</button>
+                                            <button class="btn btn-danger btn-sm">Eliminar</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>02/06/2023</td>
+                                        <td>11:00 AM</td>
+                                        <td>12:30 PM</td>
+                                        <td>
+                                            <button class="btn btn-primary btn-sm">Editar</button>
+                                            <button class="btn btn-danger btn-sm">Eliminar</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>03/06/2023</td>
+                                        <td>02:00 PM</td>
+                                        <td>03:30 PM</td>
+                                        <td>
+                                            <button class="btn btn-primary btn-sm">Editar</button>
+                                            <button class="btn btn-danger btn-sm">Eliminar</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
 
@@ -99,5 +133,25 @@
             </div>
         </div>
     </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js" integrity="sha512-3gJwYpMe3QewGELv8k/BX9vcqhryRdzRMxVfq6ngyWXwo03GFEzjsUm8Q7RZcHPHksttq7/GFoxjCVUjkjvPdw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.10.0/js/bootstrap-datepicker.min.js" integrity="sha512-LsnSViqQyaXpD4mBBdRYeP6sRwJiJveh2ZIbW41EBrNmKxgr/LFZIiWT6yr+nycvhvauz8c2nYMhrP80YhG7Cw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="~/lib/jquery-timepicker/jquery.timepicker.min.js"></script>
+    <script>
+
+        $('#hora').timepicker({
+            timeFormat: 'h:mm p',
+            interval: 60,
+            minTime: '10',
+            maxTime: '6:00pm',
+            defaultTime: '11',
+            startTime: '10:00',
+            dynamic: true,
+            dropdown: true,
+            scrollbar: false
+        });
+
+        $('#horaInicio').timepicker();
+        $('#horaFin').timepicker();
+    </script>
 </body>
 </html>
