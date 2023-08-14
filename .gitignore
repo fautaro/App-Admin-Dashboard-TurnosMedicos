@@ -50,3 +50,81 @@ Admin-Dashboard/obj/Debug/net6.0/Admin-Dashboard.assets.cache
 Admin-Dashboard/obj/Debug/net6.0/Admin-Dashboard.assets.cache
 Admin-Dashboard/obj/Debug/net6.0/Admin-Dashboard.GeneratedMSBuildEditorConfig.editorconfig
 Admin-Dashboard/obj/Debug/net6.0/project.razor.json
+
+
+# .NET build directories
+bin/
+obj/
+
+# .NET test directories
+TestResults/
+
+# User-specific files
+*.user
+
+# Visual Studio Code directory
+.vscode/
+
+# Rider directory
+.idea/
+
+# NuGet package directories
+packages/
+*.nupkg
+
+# Local application configuration files
+appsettings.json
+appsettings.Development.json
+
+# Visual Studio files
+*.suo
+*.sln.docstates
+*.userprefs
+
+# .NET project-specific files
+*.dll
+*.exe
+*.pdb
+*.log
+*.tlog
+*.iobj
+
+# .NET project-specific directories
+**/bin/
+**/obj/
+
+
+# From .NET Core 3.0 you can use the command: `dotnet new gitignore` to generate a customizable .gitignore file
+
+*.swp
+*.*~
+project.lock.json
+.DS_Store
+*.pyc
+
+# Visual Studio Code
+.vscode
+
+# User-specific files
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+build/
+bld/
+[Bb]in/
+[Oo]bj/
+msbuild.log
+msbuild.err
+msbuild.wrn
+
+# Visual Studio 2015
+.vs/
