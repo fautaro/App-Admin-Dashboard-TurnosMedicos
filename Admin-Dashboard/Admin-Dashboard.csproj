@@ -26,4 +26,8 @@
     <Folder Include="Views\Account\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\BusinessEntity\BusinessEntity.csproj" />
+  </ItemGroup>
+
 </Project>

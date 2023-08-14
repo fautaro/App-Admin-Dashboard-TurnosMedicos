@@ -17,6 +17,12 @@ builder.Services.AddMvc().AddRazorRuntimeCompilation();
 builder.Services.AddAuthentication();
 builder.Services.AddAuthorization();
 
+builder.Services.AddTransient<ReservaService, ReservaService>();
+builder.Services.AddTransient<ValidationService, ValidationService>();
+builder.Services.AddTransient<TokenService, TokenService>();
+builder.Services.AddTransient<DbWrapper, DbWrapper>();
+builder.Services.AddTransient<MailService, MailService>();
+
 
 var app = builder.Build();
 
