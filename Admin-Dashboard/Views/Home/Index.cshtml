@@ -33,136 +33,142 @@
         <div class="d-sm-flex align-items-center justify-content-between mb-4">
             <h1 class="h3 mb-0 text-gray-800">Panel</h1>
         </div>
+        @if (Model.success)
+        {
+            <div>
+                <!-- Content Row -->
+                <div class="row">
 
-        <!-- Content Row -->
-        <div class="row" v-if="hayDatos">
-
-            <!-- Earnings (Monthly) Card Example -->
-            <div class="col-xl-4 col-md-4 mb-4">
-                <div class="card border-left-primary shadow h-100 py-2">
-                    <div class="card-body">
-                        <div class="row no-gutters align-items-center">
-                            <div class="col mr-2">
-                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                    Turnos totales
+                    <!-- Earnings (Monthly) Card Example -->
+                    <div class="col-xl-4 col-md-4 mb-4">
+                        <div class="card border-left-primary shadow h-100 py-2">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                            Turnos totales
+                                        </div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.cantTurnosTotales</div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                                    </div>
                                 </div>
-                                <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.cantTurnosTotales</div>
-                            </div>
-                            <div class="col-auto">
-                                <i class="fas fa-calendar fa-2x text-gray-300"></i>
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
 
-            <!-- Earnings (Monthly) Card Example -->
-            <div class="col-xl-4 col-md-4 mb-4">
-                <div class="card border-left-success shadow h-100 py-2">
-                    <div class="card-body">
-                        <div class="row no-gutters align-items-center">
-                            <div class="col mr-2">
-                                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                    Turnos Activos
+                    <div class="col-xl-4 col-md-4 mb-4">
+                        <div class="card border-left-success shadow h-100 py-2">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                            Turnos Activos
+                                        </div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.cantTurnosActivos</div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                                    </div>
                                 </div>
-                                <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.cantTurnosActivos</div>
-                            </div>
-                            <div class="col-auto">
-                                <i class="fas fa-calendar fa-2x text-gray-300"></i>
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
-
-            <!-- Earnings (Monthly) Card Example -->
-            <div class="col-xl-4 col-md-4 mb-4">
-                <div class="card border-left-info shadow h-100 py-2">
-                    <div class="card-body">
-                        <div class="row no-gutters align-items-center">
-                            <div class="col mr-2">
-                                <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
-                                    Pacientes
+                    <div class="col-xl-4 col-md-4 mb-4">
+                        <div class="card border-left-info shadow h-100 py-2">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                                            Pacientes
+                                        </div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.cantPacientes</div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                                    </div>
                                 </div>
-                                <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.cantPacientes</div>
-                            </div>
-                            <div class="col-auto">
-                                <i class="fas fa-calendar fa-2x text-gray-300"></i>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
 
-        <!-- Content Row -->
+                <!-- Content Row -->
 
-        <div class="row">
+                <div class="row">
 
-            <!-- Area Chart -->
-            <div class="col-xl-12 col-lg-12" v-if="hayDatos">
-                <div class="card shadow mb-4">
-                    <!-- Card Header - Dropdown -->
-                    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                        <h6 class="m-0 font-weight-bold text-primary">Calendario de turnos del día</h6>
-                    </div>
-                    <!-- Card Body -->
-                    <div class="card-body">
-                        <div id="ec"></div>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-
-        <!-- Content modal -->
-        <div class="row">
-            <div class="modal fade" id="eventModal" tabindex="-1" role="dialog" aria-labelledby="eventModalLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="eventModalLabel">Detalles del Turno</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="close" v-on:click="btnCerrarModalClick()">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body" id="eventModalBody">
-                            <table class="table table-striped">
-                                <tr>
-                                    <td><strong>Nombre:</strong></td>
-                                    <td>{{modalNombre}}</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Email:</strong></td>
-                                    <td>{{modalEmail}}</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Teléfono:</strong></td>
-                                    <td>{{modalTelefono}}</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Fecha y Hora de Inicio:</strong></td>
-                                    <td>{{modalFechaInicio}}</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Fecha y Hora de Fin:</strong></td>
-                                    <td>{{modalFechaFin}}</td>
-                                </tr>
-                            </table>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal" id="btnCerrarModal" v-on:click="btnCerrarModalClick()">Cerrar</button>
+                    <!-- Area Chart -->
+                    <div class="col-xl-12 col-lg-12">
+                        <div class="card shadow mb-4">
+                            <!-- Card Header - Dropdown -->
+                            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                <h6 class="m-0 font-weight-bold text-primary">Calendario de turnos del día</h6>
+                            </div>
+                            <!-- Card Body -->
+                            <div class="card-body">
+                                <div id="ec"></div>
+                            </div>
                         </div>
                     </div>
 
                 </div>
+
+                <!-- Content modal -->
+                <div class="row">
+                    <div class="modal fade" id="eventModal" tabindex="-1" role="dialog" aria-labelledby="eventModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="eventModalLabel">Detalles del Turno</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="close" v-on:click="btnCerrarModalClick()">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body" id="eventModalBody">
+                                    <table class="table table-striped">
+                                        <tr>
+                                            <td><strong>Nombre:</strong></td>
+                                            <td>{{modalNombre}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Email:</strong></td>
+                                            <td>{{modalEmail}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Teléfono:</strong></td>
+                                            <td>{{modalTelefono}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Fecha y Hora de Inicio:</strong></td>
+                                            <td>{{modalFechaInicio}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Fecha y Hora de Fin:</strong></td>
+                                            <td>{{modalFechaFin}}</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal" id="btnCerrarModal" v-on:click="btnCerrarModalClick()">Cerrar</button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
-        <div class="row" v-if="!hayDatos">
-            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                <h6 class="m-0 font-weight-bold text-primary">No hay datos para su usuario. Por favor, comuníquese con el administrador.</h6>
+        }
+        else
+        {
+            <div class="row">
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-primary">No hay datos para su usuario. Por favor, comuníquese con el administrador.</h6>
+                </div>
             </div>
-        </div>
+        }
+
+
 
     </div>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
@@ -181,26 +187,28 @@
                     modalFechaInicio: "",
                     modalFechaFin: "",
                     //Validacion - El usuario tiene datos o un prof. Asociado
-                    hayDatos: false
                 }
             },
             mounted() {
-                if (@Model.success) {
-                    this.hayDatos = true;
-                    this.agendaList = this.fillAgenda(@Html.Raw(Json.Serialize(Model.TurnoList)));
-                } else {
-
+                var Data = @Html.Raw(Json.Serialize(Model));
+                console.log(Data)
+                if (Data.success) {
+                    this.agendaList = this.fillAgenda(Data.turnoList);
                 }
             },
             methods: {
                 fillAgenda(agenda) {
+
+                    const colors = ['#FF5733', '#338DFF', '#33FF33', '#808080']; // Array de colores diferentes
+                    let colorIndex = 0; // Índice para seleccionar colores del array
+
                     for (let turno of agenda) {
                         let obj = {
                             id: turno.id,
                             start: turno.fechaInicio,
                             end: turno.fechaFin,
                             title: turno.titulo,
-                            backgroundColor: '#007BFF',
+                            backgroundColor: colors[colorIndex], // Asignar un color del array
                             textColor: '#FFFFFF',
                             editable: false, // Evita que se puedan editar y mover
                             startEditable: false, // Evita que se pueda cambiar el inicio del evento
@@ -213,6 +221,8 @@
                         };
 
                         this.agendaList.push(obj);
+                        colorIndex = (colorIndex + 1) % colors.length;
+
                     }
                     this.initializeCalendar();
                 },
@@ -226,6 +236,7 @@
                 },
                 initializeCalendar() {
                     let that = this;
+                    console.log(that.agendaList)
                     let ec = new EventCalendar(document.getElementById('ec'), {
                         view: 'timeGridDay',
                         language: 'es',
@@ -254,7 +265,7 @@
                             // Abrir el modal
                             $('#eventModal').modal('show');
                         },
-                        events: this.agendaList
+                        events: that.agendaList
                     });
 
 
