@@ -1,6 +1,9 @@
 ﻿@{
     ViewData["Title"] = "Inicio";
 }
+@using BusinessEntity.Response;
+@model DashboardResponse;
+
 
 <!DOCTYPE html>
 <html lang='en'>
@@ -10,6 +13,21 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@@event-calendar/build@1.5.1/event-calendar.min.css">
 </head>
 <body>
+    <style>
+        /* Estilo para la tabla striped con colores de fondo y texto distintivos */
+        .table -striped tbody tr:nth-of-type(odd) {
+            background-color: #f2f2f2; /* Color de fondo para filas impares */
+        }
+
+        .table-striped tbody tr:nth-o f-typ e(even ) {
+            background-color: #ffffff; /* Color de fondo para filas pares */
+        }
+
+        .tabl e-striped tbody tr td {
+            color: #333; /* Color del texto en las celdas */
+        }
+
+    </style>
     <div class="container-fluid" id="app">
         <!-- Page Heading -->
         <div class="d-sm-flex align-items-center justify-content-between mb-4">
@@ -17,7 +35,7 @@
         </div>
 
         <!-- Content Row -->
-        <div class="row">
+        <div class="row" v-if="hayDatos">
 
             <!-- Earnings (Monthly) Card Example -->
             <div class="col-xl-4 col-md-4 mb-4">
@@ -28,7 +46,7 @@
                                 <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
                                     Turnos totales
                                 </div>
-                                <div class="h5 mb-0 font-weight-bold text-gray-800">32</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.cantTurnosTotales</div>
                             </div>
                             <div class="col-auto">
                                 <i class="fas fa-calendar fa-2x text-gray-300"></i>
@@ -47,7 +65,7 @@
                                 <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
                                     Turnos Activos
                                 </div>
-                                <div class="h5 mb-0 font-weight-bold text-gray-800">12</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.cantTurnosActivos</div>
                             </div>
                             <div class="col-auto">
                                 <i class="fas fa-calendar fa-2x text-gray-300"></i>
@@ -66,7 +84,7 @@
                                 <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
                                     Pacientes
                                 </div>
-                                <div class="h5 mb-0 font-weight-bold text-gray-800">12</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.cantPacientes</div>
                             </div>
                             <div class="col-auto">
                                 <i class="fas fa-calendar fa-2x text-gray-300"></i>
@@ -75,25 +93,6 @@
                     </div>
                 </div>
             </div>
-
-            <!-- Pending Requests Card Example -->
-            @*            <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-left-warning shadow h-100 py-2">
-            <div class="card-body">
-            <div class="row no-gutters align-items-center">
-            <div class="col mr-2">
-            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-            Usuarios
-            </div>
-            <div class="h5 mb-0 font-weight-bold text-gray-800">18</div>
-            </div>
-            <div class="col-auto">
-            <i class="fas fa-comments fa-2x text-gray-300"></i>
-            </div>
-            </div>
-            </div>
-            </div>
-            </div>*@
         </div>
 
         <!-- Content Row -->
@@ -101,11 +100,11 @@
         <div class="row">
 
             <!-- Area Chart -->
-            <div class="col-xl-12 col-lg-12">
+            <div class="col-xl-12 col-lg-12" v-if="hayDatos">
                 <div class="card shadow mb-4">
                     <!-- Card Header - Dropdown -->
                     <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                        <h6 class="m-0 font-weight-bold text-primary">Calendario de turnos</h6>
+                        <h6 class="m-0 font-weight-bold text-primary">Calendario de turnos del día</h6>
                     </div>
                     <!-- Card Body -->
                     <div class="card-body">
@@ -116,31 +115,52 @@
 
         </div>
 
-        <!-- Content Row -->
+        <!-- Content modal -->
         <div class="row">
-            <!-- Content Column -->
-            <div class="col-lg-6 mb-4">
-            </div>
+            <div class="modal fade" id="eventModal" tabindex="-1" role="dialog" aria-labelledby="eventModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="eventModalLabel">Detalles del Turno</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="close" v-on:click="btnCerrarModalClick()">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body" id="eventModalBody">
+                            <table class="table table-striped">
+                                <tr>
+                                    <td><strong>Nombre:</strong></td>
+                                    <td>{{modalNombre}}</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Email:</strong></td>
+                                    <td>{{modalEmail}}</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Teléfono:</strong></td>
+                                    <td>{{modalTelefono}}</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Fecha y Hora de Inicio:</strong></td>
+                                    <td>{{modalFechaInicio}}</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Fecha y Hora de Fin:</strong></td>
+                                    <td>{{modalFechaFin}}</td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal" id="btnCerrarModal" v-on:click="btnCerrarModalClick()">Cerrar</button>
+                        </div>
+                    </div>
 
-            <div class="col-lg-6 mb-4">
+                </div>
             </div>
         </div>
-        <div class="modal fade" id="eventModal" tabindex="-1" role="dialog" aria-labelledby="eventModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="eventModalLabel">Detalles del Evento</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body" id="eventModalBody">
-                        <!-- Aquí se mostrará la información del evento -->
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                    </div>
-                </div>
+        <div class="row" v-if="!hayDatos">
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold text-primary">No hay datos para su usuario. Por favor, comuníquese con el administrador.</h6>
             </div>
         </div>
 
@@ -152,90 +172,103 @@
 
             data() {
                 return {
+                    //Lista Agenda
+                    agendaList: [],
+                    //Datos Modal
+                    modalNombre: "",
+                    modalEmail: "",
+                    modalTelefono: "",
+                    modalFechaInicio: "",
+                    modalFechaFin: "",
+                    //Validacion - El usuario tiene datos o un prof. Asociado
+                    hayDatos: false
+                }
+            },
+            mounted() {
+                if (@Model.success) {
+                    this.hayDatos = true;
+                    this.agendaList = this.fillAgenda(@Html.Raw(Json.Serialize(Model.TurnoList)));
+                } else {
+
                 }
             },
             methods: {
+                fillAgenda(agenda) {
+                    for (let turno of agenda) {
+                        let obj = {
+                            id: turno.id,
+                            start: turno.fechaInicio,
+                            end: turno.fechaFin,
+                            title: turno.titulo,
+                            backgroundColor: '#007BFF',
+                            textColor: '#FFFFFF',
+                            editable: false, // Evita que se puedan editar y mover
+                            startEditable: false, // Evita que se pueda cambiar el inicio del evento
+                            durationEditable: false, // Evita que se pueda cambiar la duración del evento
+                            extendedProps: {
+                                name: turno.nombre,
+                                email: turno.email,
+                                phone: turno.telefono,
+                            }
+                        };
+
+                        this.agendaList.push(obj);
+                    }
+                    this.initializeCalendar();
+                },
+                btnCerrarModalClick() {
+                    $('#eventModal').modal('toggle');
+                },
+                formatDate(date) {
+                    const options = { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' };
+                    const formattedDate = date.toLocaleDateString('es-AR', options);
+                    return formattedDate.replace(',', ''); // Elimina la coma en la fecha
+                },
+                initializeCalendar() {
+                    let that = this;
+                    let ec = new EventCalendar(document.getElementById('ec'), {
+                        view: 'timeGridDay',
+                        language: 'es',
+                        height: '500px',
+                        editable: false,
+                        eventClick: function (info) {
+                            const clickedEvent = info.event; // Objeto del evento clicado
+                            const eventTitle = clickedEvent.title; // Título del evento
+                            const eventStart = that.formatDate(clickedEvent.start); // Hora de inicio del evento
+                            const eventEnd = that.formatDate(clickedEvent.end); // Hora de fin del evento
+                            const eventExtendedProps = clickedEvent.extendedProps; // Propiedades extendidas del evento
+
+                            // Obtener los detalles de las propiedades extendidas
+                            const { name, email, phone } = eventExtendedProps;
+
+                            // Rellenar el contenido del modal con la información del evento
+                            const modalBody = document.getElementById('eventModalBody');
+
+                            console.log(eventExtendedProps)
+                            that.modalNombre = eventExtendedProps.name;
+                            that.modalEmail = eventExtendedProps.email;
+                            that.modalTelefono = eventExtendedProps.phone;
+                            that.modalFechaInicio = eventStart;
+                            that.modalFechaFin = eventEnd;
+
+                            // Abrir el modal
+                            $('#eventModal').modal('show');
+                        },
+                        events: this.agendaList
+                    });
+
+
+                },
             }
         });
 
         app.mount('#app');
 
-        const allDayEvent = {
-            id: '1',
-            allDay: true,
-            start: new Date('2023-08-16T00:00:00'),
-            end: new Date('2023-08-16T00:00:00'),
-            title: 'Evento Todo el Día',
-            backgroundColor: '#FF5733',
-            textColor: '#FFFFFF',
-            editable: false, // Evita que se puedan editar y mover
-            startEditable: false, // Evita que se pueda cambiar el inicio del evento
-            durationEditable: false, // Evita que se pueda cambiar la duración del evento
-            extendedProps: {
-                location: 'Salón Principal',
-                notes: 'Reunión de planificación'
-            }
-        };
 
-        const timedEvent = {
-            id: '2',
-            start: new Date('2023-08-15T15:00:00'),
-            end: new Date('2023-08-15T17:00:00'),
-            title: 'Turno: Juan Perez - juanperez@gmail.com - 1122332312',
-            backgroundColor: '#007BFF',
-            textColor: '#FFFFFF',
-            editable: false, // Evita que se puedan editar y mover
-            startEditable: false, // Evita que se pueda cambiar el inicio del evento
-            durationEditable: false, // Evita que se pueda cambiar la duración del evento
-            extendedProps: {
-                location: 'Sala de Conferencias 2',
-                attendees: ['John', 'Alice', 'Mike'],
-                name: 'Juan Perez',
-                email: 'juanperez@gmail.com',
-                phone: '1122332312',
-            }
-        };
 
-        let ec = new EventCalendar(document.getElementById('ec'), {
-            view: 'timeGridDay',
-            language: 'es',
-            height: '500px',
-            editable: false,
-            eventClick: function (info) {
-                console.log(info)
 
-                const clickedEvent = info.event; // Objeto del evento clicado
-                const eventTitle = clickedEvent.title; // Título del evento
-                const eventStart = formatDate(clickedEvent.start); // Hora de inicio del evento
-                const eventEnd = formatDate(clickedEvent.end); // Hora de fin del evento
-                const eventExtendedProps = clickedEvent.extendedProps; // Propiedades extendidas del evento
 
-                // Obtener los detalles de las propiedades extendidas
-                const { name, email, phone } = eventExtendedProps;
 
-                // Rellenar el contenido del modal con la información del evento
-                const modalBody = document.getElementById('eventModalBody');
-                modalBody.innerHTML = `
-                            <p><strong>Nombre:</strong> ${name}</p>
-                    <p><strong>Email:</strong> ${email}</p>
-                    <p><strong>Teléfono:</strong> ${phone}</p>
-                    <p><strong>Fecha y Hora de Inicio:</strong> ${eventStart}</p>
-                    <p><strong>Fecha y Hora de Fin:</strong> ${eventEnd}</p>
-                  `;
-
-                // Abrir el modal
-                $('#eventModal').modal('show');
-            },
-            events: [
-                allDayEvent, timedEvent
-            ]
-        });
-
-        function formatDate(date) {
-            const options = { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' };
-            const formattedDate = date.toLocaleDateString('es-AR', options);
-            return formattedDate.replace(',', ''); // Elimina la coma en la fecha
-        }
 
     </script>
 </body>

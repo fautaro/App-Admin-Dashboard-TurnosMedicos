@@ -18,6 +18,7 @@ namespace DataAccess.Context
         public DbSet<Turno> Turno { get; set; }
         public DbSet<AgendaBloqueada> AgendaBloqueada { get; set; }
         public DbSet<Horario> Horario { get; set; }
+        public DbSet<UsuarioProfesional> UsuarioProfesional { get; set; }
 
 
 
@@ -74,6 +75,7 @@ namespace DataAccess.Context
                 entity.Property(e => e.Titulo).HasColumnName("Titulo").HasMaxLength(100); // Propiedad para el campo Titulo con límite de 100 caracteres
                 entity.Property(e => e.Descripcion).HasColumnName("Descripcion").HasMaxLength(500); // Propiedad para el campo Descripcion con límite de 500 caracteres
                 entity.Property(e => e.Imagen).HasColumnName("Imagen"); // Propiedad para el campo Imagen (varbinary)
+                entity.Property(e => e.Intervalo).HasColumnName("Intervalo"); // Propiedad para el campo Intervalo
 
 
             });
@@ -97,6 +99,14 @@ namespace DataAccess.Context
                 entity.Property(e => e.Horario_Id).HasColumnName("Horario_Id"); // Mapeo de propiedad
                 entity.Property(e => e.Profesional_Id).HasColumnName("Profesional_Id"); // Mapeo de propiedad
                 entity.Property(e => e.Hora).HasColumnName("Hora");
+            });
+
+            modelBuilder.Entity<UsuarioProfesional>(entity =>
+            {
+                entity.ToTable("UsuarioProfesional"); // Nombre de la tabla en la base de datos
+                entity.HasKey(e => e.UsuarioProfesional_Id); // Clave primaria
+                entity.Property(e => e.User_Id).HasColumnName("User_Id"); // Mapeo de propiedad
+                entity.Property(e => e.Profesional_Id).HasColumnName("Profesional_Id"); // Mapeo de propiedad
             });
 
         }

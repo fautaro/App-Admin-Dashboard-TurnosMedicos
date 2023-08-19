@@ -17,7 +17,8 @@ namespace DataAccess.Models
         public bool? Activo { get; set; }
         public string? Titulo { get; set; }
         public string? Descripcion { get; set; }
-        public byte[]? Imagen { get; set; } // Nueva propiedad para la imagen
+        public byte[]? Imagen { get; set; } 
+        public int? Intervalo { get; set; }
 
     }
 

@@ -30,6 +30,7 @@ builder.Services.AddTransient<ValidationService, ValidationService>();
 builder.Services.AddTransient<TokenService, TokenService>();
 builder.Services.AddTransient<DbWrapper, DbWrapper>();
 builder.Services.AddTransient<MailService, MailService>();
+builder.Services.AddTransient<DashboardService, DashboardService>();
 
 
 var app = builder.Build();

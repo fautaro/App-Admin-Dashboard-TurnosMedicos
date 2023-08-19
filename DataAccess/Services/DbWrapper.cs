@@ -20,7 +20,39 @@ namespace DataAccess.Services
             _dbContext = dbContext;
         }
 
+        #region Dashboard
 
+        public async Task<List<Turno>> GetTurnosByUser(Profesional profesional)
+        {
+            var Turnos = await _dbContext.Turno.Where(e => e.Activo == true
+                                                        && e.Profesional_Id == profesional.Profesional_Id).ToListAsync();
+
+            return Turnos;
+        }
+        public async Task<Profesional> ValidateUser(string User)
+        {
+            try
+            {
+                var user = await _dbContext.UsuarioProfesional.Where(e => e.User_Id == User).FirstOrDefaultAsync();
+
+                if (user == null)
+                    throw new Exception("Profesional no encontrado");
+
+                var profesional = await _dbContext.Profesional.Where(e => e.Profesional_Id == user.Profesional_Id).FirstOrDefaultAsync();
+
+                return profesional;
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+
+        }
+
+        #endregion
+
+        #region Metodos del otro sitio
         // Agregar un nuevo turno
         public async Task<Turno> AddTurno(Turno turno)
         {
@@ -81,5 +113,7 @@ namespace DataAccess.Services
                 throw;
             }
         }
+
+        #endregion
     }
 }
