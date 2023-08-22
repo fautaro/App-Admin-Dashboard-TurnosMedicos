@@ -19,16 +19,7 @@ namespace DataAccess.Services
         {
             _dbContext = dbContext;
         }
-
-        #region Dashboard
-
-        public async Task<List<Turno>> GetTurnosByUser(Profesional profesional)
-        {
-            var Turnos = await _dbContext.Turno.Where(e => e.Activo == true
-                                                        && e.Profesional_Id == profesional.Profesional_Id).ToListAsync();
-
-            return Turnos;
-        }
+        #region Metodos Generales
         public async Task<Profesional> ValidateUser(string User)
         {
             try
@@ -48,6 +39,55 @@ namespace DataAccess.Services
                 throw;
             }
 
+        }
+
+        public async Task<List<Turno>> GetTurnosVigentesByUser(Profesional profesional)
+        {
+            var Turnos = await _dbContext.Turno.Where(e => e.Activo == true
+                                                        && e.Profesional_Id == profesional.Profesional_Id && e.FechaHora > fechaActual).ToListAsync();
+
+            return Turnos;
+        }
+
+        public async Task<List<Turno>> ExportTurnosByUser(Profesional profesional)
+        {
+            var Turnos = await _dbContext.Turno.Where(e => e.Profesional_Id == profesional.Profesional_Id && e.FechaHora > fechaActual).ToListAsync();
+
+            return Turnos;
+        }
+        #endregion
+
+        #region Acciones
+        // Eliminar un turno
+        public async Task<bool> CancelarTurnoById(int id)
+        {
+            try
+            {
+                var TurnoACancelar = await _dbContext.Turno.Where(e => e.Turno_Id == id).FirstOrDefaultAsync();
+
+                TurnoACancelar.Activo = false;
+                _dbContext.Turno.Update(TurnoACancelar);
+                await _dbContext.SaveChangesAsync();
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+                throw;
+            }
+
+        }
+
+        #endregion
+        #region Dashboard
+
+        public async Task<List<Turno>> GetTurnosByUser(Profesional profesional)
+        {
+            var Turnos = await _dbContext.Turno.Where(e => e.Activo == true
+                                                        && e.Profesional_Id == profesional.Profesional_Id).ToListAsync();
+
+            return Turnos;
         }
 
         #endregion

@@ -2,85 +2,203 @@
     ViewData["Title"] = "Turnos Confirmados";
 }
 
+@using BusinessEntity.Response;
+@model ResponseGetTurnosConfirmados;
+
 <!DOCTYPE html>
 <html lang='en'>
 <head>
     <meta charset='utf-8' />
     <link href="~/css/sb-admin-2.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.27/dist/sweetalert2.min.css" rel="stylesheet">
 </head>
 <body>
-
-    <!-- Content Row -->
     <div class="row">
-        <!-- Area Chart -->
         <div class="col-xl-12 col-lg-12">
             <div class="card shadow mb-4">
-                <!-- Card Header - Dropdown -->
-                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                    <h6 class="m-0 font-weight-bold text-primary">Ver Turnos Confirmados</h6>
-                    <div class="dropdown no-arrow">
-                        <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                @if (!Model.Success)
+                {
+                    <div class="row">
+                        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                            <h6 class="m-0 font-weight-bold text-primary">No hay datos para su usuario. Por favor, comuníquese con el administrador.</h6>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    if (Model.Turnos.Count == 0)
+                    {
+                        <div class="row">
+                            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                <h6 class="m-0 font-weight-bold text-primary">Actualmente no hay turnos activos.</h6>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                            <h6 class="m-0 font-weight-bold text-primary">Ver Turnos Confirmados</h6>
+                            <div class="dropdown no-arrow">
+                                <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
+                                    <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
                              aria-labelledby="dropdownMenuLink">
-                            <div class="dropdown-header">Visualización:</div>
-                            <a class="dropdown-item" href="#">Visualizar como calendario</a>
-                            <div class="dropdown-divider"></div>
-                            <div class="dropdown-header">Acciones:</div>
-                            <a class="dropdown-item" @Url.Action("ExportarCalendar", "Acciones")">Exportar a Calendar</a>
+                                    <div class="dropdown-header">Visualización:</div>
+                                    <a class="dropdown-item" href="#">Visualizar como calendario</a>
+                                    <div class="dropdown-divider"></div>
+                                    <div class="dropdown-header">Acciones:</div>
+                                    <a class="dropdown-item" @Url.Action("ExportarCalendar", "Acciones")" onclick="ExportarCalendar()">Exportar a Calendar</a>
                             <a class="dropdown-item" @Url.Action("ExportarExcel", "Acciones")">Exportar a Excel</a>
-
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
-                <!-- Card Body -->
-                <div class="card-body">
-                    <div class="container">
-                        <div class="table-responsive">
-                            <table class="table table-striped">
-                                <thead>
-                                    <tr>
-                                        <th>Nombre y Apellido</th>
-                                        <th>Teléfono</th>
-                                        <th>Email</th>
-                                        <th>Fecha</th>
-                                        <th>Hora</th>
-                                        <th>Acciones</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>Juan Perez</td>
-                                        <td>123456789</td>
-                                        <td>johndoe@example.com</td>
-                                        <td>2023-06-10</td>
-                                        <td>09:30 AM</td>
-                                        <td>
-                                            <button class="btn btn-primary btn-sm">Editar</button>
-                                            <button class="btn btn-danger btn-sm">Cancelar</button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>Roberto Leto</td>
-                                        <td>987654321</td>
-                                        <td>janesmith@example.com</td>
-                                        <td>2023-06-12</td>
-                                        <td>11:00 AM</td>
-                                        <td>
-                                            <button class="btn btn-primary btn-sm">Editar</button>
-                                            <button class="btn btn-danger btn-sm">Cancelar</button>
-                                        </td>
-                                    </tr>
-                                    <!-- Agrega más filas para mostrar más turnos confirmados -->
-                                </tbody>
-                            </table>
+                        <!-- Card Body -->
+                        <div class="card-body">
+                            <div class="container">
+                                <div class="table-responsive">
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>Nombre y Apellido</th>
+                                                <th>Teléfono</th>
+                                                <th>Email</th>
+                                                <th>Fecha y Hora</th>
+                                                <th>Acciones</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var item in Model.Turnos)
+                                            {
+                                                <tr>
+                                                    <td>@item.Nombre @item.Apellido</td>
+                                                    <td>@item.Telefono</td>
+                                                    <td>@item.Email</td>
+                                                    <td>@item.FechaHora</td>
+                                                    <td>
+                                                        @*                                                        <button class="btn btn-primary btn-sm">Editar</button>
+                                            *@                                                        <button class="btn btn-danger btn-sm" onclick='cancelarTurno(@item.Turno_Id)'>Cancelar</button>
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
+                    }
+                }
             </div>
         </div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.27/dist/sweetalert2.all.min.js"></script>
+
+
+    <script>
+        function ExportarCalendar() {
+            Swal.fire({
+                title: "Exportando turnos",
+            });
+            Swal.showLoading();
+
+            fetch(`/Acciones/ExportarIcs`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "text/calendar" // Establece el tipo de contenido correcto
+                },
+            })
+                .then(response => response.blob()) // Obtiene el archivo como un objeto Blob
+                .then(blob => {
+                    Swal.hideLoading();
+                    Swal.fire({
+                        title: "Turnos exportados correctamente",
+                        icon: "success"
+                    });
+                    // Crea una URL para el objeto Blob
+                    const blobUrl = URL.createObjectURL(blob);
+
+                    // Crea un enlace para descargar el archivo
+                    const link = document.createElement("a");
+                    link.href = blobUrl;
+                    link.download = "eventos.ics"; // Nombre del archivo
+                    link.textContent = "Descargar archivo";
+
+                    // Agrega el enlace a la página y dispara la descarga
+                    document.body.appendChild(link);
+                    link.click();
+
+                    // Limpia la URL creada
+                    URL.revokeObjectURL(blobUrl);
+                })
+                .catch(error => {
+                    console.log(error);
+                    Swal.hideLoading();
+                    Swal.fire(
+                        'Error al exportar turnos',
+                        'No ha sido posible exportar el listado de turnos.',
+                        'info'
+                    );
+                });
+        }
+
+
+
+        function cancelarTurno(id) {
+            Swal.fire({
+                title: 'Cancelar el turno',
+                text: `¿Está seguro de cancelar el turno?`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Confirmar',
+                cancelButtonText: 'Atrás',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({
+                        title: "Cancelando turno",
+                    })
+                    Swal.showLoading()
+                    fetch(`/Acciones/CancelarTurno?id=` + id, {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                    })
+                        .then(response => response.json())
+                        .then(success => {
+                            Swal.hideLoading()
+                            if (success) {
+                                Swal.fire(
+                                    'Turno cancelado',
+                                    'El turno ha sido cancelado correctamente.',
+                                    'success'
+                                ).then((result) => {
+                                    window.location.reload();
+                                });
+                            } else {
+                                Swal.fire(
+                                    'Turno no cancelado',
+                                    'No ha sido posible cancelar el turno.',
+                                    'info'
+                                )
+                            }
+                        })
+                        .catch(error => {
+                            Swal.hideLoading()
+                            Swal.fire(
+                                'Turno no cancelado',
+                                'No ha sido posible cancelar el turno.',
+                                'info'
+                            ).then((result) => {
+                                window.location.reload();
+                            });
+                        });
+                }
+            })
+
+        };
+    </script>
 </body>
 </html>
