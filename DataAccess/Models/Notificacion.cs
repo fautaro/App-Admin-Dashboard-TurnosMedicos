@@ -19,5 +19,9 @@ namespace DataAccess.Models
         public string? Descripcion { get; set; }
 
         public bool Leido { get; set; }
+        public DateTime? FechaHoraEvento { get; set; }
+
+        public bool? Eliminado { get; set; }
+
     }
 }

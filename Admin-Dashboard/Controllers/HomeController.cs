@@ -39,7 +39,23 @@ namespace Admin_Dashboard.Controllers
             return View();
         }
 
+        public async Task<int> GetCantNotificaciones()
+        {
+            var user = await _userManager.GetUserAsync(User);
 
+            var response = await _dashboardService.GetCantNotificaciones(user.Id);
+
+            return response;
+
+        }
+        public async Task<IActionResult> Notificaciones()
+        {
+            var user = await _userManager.GetUserAsync(User);
+
+            var response = await _dashboardService.GetDetalleNotificaciones(user.Id);
+
+            return View(response);
+        }
 
         //public IActionResult Privacy()
         //{

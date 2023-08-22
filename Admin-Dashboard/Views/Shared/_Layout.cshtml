@@ -117,49 +117,16 @@
                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="fas fa-bell fa-fw"></i>
                                 <!-- Counter - Alerts -->
-                                <span class="badge badge-danger badge-counter">3+</span>
+                                <span class="badge badge-counter" id="notificationCant"></span>
                             </a>
                             <!-- Dropdown - Alerts -->
                             <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                                 aria-labelledby="alertsDropdown">
+                                 aria-labelledby="alertsDropdown" id="notificationsList">
                                 <h6 class="dropdown-header">
                                     Notificaciones
                                 </h6>
-                                <a class="dropdown-item d-flex align-items-center" href="#">
-                                    <div class="mr-3">
-                                        <div class="icon-circle bg-primary">
-                                            <i class="fas fa-file-alt text-white"></i>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div class="small text-gray-500">December 12, 2019</div>
-                                        <span class="font-weight-bold">A new monthly report is ready to download!</span>
-                                    </div>
-                                </a>
-                                <a class="dropdown-item d-flex align-items-center" href="#">
-                                    <div class="mr-3">
-                                        <div class="icon-circle bg-success">
-                                            <i class="fas fa-donate text-white"></i>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div class="small text-gray-500">December 7, 2019</div>
-                                        $290.29 has been deposited into your account!
-                                    </div>
-                                </a>
-                                <a class="dropdown-item d-flex align-items-center" href="#">
-                                    <div class="mr-3">
-                                        <div class="icon-circle bg-warning">
-                                            <i class="fas fa-exclamation-triangle text-white"></i>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div class="small text-gray-500">December 2, 2019</div>
-                                        Spending Alert: We've noticed unusually high spending for your account.
-                                    </div>
-                                </a>
-                                <a class="dropdown-item text-center small text-gray-500" href="#">Mostrar todas las notificaciones</a>
                             </div>
+
                         </li>
 
                         <div class="topbar-divider d-none d-sm-block"></div>
@@ -243,7 +210,7 @@
                 <div class="modal-body">Selecciona "Cerrar sesión" para salir.</div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancelar</button>
-                    <form asp-area="Identity"  asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/", new { area = "" })" method="post">
+                    <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/", new { area = "" })" method="post">
                         <button type="submit" class="btn btn-primary">Cerrar sesión</button>
                     </form>
                 </div>
@@ -262,13 +229,138 @@
     <script src="~/js/sb-admin-2.min.js"></script>
 
     <!-- Page level plugins -->
-@*    <script src="~/js/chart.js/Chart.min.js"></script>
-*@
+    @*    <script src="~/js/chart.js/Chart.min.js"></script>
+    *@
     <!-- Page level custom scripts -->
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
 
+
+    <script>
+        //Notificaciones
+        // Llamamos al método para actualizar el contador al cargar la página
+        window.addEventListener('DOMContentLoaded', actualizarContadorNotificaciones);
+        // Llamamos al método para cargar y mostrar notificaciones al cargar la página
+        window.addEventListener('DOMContentLoaded', cargarNotificaciones);
+
+        // Método para actualizar el contador de notificaciones no leídas
+        function actualizarContadorNotificaciones() {
+            // Simulamos una llamada AJAX para obtener el número de notificaciones no leídas desde el servidor
+            const numeroNotificacionesNoLeidas = obtenerNumeroNotificacionesNoLeidas();
+
+            // Seleccionamos el elemento del contador
+            const contadorElement = document.getElementById('notificationCant');
+
+            // Actualizamos el contenido del contador
+            if (numeroNotificacionesNoLeidas > 0) {
+                contadorElement.classList.add("badge-danger"); // Agrega la clase adicional
+                contadorElement.textContent = numeroNotificacionesNoLeidas.toString();
+            } else {
+                contadorElement.textContent = '';
+            }
+        }
+
+        function obtenerNumeroNotificacionesNoLeidas() {
+
+            return fetch('@Url.Action("GetCantNotificaciones", "Home")')
+                .then(response => response.json())
+                .then(data => {
+                    return data; // Retornamos el valor obtenido
+                })
+                .catch(error => {
+                    console.error("Error al obtener la cantidad de notificaciones:", error);
+                    return 0; // Manejo del error, retornamos 0 en caso de fallo
+                });
+        }
+
+
+
+        // Método para cargar y mostrar notificaciones
+        function cargarNotificaciones() {
+            // Simulamos una llamada AJAX para obtener las notificaciones del servidor
+            const notificaciones = obtenerNotificacionesDesdeElServidor();
+
+            // Seleccionamos el elemento de la lista de notificaciones
+            const listaNotificaciones = document.getElementById('notificationsList');
+
+            // Vaciamos la lista de notificaciones
+            listaNotificaciones.innerHTML = '';
+
+            // Iteramos a través de las notificaciones y las agregamos al DOM
+            notificaciones.forEach(notificacion => {
+                let notificacionElement = "";
+                if (notificacion.leida) {
+                    notificacionElement = `
+                                                    <a class="dropdown-item d-flex align-items-center" href="#">
+                                                    <div class="mr-3">
+                                                        <div class="icon-circle bg-primary">
+                                                        <i class="far fa-bell" style="color: #ffffff;"></i>
+                                                        </div>
+                                                    </div>
+                                                    <div>
+                                                                <div class="small text-gray-500">${notificacion.fecha}</div>
+                                                        <span class="font-weight-regular">${notificacion.mensaje}</span>
+                                                    </div>
+                                                   </a>`;
+                } else {
+                    notificacionElement = `
+                                                  <a class="dropdown-item d-flex align-items-center" href="#">
+                                                  <div class="mr-3">
+                                                      <div class="icon-circle bg-primary">
+                                                      <i class="far fa-bell" style="color: #ffffff;"></i>
+                                                      </div>
+                                                  </div>
+                                                  <div>
+                                                              <div class="small text-gray-500">${notificacion.fecha}</div>
+                                                      <span class="font-weight-bold">${notificacion.mensaje}</span>
+                                                  </div>
+                                              </a>`;
+                }
+
+
+                // Agregamos la notificación al DOM
+                listaNotificaciones.insertAdjacentHTML('beforeend', notificacionElement);
+            });
+
+        @{
+            string urlMostrarNotificaciones = Url.Action("Notificaciones", "Home");
+        }
+                let btnMostrarTodo = '<a class="dropdown-item text-center small text-gray-500" href="@urlMostrarNotificaciones">Mostrar todas las notificaciones</a>';
+            listaNotificaciones.insertAdjacentHTML('beforeend', btnMostrarTodo);
+
+        }
+
+
+
+        // Método para obtener notificaciones desde el servidor (simulado)
+        function obtenerNotificacionesDesdeElServidor() {
+            // Aquí realizarías una llamada real al servidor para obtener las notificaciones
+            // Por ahora, simulamos algunas notificaciones
+            return [
+                {
+                    fecha: '22/08/2023',
+                    mensaje: 'Nuevo turno con Juan Perez',
+                    leida: false,
+                },
+                {
+                    fecha: '19/08/2023',
+                    mensaje: 'Nuevo turno con Roberto Leto',
+                    leida: true,
+
+                },
+                {
+                    fecha: '17/08/2023',
+                    mensaje: 'Nuevo turno con Matias Martinez',
+                    leida: true,
+
+                }
+            ];
+        }
+
+
+
+    </script>
 </body>
 </html>

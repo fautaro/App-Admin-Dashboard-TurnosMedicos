@@ -81,7 +81,19 @@ namespace DataAccess.Services
 
         #endregion
         #region Dashboard
+        public async Task<int> GetCantNotificacionesByUser(Profesional profesional)
+        {
+            var Notificaciones = await _dbContext.Notificacion.Where(e => e.Profesional_Id == profesional.Profesional_Id && (e.Eliminado == null || e.Eliminado == false)).ToListAsync();
 
+            return Notificaciones.Count();
+
+        }
+        public async Task<List<Notificacion>> GetNotificacionesDetalleByUser (Profesional profesional)
+        {
+            var Notificaciones = await _dbContext.Notificacion.Where(e => e.Profesional_Id == profesional.Profesional_Id && (e.Eliminado == null || e.Eliminado == false)).ToListAsync();
+            Notificaciones.Sort();
+            return Notificaciones;
+        }
         public async Task<List<Turno>> GetTurnosByUser(Profesional profesional)
         {
             var Turnos = await _dbContext.Turno.Where(e => e.Activo == true

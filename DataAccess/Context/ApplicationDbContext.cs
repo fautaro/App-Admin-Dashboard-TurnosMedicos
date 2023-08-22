@@ -120,6 +120,9 @@ namespace DataAccess.Context
                 entity.Property(e => e.Titulo).HasColumnName("Titulo").HasMaxLength(50).IsRequired();
                 entity.Property(e => e.Descripcion).HasColumnName("Descripcion").HasMaxLength(500);
                 entity.Property(e => e.Leido).HasColumnName("Leido").IsRequired();
+                entity.Property(e => e.FechaHoraEvento).HasColumnName("FechaHoraEvento");
+                entity.Property(e => e.Eliminado).HasColumnName("Eliminado");
+
             });
         }
     }

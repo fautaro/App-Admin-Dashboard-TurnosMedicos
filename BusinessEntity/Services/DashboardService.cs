@@ -26,6 +26,51 @@ namespace BusinessEntity.Services
             _tokenService = tokenService;
             _mailService = mailService;
         }
+        public async Task<int> GetCantNotificaciones(string AuthenticatedUser)
+        {
+            try
+            {
+                var user = await _dbWrapper.ValidateUser(AuthenticatedUser);
+                var CantNotificacion = await _dbWrapper.GetCantNotificacionesByUser(user);
+
+                return CantNotificacion;
+
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+        }
+        public async Task<List<NotificacionesDetalleResponse>> GetDetalleNotificaciones(string AuthenticatedUser)
+        {
+            List<NotificacionesDetalleResponse> NotifDetalleResponse = new List<NotificacionesDetalleResponse>();
+
+            try
+            {
+                var user = await _dbWrapper.ValidateUser(AuthenticatedUser);
+                var NotificacionDetalle = await _dbWrapper.GetNotificacionesDetalleByUser(user);
+
+                foreach (var item in NotificacionDetalle)
+                {
+                    NotificacionesDetalleResponse notif = new NotificacionesDetalleResponse()
+                    {
+                        Titulo = item.Titulo,
+                        Descripcion = item.Descripcion,
+                        FechaHoraEvento = item.FechaHoraEvento?.ToString("dd/MM/yyyy HH:mm"),
+                        Leido = item.Leido
+                    };
+                    NotifDetalleResponse.Add(notif);
+                }
+
+                return NotifDetalleResponse;
+            }
+            catch (Exception ex) 
+            {
+
+                throw;
+            }
+        }
 
 
         public async Task<DashboardResponse> GetItems(string AuthenticatedUser)
