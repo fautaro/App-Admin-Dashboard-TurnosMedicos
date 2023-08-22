@@ -23,6 +23,9 @@ namespace BusinessEntity.Response
         public string Telefono { get; set; }
         public string Email { get; set; }
         public string FechaHora { get; set; }
+        public string FechaHoraO { get; set; }
+        public string FechaFinO { get; set; }
+        public string Titulo { get; set; }
     }
 
 }

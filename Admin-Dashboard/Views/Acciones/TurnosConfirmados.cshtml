@@ -11,194 +11,392 @@
     <meta charset='utf-8' />
     <link href="~/css/sb-admin-2.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.27/dist/sweetalert2.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@@event-calendar/build@1.5.1/event-calendar.min.css">
+
 </head>
 <body>
-    <div class="row">
-        <div class="col-xl-12 col-lg-12">
-            <div class="card shadow mb-4">
-                @if (!Model.Success)
-                {
-                    <div class="row">
-                        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                            <h6 class="m-0 font-weight-bold text-primary">No hay datos para su usuario. Por favor, comuníquese con el administrador.</h6>
-                        </div>
-                    </div>
-                }
-                else
-                {
-                    if (Model.Turnos.Count == 0)
+    <style>
+               @@media (max-width: 768px) {
+          .event-calendar {
+            transform: scale(1.2); /* Ajusta el valor según sea necesario */
+            transform-origin: top left;
+          }
+        }
+
+    </style>
+
+    <div id="app">
+        <div class="row">
+            <div class="col-xl-12 col-lg-12">
+                <div class="card shadow mb-4">
+
+                    @if (!Model.Success)
                     {
                         <div class="row">
                             <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                <h6 class="m-0 font-weight-bold text-primary">Actualmente no hay turnos activos.</h6>
+                                <h6 class="m-0 font-weight-bold text-primary">No hay datos para su usuario. Por favor, comuníquese con el administrador.</h6>
                             </div>
                         </div>
                     }
                     else
                     {
-                        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                            <h6 class="m-0 font-weight-bold text-primary">Ver Turnos Confirmados</h6>
-                            <div class="dropdown no-arrow">
-                                <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
-                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
-                                </a>
-                                <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
-                             aria-labelledby="dropdownMenuLink">
-                                    <div class="dropdown-header">Visualización:</div>
-                                    <a class="dropdown-item" href="#">Visualizar como calendario</a>
-                                    <div class="dropdown-divider"></div>
-                                    <div class="dropdown-header">Acciones:</div>
-                                    <a class="dropdown-item" @Url.Action("ExportarCalendar", "Acciones")" onclick="ExportarCalendar()">Exportar a Calendar</a>
-                            <a class="dropdown-item" @Url.Action("ExportarExcel", "Acciones")">Exportar a Excel</a>
+                        if (Model.Turnos.Count == 0)
+                        {
+                            <div class="row">
+                                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                    <h6 class="m-0 font-weight-bold text-primary">Actualmente no hay turnos activos.</h6>
                                 </div>
                             </div>
-                        </div>
-                        <!-- Card Body -->
-                        <div class="card-body">
-                            <div class="container">
-                                <div class="table-responsive">
-                                    <table class="table table-striped">
-                                        <thead>
-                                            <tr>
-                                                <th>Nombre y Apellido</th>
-                                                <th>Teléfono</th>
-                                                <th>Email</th>
-                                                <th>Fecha y Hora</th>
-                                                <th>Acciones</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach (var item in Model.Turnos)
-                                            {
+                        }
+                        else
+                        {
+                            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                <h6 class="m-0 font-weight-bold text-primary">Ver Turnos Confirmados</h6>
+                                <div class="dropdown no-arrow">
+                                    <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+                                    </a>
+                                    <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
+                                 aria-labelledby="dropdownMenuLink">
+                                        <div class="dropdown-header">Visualización:</div>
+                                        <div v-if="!showCalendar">
+                                            <a class="dropdown-item" v-on:click="viewCalendar()">Visualizar como calendario</a>
+                                        </div>
+                                        <div v-else>
+                                            <a class="dropdown-item" v-on:click="viewCalendar()" v-else>Visualizar como listado de eventos</a>
+                                            <div class="dropdown-divider"></div>
+                                            <div class="dropdown-header">Calendario:</div>
+
+                                            <a class="dropdown-item" v-on:click="changeStyleCalendar('timeGridDay')">Visualizar por día</a>
+                                            <a class="dropdown-item" v-on:click="changeStyleCalendar('timeGridWeek')">Visualizar por semana</a>
+                                            <a class="dropdown-item" v-on:click="changeStyleCalendar('dayGridMonth')">Visualizar por mes</a>
+                                        </div>
+
+                                        <div class="dropdown-divider"></div>
+                                        <div class="dropdown-header">Acciones:</div>
+                                        <a class="dropdown-item" v-on:click="exportarCalendar()">Exportar a Calendar</a>
+                                        <a class="dropdown-item">Exportar a Excel</a>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div v-show="showCalendar">
+                                <div class="card-body">
+                                    <div class="container" id="containerCalendar">
+                                        <div id="ec"></div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="modal fade" id="eventModal" tabindex="-1" role="dialog" aria-labelledby="eventModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="eventModalLabel">Detalles del Turno</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="close" v-on:click="btnCerrarModalClick()">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body" id="eventModalBody">
+                                                    <table class="table table-striped">
+                                                        <tr>
+                                                            <td><strong>Nombre:</strong></td>
+                                                            <td>{{modalNombre}}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><strong>Email:</strong></td>
+                                                            <td>{{modalEmail}}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><strong>Teléfono:</strong></td>
+                                                            <td>{{modalTelefono}}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><strong>Fecha y Hora de Inicio:</strong></td>
+                                                            <td>{{modalFechaInicio}}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><strong>Fecha y Hora de Fin:</strong></td>
+                                                            <td>{{modalFechaFin}}</td>
+                                                        </tr>
+                                                    </table>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal" id="btnCerrarModal" v-on:click="btnCerrarModalClick()">Cerrar</button>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Card Body -->
+                            <div class="card-body" id="tablaTurnoslist" v-show="!showCalendar">
+                                <div class="container">
+                                    <div class="table-responsive">
+                                        <table class="table table-striped">
+                                            <thead>
                                                 <tr>
-                                                    <td>@item.Nombre @item.Apellido</td>
-                                                    <td>@item.Telefono</td>
-                                                    <td>@item.Email</td>
-                                                    <td>@item.FechaHora</td>
-                                                    <td>
-                                                        @*                                                        <button class="btn btn-primary btn-sm">Editar</button>
-                                            *@                                                        <button class="btn btn-danger btn-sm" onclick='cancelarTurno(@item.Turno_Id)'>Cancelar</button>
-                                                    </td>
+                                                    <th>Nombre y Apellido</th>
+                                                    <th>Teléfono</th>
+                                                    <th>Email</th>
+                                                    <th>Fecha y Hora</th>
+                                                    <th>Acciones</th>
                                                 </tr>
-                                            }
-                                        </tbody>
-                                    </table>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var item in Model.Turnos)
+                                                {
+                                                    <tr>
+                                                        <td>@item.Nombre @item.Apellido</td>
+                                                        <td>@item.Telefono</td>
+                                                        <td>@item.Email</td>
+                                                        <td>@item.FechaHora</td>
+                                                        <td>
+                                                            @*                                                        <button class="btn btn-primary btn-sm">Editar</button>
+                                                *@                                                        <button class="btn btn-danger btn-sm" v-on:click='cancelarTurno(@item.Turno_Id)'>Cancelar</button>
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        }
                     }
-                }
+                </div>
             </div>
         </div>
     </div>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.27/dist/sweetalert2.all.min.js"></script>
-
+    <script src="https://cdn.jsdelivr.net/npm/@@event-calendar/build@1.5.1/event-calendar.min.js"></script>
 
     <script>
-        function ExportarCalendar() {
-            Swal.fire({
-                title: "Exportando turnos",
-            });
-            Swal.showLoading();
+        const app = Vue.createApp({
 
-            fetch(`/Acciones/ExportarIcs`, {
-                method: "GET",
-                headers: {
-                    "Content-Type": "text/calendar" // Establece el tipo de contenido correcto
+            data() {
+                return {
+                    //Lista Agenda
+                    agendaList: [],
+                    //Datos Modal
+                    modalNombre: "",
+                    modalEmail: "",
+                    modalTelefono: "",
+                    modalFechaInicio: "",
+                    modalFechaFin: "",
+                    //Validacion -
+                    showCalendar: false,
+                    initializeCalendar: false,
+                    //Visualizacion Calendario
+                    styleCalendar: "dayGridMonth"
+
+                }
+            },
+            mounted() {
+                this.agendaList = this.fillAgenda(@Html.Raw(Json.Serialize(Model.Turnos)));
+            },
+            methods: {
+                changeStyleCalendar(style) {
+                    if (style != this.styleCalendar) {
+                        this.styleCalendar = style;
+                        const calendarContainer = document.getElementById('ec');
+                        if (calendarContainer) {
+                            calendarContainer.remove(); // Elimina el contenedor del calendario
+                            const newCalendarContainer = document.createElement('div');
+                            newCalendarContainer.id = 'ec';
+                            document.getElementById('containerCalendar').appendChild(newCalendarContainer);
+
+                        }
+
+                        this.initCalendar();
+
+                    }
                 },
-            })
-                .then(response => response.blob()) // Obtiene el archivo como un objeto Blob
-                .then(blob => {
-                    Swal.hideLoading();
+                exportarCalendar() {
                     Swal.fire({
-                        title: "Turnos exportados correctamente",
-                        icon: "success"
+                        title: "Exportando turnos",
                     });
-                    // Crea una URL para el objeto Blob
-                    const blobUrl = URL.createObjectURL(blob);
+                    Swal.showLoading();
 
-                    // Crea un enlace para descargar el archivo
-                    const link = document.createElement("a");
-                    link.href = blobUrl;
-                    link.download = "eventos.ics"; // Nombre del archivo
-                    link.textContent = "Descargar archivo";
-
-                    // Agrega el enlace a la página y dispara la descarga
-                    document.body.appendChild(link);
-                    link.click();
-
-                    // Limpia la URL creada
-                    URL.revokeObjectURL(blobUrl);
-                })
-                .catch(error => {
-                    console.log(error);
-                    Swal.hideLoading();
-                    Swal.fire(
-                        'Error al exportar turnos',
-                        'No ha sido posible exportar el listado de turnos.',
-                        'info'
-                    );
-                });
-        }
-
-
-
-        function cancelarTurno(id) {
-            Swal.fire({
-                title: 'Cancelar el turno',
-                text: `¿Está seguro de cancelar el turno?`,
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Confirmar',
-                cancelButtonText: 'Atrás',
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    Swal.fire({
-                        title: "Cancelando turno",
-                    })
-                    Swal.showLoading()
-                    fetch(`/Acciones/CancelarTurno?id=` + id, {
-                        method: "POST",
+                    fetch(`/Acciones/ExportarIcs`, {
+                        method: "GET",
                         headers: {
-                            "Content-Type": "application/json"
+                            "Content-Type": "text/calendar" // Establece el tipo de contenido correcto
                         },
                     })
-                        .then(response => response.json())
-                        .then(success => {
-                            Swal.hideLoading()
-                            if (success) {
-                                Swal.fire(
-                                    'Turno cancelado',
-                                    'El turno ha sido cancelado correctamente.',
-                                    'success'
-                                ).then((result) => {
-                                    window.location.reload();
-                                });
-                            } else {
-                                Swal.fire(
-                                    'Turno no cancelado',
-                                    'No ha sido posible cancelar el turno.',
-                                    'info'
-                                )
-                            }
+                        .then(response => response.blob()) // Obtiene el archivo como un objeto Blob
+                        .then(blob => {
+                            Swal.hideLoading();
+                            Swal.fire({
+                                title: "Turnos exportados correctamente",
+                                icon: "success"
+                            });
+                            // Crea una URL para el objeto Blob
+                            const blobUrl = URL.createObjectURL(blob);
+
+                            // Crea un enlace para descargar el archivo
+                            const link = document.createElement("a");
+                            link.href = blobUrl;
+                            link.download = "eventos.ics"; // Nombre del archivo
+                            link.textContent = "Descargar archivo";
+
+                            // Agrega el enlace a la página y dispara la descarga
+                            document.body.appendChild(link);
+                            link.click();
+
+                            // Limpia la URL creada
+                            URL.revokeObjectURL(blobUrl);
                         })
                         .catch(error => {
-                            Swal.hideLoading()
+                            console.log(error);
+                            Swal.hideLoading();
                             Swal.fire(
-                                'Turno no cancelado',
-                                'No ha sido posible cancelar el turno.',
+                                'Error al exportar turnos',
+                                'No ha sido posible exportar el listado de turnos.',
                                 'info'
-                            ).then((result) => {
-                                window.location.reload();
-                            });
+                            );
                         });
-                }
-            })
+                },
 
-        };
+                cancelarTurno(id) {
+                    Swal.fire({
+                        title: 'Cancelar el turno',
+                        text: `¿Está seguro de cancelar el turno?`,
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Confirmar',
+                        cancelButtonText: 'Atrás',
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            Swal.fire({
+                                title: "Cancelando turno",
+                            })
+                            Swal.showLoading()
+                            fetch(`/Acciones/CancelarTurno?id=` + id, {
+                                method: "POST",
+                                headers: {
+                                    "Content-Type": "application/json"
+                                },
+                            })
+                                .then(response => response.json())
+                                .then(success => {
+                                    Swal.hideLoading()
+                                    if (success) {
+                                        Swal.fire(
+                                            'Turno cancelado',
+                                            'El turno ha sido cancelado correctamente.',
+                                            'success'
+                                        ).then((result) => {
+                                            window.location.reload();
+                                        });
+                                    } else {
+                                        Swal.fire(
+                                            'Turno no cancelado',
+                                            'No ha sido posible cancelar el turno.',
+                                            'info'
+                                        )
+                                    }
+                                })
+                                .catch(error => {
+                                    Swal.hideLoading()
+                                    Swal.fire(
+                                        'Turno no cancelado',
+                                        'No ha sido posible cancelar el turno.',
+                                        'info'
+                                    ).then((result) => {
+                                        window.location.reload();
+                                    });
+                                });
+                        }
+                    })
+                },
+                fillAgenda(agenda) {
+                    let arr = [];
+                    const colors = ['#6d6875', '#073b4c']; // Array de colores diferentes
+                    let colorIndex = 0; // Índice para seleccionar colores del array
+
+                    for (let turno of agenda) {
+                        let obj = {
+                            id: turno.turno_Id,
+                            start: turno.fechaHoraO,
+                            end: turno.fechaFinO,
+                            title: turno.titulo,
+                            backgroundColor: colors[colorIndex], // Asignar un color del array
+                            textColor: '#FFFFFF',
+                            editable: false, // Evita que se puedan editar y mover
+                            startEditable: false, // Evita que se pueda cambiar el inicio del evento
+                            durationEditable: false, // Evita que se pueda cambiar la duración del evento
+                            extendedProps: {
+                                name: turno.nombre + " " + turno.apellido,
+                                email: turno.email,
+                                phone: turno.telefono,
+                            }
+                        };
+
+                        arr.push(obj);
+                        colorIndex = (colorIndex + 1) % colors.length;
+                    }
+                    return arr;
+                },
+                btnCerrarModalClick() {
+                    $('#eventModal').modal('toggle');
+                },
+                formatDate(date) {
+                    const options = { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' };
+                    const formattedDate = date.toLocaleDateString('es-AR', options);
+                    return formattedDate.replace(',', ''); // Elimina la coma en la fecha
+                },
+                initCalendar() {
+                    const that = this;
+                    this.initializeCalendar = true;
+                    let ec = new EventCalendar(document.getElementById('ec'), {
+                        view: that.styleCalendar,
+                        language: 'es',
+                        height: '700px',
+                        editable: false,
+                        eventClick: function (info) {
+                            const clickedEvent = info.event; // Objeto del evento clicado
+                            const eventTitle = clickedEvent.title; // Título del evento
+                            const eventStart = that.formatDate(clickedEvent.start); // Hora de inicio del evento
+                            const eventEnd = that.formatDate(clickedEvent.end); // Hora de fin del evento
+                            const eventExtendedProps = clickedEvent.extendedProps;
+
+                            const { name, email, phone } = eventExtendedProps;
+
+                            const modalBody = document.getElementById('eventModalBody');
+
+                            console.log(eventExtendedProps);
+                            that.modalNombre = eventExtendedProps.name;
+                            that.modalEmail = eventExtendedProps.email;
+                            that.modalTelefono = eventExtendedProps.phone;
+                            that.modalFechaInicio = eventStart;
+                            that.modalFechaFin = eventEnd;
+
+                            // Abrir el modal
+                            $('#eventModal').modal('show');
+                        },
+                        events: that.agendaList
+                    });
+                },
+                viewCalendar() {
+                    if (this.showCalendar) {
+                        this.showCalendar = false;
+                    } else {
+                        this.showCalendar = true;
+                        console.log(this.agendaList)
+                        if (!this.initializeCalendar) {
+                            this.initCalendar();
+                        }
+                    }
+                }
+            }
+        });
+
+        app.mount('#app');
     </script>
 </body>
 </html>

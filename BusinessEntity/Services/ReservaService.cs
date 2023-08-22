@@ -149,7 +149,10 @@ namespace BusinessEntity.Services
                         Apellido = turno.Apellido,
                         Telefono = turno.Telefono,
                         Email = turno.Email,
-                        FechaHora = turno.FechaHora.ToString("dd/MM/yyyy HH:mm")
+                        FechaHora = turno.FechaHora.ToString("dd/MM/yyyy HH:mm"),
+                        FechaHoraO = turno.FechaHora.ToString("o"),
+                        FechaFinO = turno.FechaHora.AddMinutes(Convert.ToInt32(Profesional.Intervalo)).ToString("o"),
+                        Titulo = $"{turno.Nombre} {turno.Apellido}"
                     };
 
                     list.Add(t);
