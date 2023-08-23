@@ -39,6 +39,14 @@ namespace Admin_Dashboard.Controllers
             return View();
         }
 
+        public async Task<bool> NotificacionesLeidas()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            var result = await _dashboardService.MarcarNotificacionesLeidas(user.Id);
+
+            return true;
+
+        }
         public async Task<int> GetCantNotificaciones()
         {
             var user = await _userManager.GetUserAsync(User);
@@ -55,6 +63,15 @@ namespace Admin_Dashboard.Controllers
             var response = await _dashboardService.GetDetalleNotificaciones(user.Id);
 
             return View(response);
+        }
+
+        public async Task<List<NotificacionesDetalleResponse>> GetNotificacionesList()
+        {
+            var user = await _userManager.GetUserAsync(User);
+
+            var response = await _dashboardService.GetDetalleNotificaciones(user.Id);
+
+            return response;
         }
 
         //public IActionResult Privacy()

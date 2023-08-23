@@ -81,6 +81,32 @@ namespace DataAccess.Services
 
         #endregion
         #region Dashboard
+
+        public async Task<bool> MarcarNotificacionesLeidas(Profesional profesional)
+        {
+            try
+            {
+                var Notificaciones = await _dbContext.Notificacion.Where(e => e.Profesional_Id == profesional.Profesional_Id && (e.Eliminado == null || e.Eliminado == false) && e.Leido == false).ToListAsync();
+
+                foreach (var item in Notificaciones)
+                {
+                    item.Leido = true;
+                    _dbContext.Update(item);
+
+
+                }
+
+                await _dbContext.SaveChangesAsync();
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+                throw;
+            }
+
+        }
         public async Task<int> GetCantNotificacionesByUser(Profesional profesional)
         {
             var Notificaciones = await _dbContext.Notificacion.Where(e => e.Profesional_Id == profesional.Profesional_Id && (e.Eliminado == null || e.Eliminado == false)).ToListAsync();

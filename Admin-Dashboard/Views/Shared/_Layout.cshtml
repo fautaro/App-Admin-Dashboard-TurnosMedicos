@@ -114,7 +114,7 @@
                         <!-- Nav Item - Alerts -->
                         <li class="nav-item dropdown no-arrow mx-1">
                             <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button"
-                               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onclick="marcarNotificacionesLeidas()">
                                 <i class="fas fa-bell fa-fw"></i>
                                 <!-- Counter - Alerts -->
                                 <span class="badge badge-counter" id="notificationCant"></span>
@@ -239,35 +239,68 @@
 
 
     <script>
+
+
         //Notificaciones
+        let leidas = false;
+        let requestEjecutada = false;
         // Llamamos al método para actualizar el contador al cargar la página
         window.addEventListener('DOMContentLoaded', actualizarContadorNotificaciones);
         // Llamamos al método para cargar y mostrar notificaciones al cargar la página
         window.addEventListener('DOMContentLoaded', cargarNotificaciones);
 
-        // Método para actualizar el contador de notificaciones no leídas
-        function actualizarContadorNotificaciones() {
-            // Simulamos una llamada AJAX para obtener el número de notificaciones no leídas desde el servidor
-            const numeroNotificacionesNoLeidas = obtenerNumeroNotificacionesNoLeidas();
 
-            // Seleccionamos el elemento del contador
+
+        function marcarNotificacionesLeidas() {
+
             const contadorElement = document.getElementById('notificationCant');
+            contadorElement.classList.remove("badge-danger");
+            contadorElement.textContent = '';
+            if (leidas) {
+                const spanElement = document.querySelector('.mensaje'); // Selecciona el elemento span
+                spanElement.classList.remove('font-weight-bold'); // Quita la clase bold
+                spanElement.classList.add('font-weight-regular'); // Agrega la clase regular
 
-            // Actualizamos el contenido del contador
-            if (numeroNotificacionesNoLeidas > 0) {
-                contadorElement.classList.add("badge-danger"); // Agrega la clase adicional
-                contadorElement.textContent = numeroNotificacionesNoLeidas.toString();
-            } else {
-                contadorElement.textContent = '';
+            }
+            else {
+                leidas = true;
+                if (!requestEjecutada) {
+                    fetch('@Url.Action("NotificacionesLeidas", "Home")')
+                        .then(response => response.json())
+                        .then(success => {
+                            if (success) {
+                                requestEjecutada = true;
+
+                            }
+
+                        })
+                        .catch(error => {
+                            requestEjecutada = false;
+
+                        });
+                }
+
             }
         }
 
-        function obtenerNumeroNotificacionesNoLeidas() {
 
-            return fetch('@Url.Action("GetCantNotificaciones", "Home")')
+
+        // Método para actualizar el contador de notificaciones no leídas
+        function actualizarContadorNotificaciones() {
+            fetch('@Url.Action("GetCantNotificaciones", "Home")')
                 .then(response => response.json())
                 .then(data => {
-                    return data; // Retornamos el valor obtenido
+                    let cant = data;
+                    // Seleccionamos el elemento del contador
+                    const contadorElement = document.getElementById('notificationCant');
+
+                    // Actualizamos el contenido del contador
+                    if (cant > 0) {
+                        contadorElement.classList.add("badge-danger"); // Agrega la clase adicional
+                        contadorElement.textContent = cant.toString();
+                    } else {
+                        contadorElement.textContent = '';
+                    }
                 })
                 .catch(error => {
                     console.error("Error al obtener la cantidad de notificaciones:", error);
@@ -277,89 +310,86 @@
 
 
 
+
         // Método para cargar y mostrar notificaciones
         function cargarNotificaciones() {
             // Simulamos una llamada AJAX para obtener las notificaciones del servidor
             const notificaciones = obtenerNotificacionesDesdeElServidor();
-
-            // Seleccionamos el elemento de la lista de notificaciones
-            const listaNotificaciones = document.getElementById('notificationsList');
-
-            // Vaciamos la lista de notificaciones
-            listaNotificaciones.innerHTML = '';
-
-            // Iteramos a través de las notificaciones y las agregamos al DOM
-            notificaciones.forEach(notificacion => {
-                let notificacionElement = "";
-                if (notificacion.leida) {
-                    notificacionElement = `
-                                                    <a class="dropdown-item d-flex align-items-center" href="#">
-                                                    <div class="mr-3">
-                                                        <div class="icon-circle bg-primary">
-                                                        <i class="far fa-bell" style="color: #ffffff;"></i>
-                                                        </div>
-                                                    </div>
-                                                    <div>
-                                                                <div class="small text-gray-500">${notificacion.fecha}</div>
-                                                        <span class="font-weight-regular">${notificacion.mensaje}</span>
-                                                    </div>
-                                                   </a>`;
-                } else {
-                    notificacionElement = `
-                                                  <a class="dropdown-item d-flex align-items-center" href="#">
-                                                  <div class="mr-3">
-                                                      <div class="icon-circle bg-primary">
-                                                      <i class="far fa-bell" style="color: #ffffff;"></i>
-                                                      </div>
-                                                  </div>
-                                                  <div>
-                                                              <div class="small text-gray-500">${notificacion.fecha}</div>
-                                                      <span class="font-weight-bold">${notificacion.mensaje}</span>
-                                                  </div>
-                                              </a>`;
-                }
-
-
-                // Agregamos la notificación al DOM
-                listaNotificaciones.insertAdjacentHTML('beforeend', notificacionElement);
-            });
-
-        @{
-            string urlMostrarNotificaciones = Url.Action("Notificaciones", "Home");
-        }
-                let btnMostrarTodo = '<a class="dropdown-item text-center small text-gray-500" href="@urlMostrarNotificaciones">Mostrar todas las notificaciones</a>';
-            listaNotificaciones.insertAdjacentHTML('beforeend', btnMostrarTodo);
-
         }
 
 
 
         // Método para obtener notificaciones desde el servidor (simulado)
         function obtenerNotificacionesDesdeElServidor() {
-            // Aquí realizarías una llamada real al servidor para obtener las notificaciones
-            // Por ahora, simulamos algunas notificaciones
-            return [
-                {
-                    fecha: '22/08/2023',
-                    mensaje: 'Nuevo turno con Juan Perez',
-                    leida: false,
-                },
-                {
-                    fecha: '19/08/2023',
-                    mensaje: 'Nuevo turno con Roberto Leto',
-                    leida: true,
+            return fetch('/Home/GetNotificacionesList')
+                .then(response => response.json())
+                .then(data => {
 
-                },
-                {
-                    fecha: '17/08/2023',
-                    mensaje: 'Nuevo turno con Matias Martinez',
-                    leida: true,
+                    let arr = [];
+                    for (let notif of data) {
+                        let obj = {
+                            fecha: notif.fechaHoraEvento,
+                            mensaje: notif.titulo,
+                            leida: notif.leido,
+                        }
+                        arr.push(obj);
+                    }
+                    console.log(arr)
 
-                }
-            ];
+                    // Seleccionamos el elemento de la lista de notificaciones
+                    const listaNotificaciones = document.getElementById('notificationsList');
+
+                    // Vaciamos la lista de notificaciones
+                    listaNotificaciones.innerHTML = '';
+                    if (arr.length > 0) {
+                        // Iteramos a través de las notificaciones y las agregamos al DOM
+                        arr.forEach(notificacion => {
+                            let notificacionElement = "";
+                            if (notificacion.leida) {
+                                notificacionElement = `
+                                                         <a class="dropdown-item d-flex align-items-center" href="#">
+                                                         <div class="mr-3">
+                                                             <div class="icon-circle bg-primary">
+                                                             <i class="far fa-bell" style="color: #ffffff;"></i>
+                                                             </div>
+                                                         </div>
+                                                         <div>
+                                                                     <div class="small text-gray-500">${notificacion.fecha}</div>
+                                                             <span class="font-weight-regular">${notificacion.mensaje}</span>
+                                                         </div>
+                                                        </a>`;
+                            } else {
+                                notificacionElement = `
+                                                             <a class="dropdown-item d-flex align-items-center" href="#">
+                                                             <div class="mr-3">
+                                                                 <div class="icon-circle bg-primary">
+                                                                 <i class="far fa-bell" style="color: #ffffff;"></i>
+                                                                 </div>
+                                                             </div>
+                                                             <div>
+                                                                         <div class="small text-gray-500">${notificacion.fecha}</div>
+                                                                 <span class="mensaje font-weight-bold">${notificacion.mensaje}</span>
+                                                             </div>
+                                                         </a>`;
+                            }
+                            // Agregamos la notificación al DOM
+                            listaNotificaciones.insertAdjacentHTML('beforeend', notificacionElement);
+                        });
+                    }
+
+        @{
+            string urlMostrarNotificaciones = Url.Action("Notificaciones", "Home");
         }
+                        let btnMostrarTodo = '<a class="dropdown-item text-center small text-gray-500" href="' + '@urlMostrarNotificaciones' + '">Mostrar todas las notificaciones</a>';
+                    listaNotificaciones.insertAdjacentHTML('beforeend', btnMostrarTodo);
 
 
+                })
+                .catch(error => {
+                    console.error("Error al obtener las notificaciones desde el servidor:", error);
+                    return []; // Manejo del error, retornamos un arreglo vacío en caso de fallo
+                });
+        }
 
     </script>
 </body>

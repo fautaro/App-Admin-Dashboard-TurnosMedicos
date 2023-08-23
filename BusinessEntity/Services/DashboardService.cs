@@ -26,6 +26,22 @@ namespace BusinessEntity.Services
             _tokenService = tokenService;
             _mailService = mailService;
         }
+
+        public async Task<bool> MarcarNotificacionesLeidas(string AuthenticatedUser)
+        {
+            try
+            {
+                var user = await _dbWrapper.ValidateUser(AuthenticatedUser);
+
+                var result = await _dbWrapper.MarcarNotificacionesLeidas(user);
+                return result;
+
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
         public async Task<int> GetCantNotificaciones(string AuthenticatedUser)
         {
             try
