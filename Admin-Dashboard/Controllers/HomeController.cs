@@ -38,13 +38,20 @@ namespace Admin_Dashboard.Controllers
         {
             return View();
         }
+        public async Task<bool> BorrarNotificaciones()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            var result = await _dashboardService.BorrarNotificaciones(user.Id);
 
+            return result;
+
+        }
         public async Task<bool> NotificacionesLeidas()
         {
             var user = await _userManager.GetUserAsync(User);
             var result = await _dashboardService.MarcarNotificacionesLeidas(user.Id);
 
-            return true;
+            return result;
 
         }
         public async Task<int> GetCantNotificaciones()

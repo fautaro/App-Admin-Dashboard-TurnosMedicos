@@ -257,9 +257,12 @@
             contadorElement.classList.remove("badge-danger");
             contadorElement.textContent = '';
             if (leidas) {
-                const spanElement = document.querySelector('.mensaje'); // Selecciona el elemento span
-                spanElement.classList.remove('font-weight-bold'); // Quita la clase bold
-                spanElement.classList.add('font-weight-regular'); // Agrega la clase regular
+                const spanElements = document.querySelectorAll('.mensaje'); // Selecciona los elementos span
+
+                spanElements.forEach(spanElement => {
+                    spanElement.classList.remove('font-weight-bold'); // Quita la clase bold
+                    spanElement.classList.add('font-weight-regular'); // Agrega la clase regular
+                });
 
             }
             else {
@@ -355,7 +358,7 @@
                                                          </div>
                                                          <div>
                                                                      <div class="small text-gray-500">${notificacion.fecha}</div>
-                                                             <span class="font-weight-regular">${notificacion.mensaje}</span>
+                                                             <span class="mensaje font-weight-regular">${notificacion.mensaje}</span>
                                                          </div>
                                                         </a>`;
                             } else {

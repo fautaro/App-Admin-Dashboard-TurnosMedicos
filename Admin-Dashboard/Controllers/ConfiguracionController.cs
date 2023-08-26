@@ -1,9 +1,38 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using BusinessEntity.Services;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using System.Runtime.InteropServices;
+using TuNamespace.Attributes;
 
 namespace Admin_Dashboard.Controllers
 {
+    [AuthorizeOrRedirect]
+
     public class ConfiguracionController : Controller
     {
+        private readonly UserManager<IdentityUser> _userManager;
+        private ReservaService _reservaService;
+        private PerfilService _perfilService;
+
+
+        public ConfiguracionController(ReservaService reservaService, PerfilService perfilService, UserManager<IdentityUser> userManager)
+        {
+            _reservaService = reservaService;
+            _perfilService = perfilService;
+            _userManager = userManager;
+
+        }
+
+        public async Task<IActionResult> Perfil()
+        {
+            var user = await _userManager.GetUserAsync(User);
+
+            var response = _perfilService.GetItemsPerfilReducido(user.Id);
+            
+            return View(response);
+
+
+        }
         public IActionResult Index()
         {
             if (User.Identity.IsAuthenticated)

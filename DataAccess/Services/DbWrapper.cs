@@ -20,6 +20,20 @@ namespace DataAccess.Services
             _dbContext = dbContext;
         }
         #region Metodos Generales
+
+        public async Task<Profesion> GetProfesion (Profesional profesional)
+        {
+            try
+            {
+                var Profesion = await _dbContext.Profesion.Where(e => e.Profesion_Id == profesional.Profesion_Id).FirstOrDefaultAsync();
+                return Profesion;
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+        }
         public async Task<Profesional> ValidateUser(string User)
         {
             try
@@ -57,6 +71,13 @@ namespace DataAccess.Services
         }
         #endregion
 
+
+        #region Perfil
+        //public async Task<Profesional> GetItemsPerfilReducido
+
+
+
+        #endregion
         #region Acciones
         // Eliminar un turno
         public async Task<bool> CancelarTurnoById(int id)
@@ -81,7 +102,30 @@ namespace DataAccess.Services
 
         #endregion
         #region Dashboard
+        public async Task<bool> BorrarNotificaciones(Profesional profesional)
+        {
+            try
+            {
+                var Notificaciones = await _dbContext.Notificacion.Where(e => e.Profesional_Id == profesional.Profesional_Id && (e.Eliminado == null || e.Eliminado == false)).ToListAsync();
 
+                foreach (var item in Notificaciones)
+                {
+                    item.Eliminado = true;
+                    _dbContext.Update(item);
+
+
+                }
+
+                await _dbContext.SaveChangesAsync();
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+                throw;
+            }
+        }
         public async Task<bool> MarcarNotificacionesLeidas(Profesional profesional)
         {
             try
@@ -109,15 +153,14 @@ namespace DataAccess.Services
         }
         public async Task<int> GetCantNotificacionesByUser(Profesional profesional)
         {
-            var Notificaciones = await _dbContext.Notificacion.Where(e => e.Profesional_Id == profesional.Profesional_Id && (e.Eliminado == null || e.Eliminado == false)).ToListAsync();
+            var Notificaciones = await _dbContext.Notificacion.Where(e => e.Profesional_Id == profesional.Profesional_Id && (e.Eliminado == null || e.Eliminado == false) && e.Leido == false).ToListAsync();
 
             return Notificaciones.Count();
 
         }
         public async Task<List<Notificacion>> GetNotificacionesDetalleByUser (Profesional profesional)
         {
-            var Notificaciones = await _dbContext.Notificacion.Where(e => e.Profesional_Id == profesional.Profesional_Id && (e.Eliminado == null || e.Eliminado == false)).ToListAsync();
-            Notificaciones.Sort();
+            var Notificaciones = await _dbContext.Notificacion.Where(e => e.Profesional_Id == profesional.Profesional_Id && (e.Eliminado == null || e.Eliminado == false)).OrderBy(e => e.FechaHoraEvento).ToListAsync();
             return Notificaciones;
         }
         public async Task<List<Turno>> GetTurnosByUser(Profesional profesional)

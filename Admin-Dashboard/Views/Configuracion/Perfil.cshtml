@@ -1,0 +1,76 @@
+﻿@{
+    ViewData["Title"] = "Perfil de usuario - Appoint.ar";
+}
+@using BusinessEntity.Response;
+@model GetItemsPerfilReducidoResponse;
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='utf-8' />
+    <link href="~/css/sb-admin-2.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@@event-calendar/build@1.5.1/event-calendar.min.css">
+</head>
+<body>
+    <style>
+        .perfil-img {
+            max-width: 150px; /* Ajusta el tamaño máximo según tus necesidades */
+            height: auto; /* Ajusta la altura automáticamente */
+        }
+
+        .content-wrapper {
+            max-width: 750px; /* Ajusta el ancho máximo según tus necesidades */
+            margin: 0 auto; /* Centrar el contenido horizontalmente */
+            padding: 20px; /* Agregar un poco de espacio alrededor del contenido */
+        }
+
+    </style>
+    <div class="content-wrapper">
+
+
+        <div class="card shadow mb-4">
+            <!-- Card Header - Dropdown -->
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold text-primary">Perfil de usuario</h6>
+                <div class="dropdown no-arrow">
+                    <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
+                         aria-labelledby="dropdownMenuLink">
+                        <div class="dropdown-header">Acciones:</div>
+                        <a class="dropdown-item" v-on:click="accion()">Alguna accion</a>
+                    </div>
+                </div>
+            </div>
+            <!-- Card Body -->
+            <div class="card-body">
+                <div class="container">
+                    <div class="text-center">
+                        <div style="margin-bottom:20px">
+                            @if (Model.ImagenPerfil != null && Model.ImagenPerfil.Length > 0)
+                            {
+                                <img src="data:image;base64,@Convert.ToBase64String(Model.ImagenPerfil)" alt="Foto de perfil" class="perfil-img img-fluid rounded-circle mb-2" />
+                            }
+                            else
+                            {
+                                <img class="perfil-img img-fluid rounded-circle mb-2" src="~/img/undraw_profile.svg" alt="Foto de perfil">
+
+                            }
+                            <h2>@Model.NombreUsuario</h2>
+                        </div>
+                        <p><span class="font-weight-bold">Estado:</span> <span>@Model.Activo</span></p>
+                        <p><span class="font-weight-bold">Email:</span> <span>@Model.Email</span></p>
+                        <p><span class="font-weight-bold">Intervalo:</span> <span>@Model.Intervalo</span></p>
+                        <p><span class="font-weight-bold">Profesión:</span> <span>@Model.Profesion</span></p>
+                        <p><span class="font-weight-bold">Activo desde:</span> <span>@Model.ActivoDesde</span></p>
+                        <button class="btn btn-primary" href="@Model.PerfilPublico" target="_blank" style="margin-top:20px">Ir a mi perfil público de turnos</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="~/js/vue.global.js"></script>
+
+</body>
+</html>

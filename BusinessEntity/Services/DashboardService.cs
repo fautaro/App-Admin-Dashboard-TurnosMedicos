@@ -81,9 +81,32 @@ namespace BusinessEntity.Services
 
                 return NotifDetalleResponse;
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
 
+                throw;
+            }
+        }
+
+        public async Task<bool> BorrarNotificaciones(string AuthenthicatedUser)
+        {
+            try
+            {
+                var user = await _dbWrapper.ValidateUser(AuthenthicatedUser);
+
+                if (user is null || user.Activo == false)
+                {
+                    return false;
+                }
+
+                var response = await _dbWrapper.BorrarNotificaciones(user);
+                return response;
+            }
+
+
+            catch (Exception ex)
+            {
+                return false;
                 throw;
             }
         }
