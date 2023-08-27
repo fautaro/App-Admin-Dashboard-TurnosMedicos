@@ -1,4 +1,5 @@
-﻿using BusinessEntity.Services;
+﻿using BusinessEntity.Request;
+using BusinessEntity.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Runtime.InteropServices;
@@ -28,12 +29,21 @@ namespace Admin_Dashboard.Controllers
             var user = await _userManager.GetUserAsync(User);
 
             var response = await _perfilService.GetItemsPerfilReducido(user.Id, user.Email);
-            
+
             return View(response);
 
 
         }
+        [HttpPost]
+        public async Task<bool> GuardarPerfilPublico([FromBody]RequestGuardarPerfilPublico request)
 
+        {
+            var user = await _userManager.GetUserAsync(User);
+
+            var response = await _perfilService.GuardarPerfilPublico(user.Id, request);
+            return true;
+
+        }
         public async Task<IActionResult> PerfilPublico()
         {
             var user = await _userManager.GetUserAsync(User);

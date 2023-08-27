@@ -21,7 +21,7 @@ namespace DataAccess.Services
         }
         #region Metodos Generales
 
-        public async Task<Profesion> GetProfesion (Profesional profesional)
+        public async Task<Profesion> GetProfesion(Profesional profesional)
         {
             try
             {
@@ -73,7 +73,37 @@ namespace DataAccess.Services
 
 
         #region Perfil
-        //public async Task<Profesional> GetItemsPerfilReducido
+        public async Task<bool> UpdatePerfilPublico(string id, string? Titulo, string? Descripcion, byte[]? imagen)
+        {
+            var user = await _dbContext.UsuarioProfesional.Where(e => e.User_Id == id).FirstOrDefaultAsync();
+
+            if (user == null)
+                throw new Exception("Profesional no encontrado");
+
+            var profesional = await _dbContext.Profesional.Where(e => e.Profesional_Id == user.Profesional_Id).FirstOrDefaultAsync();
+
+            if (Titulo != null)
+            {
+                profesional.Titulo = Titulo;
+
+            }
+            if (Descripcion != null)
+            {
+                profesional.Descripcion = Descripcion;
+
+            }
+            if (imagen != null)
+            {
+                profesional.Imagen = imagen;
+
+            }
+
+            _dbContext.Update(profesional);
+
+            await _dbContext.SaveChangesAsync();
+
+            return true;
+        }
 
 
 
@@ -158,7 +188,7 @@ namespace DataAccess.Services
             return Notificaciones.Count();
 
         }
-        public async Task<List<Notificacion>> GetNotificacionesDetalleByUser (Profesional profesional)
+        public async Task<List<Notificacion>> GetNotificacionesDetalleByUser(Profesional profesional)
         {
             var Notificaciones = await _dbContext.Notificacion.Where(e => e.Profesional_Id == profesional.Profesional_Id && (e.Eliminado == null || e.Eliminado == false)).OrderBy(e => e.FechaHoraEvento).ToListAsync();
             return Notificaciones;

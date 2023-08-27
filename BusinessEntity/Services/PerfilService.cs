@@ -1,9 +1,11 @@
-﻿using BusinessEntity.Response;
+﻿using BusinessEntity.Request;
+using BusinessEntity.Response;
 using DataAccess.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace BusinessEntity.Services
@@ -25,6 +27,35 @@ namespace BusinessEntity.Services
             _mailService = mailService;
         }
 
+        public async Task <bool> GuardarPerfilPublico(string id, RequestGuardarPerfilPublico request)
+        {
+            try
+            {
+                var result = false; 
+                if (request.Imagen == null)
+                {
+                    result = await _dbWrapper.UpdatePerfilPublico(id, request.Titulo, request.Descripcion, null);
+
+                } else
+                {
+                    Regex regex = new Regex(@"^[\w/\:.-]+;base64,");
+                    string convert = regex.Replace(request.Imagen, string.Empty);
+
+                    byte[] image = Convert.FromBase64String(convert);
+
+
+
+                    result = await _dbWrapper.UpdatePerfilPublico(id, request.Titulo, request.Descripcion, image);
+
+                }
+                return result;
+            }
+            catch (Exception ex) 
+            {
+
+                throw;
+            }
+        }
         public async Task<GetPerfilPublicoResponse> GetItemsPerfilPublico(string id, string email)
         {
             var response = new GetPerfilPublicoResponse();

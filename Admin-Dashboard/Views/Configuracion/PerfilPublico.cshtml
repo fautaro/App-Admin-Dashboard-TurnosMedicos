@@ -111,11 +111,11 @@
                                     <div style="text-align: center;">
                                         @if (Model.ImagenPerfil != null)
                                         {
-                                            <img src="@($"data:image/png;base64,{Convert.ToBase64String(Model.ImagenPerfil)}")" alt="Imagen" class="img-fluid rounded-circle mb-3" style="max-width: 200px;" id="imgPerfil"/>
+                                            <img src="@($"data:image/png;base64,{Convert.ToBase64String(Model.ImagenPerfil)}")" alt="Imagen" class="img-fluid rounded-circle mb-3" style="max-width: 200px;" id="imgPerfil" />
                                         }
                                         else
                                         {
-                                            <img src="~/img/blank.webp" class="img-fluid rounded-circle mb-3" style="max-width: 200px;" id="imgPerfil"/>
+                                            <img src="~/img/blank.webp" class="img-fluid rounded-circle mb-3" style="max-width: 200px;" id="imgPerfil" />
                                         }
                                     </div>
                                     <div style="margin-top: 17px;">
@@ -142,7 +142,7 @@
             </div>
             <span class="d-flex justify-content-center" v-if="edit">
                 <!-- Botón de confirmación con tilde -->
-                <button class="btn btn-success square-button" id="confirmButton">
+                <button class="btn btn-success square-button" id="confirmButton" v-on:click="confirmarCambios()">
                     <i class="fas fa-check"></i> Guardar
                 </button>
                 <!-- Botón de cancelación con cruz -->
@@ -212,10 +212,10 @@
                                 </div>
                             </form>
 
-@*                            <img :src="previewImage" class="img-fluid mb-3" id="imagePreview" />
-*@
-@*                            <img :src="previewImage" class="img-fluid mb-3" id="imagePreview" />
-*@
+                            @*                            <img :src="previewImage" class="img-fluid mb-3" id="imagePreview" />
+                            *@
+                            @*                            <img :src="previewImage" class="img-fluid mb-3" id="imagePreview" />
+                            *@
                             <div class="preview-container mt-3" v-if="previewImage">
                                 <img :src="previewImage" class="img-fluid mb-3" id="imagePreview" />
                             </div>
@@ -243,8 +243,8 @@
                 return {
                     titulo: @Html.Raw(Json.Serialize(Model.Titulo)),
                     descripcion: @Html.Raw(Json.Serialize(Model.Descripcion)),
-                    nuevoTitulo: "",
-                    nuevaDescripcion: "",
+                    nuevoTitulo: null,
+                    nuevaDescripcion: null,
                     nuevaFoto: "",
                     previewImage: null,
                     edit: false
@@ -267,7 +267,7 @@
                     this.edit = true;
 
                     const imgPerfil = document.getElementById('imgPerfil');
-                    imgPerfil.src = this.previewImage; 
+                    imgPerfil.src = this.previewImage;
 
                 },
                 handleImageChange(event) {
@@ -281,11 +281,34 @@
                 },
 
                 confirmarCambios() {
-                    let obj = {
-                        titulo: this.nuevoTitulo,
-                        descripcion: this.nuevaDescripcion,
-                        foto: this.previewImage
+                    let that = this;
+                    let request = {
+                        Titulo: that.nuevoTitulo,
+                        Descripcion: that.nuevaDescripcion,
+                        Imagen: null // O simplemente omitir este campo si es nulo por defecto en el backend
+                    };
+
+                    if (this.previewImage) {
+                        if (typeof that.previewImage === "string" && that.previewImage.startsWith("blob:")) {
+                            // Obtén la imagen Blob desde la URL
+                            fetch(that.previewImage)
+                                .then(response => response.blob())
+                                .then(blob => {
+                                    // Convierte el Blob a Base64 usando FileReader
+                                    var reader = new FileReader();
+                                    reader.readAsDataURL(blob);
+                                    reader.onloadend = function () {
+                                        var base64data = reader.result;
+                                        request.Imagen = base64data;
+
+                                    };
+                                })
+                                .catch(error => {
+                                    console.error("Error al obtener el Blob de la URL:", error);
+                                });
+                        }
                     }
+
                     Swal.fire({
                         title: 'Confirmar cambios',
                         text: `¿Está seguro de que desea guardar los cambios?`,
@@ -301,12 +324,12 @@
                                 title: "Guardando cambios",
                             })
                             Swal.showLoading()
-                            fetch(`@Url.Action("GuardarPerfilPublico", "Configuracion")`, {
+                            fetch('@Url.Action("GuardarPerfilPublico", "Configuracion")', {
                                 method: "POST",
                                 headers: {
                                     "Content-Type": "application/json"
                                 },
-                                body: JSON.stringify(obj)
+                                body: JSON.stringify(request)
                             })
                                 .then(response => response.json())
                                 .then(success => {
@@ -330,11 +353,10 @@
                                 .catch(error => {
                                     Swal.hideLoading()
                                     Swal.fire(
-                                        'Turno no cancelado',
-                                        'No ha sido posible cancelar el turno.',
+                                        'Cambios no guardados',
+                                        'No ha sido posible guardar los cambios.',
                                         'info'
                                     ).then((result) => {
-                                        window.location.reload();
                                     });
                                 });
                         }
