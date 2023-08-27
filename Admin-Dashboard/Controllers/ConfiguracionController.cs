@@ -27,8 +27,19 @@ namespace Admin_Dashboard.Controllers
         {
             var user = await _userManager.GetUserAsync(User);
 
-            var response = _perfilService.GetItemsPerfilReducido(user.Id);
+            var response = await _perfilService.GetItemsPerfilReducido(user.Id, user.Email);
             
+            return View(response);
+
+
+        }
+
+        public async Task<IActionResult> PerfilPublico()
+        {
+            var user = await _userManager.GetUserAsync(User);
+
+            var response = await _perfilService.GetItemsPerfilPublico(user.Id, user.Email);
+
             return View(response);
 
 

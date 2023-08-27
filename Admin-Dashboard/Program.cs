@@ -31,6 +31,7 @@ builder.Services.AddTransient<TokenService, TokenService>();
 builder.Services.AddTransient<DbWrapper, DbWrapper>();
 builder.Services.AddTransient<MailService, MailService>();
 builder.Services.AddTransient<DashboardService, DashboardService>();
+builder.Services.AddTransient<PerfilService, PerfilService>();
 
 
 var app = builder.Build();

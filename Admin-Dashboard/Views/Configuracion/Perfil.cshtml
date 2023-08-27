@@ -38,8 +38,8 @@
                     </a>
                     <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
                          aria-labelledby="dropdownMenuLink">
-                        <div class="dropdown-header">Acciones:</div>
-                        <a class="dropdown-item" v-on:click="accion()">Alguna accion</a>
+                        <div class="dropdown-header">Editar:</div>
+                        <a class="dropdown-item" href="@Url.Action("PerfilPublico", "Configuracion")">Perfil Publico</a>
                     </div>
                 </div>
             </div>
@@ -59,12 +59,11 @@
                             }
                             <h2>@Model.NombreUsuario</h2>
                         </div>
-                        <p><span class="font-weight-bold">Estado:</span> <span>@Model.Activo</span></p>
+                        <p><span class="font-weight-bold">Activo:</span> <span>@Model.Activo</span></p>
                         <p><span class="font-weight-bold">Email:</span> <span>@Model.Email</span></p>
                         <p><span class="font-weight-bold">Intervalo:</span> <span>@Model.Intervalo</span></p>
                         <p><span class="font-weight-bold">Profesión:</span> <span>@Model.Profesion</span></p>
-                        <p><span class="font-weight-bold">Activo desde:</span> <span>@Model.ActivoDesde</span></p>
-                        <button class="btn btn-primary" href="@Model.PerfilPublico" target="_blank" style="margin-top:20px">Ir a mi perfil público de turnos</button>
+                        <a class="btn btn-primary" href="@Model.PerfilPublico" target="_blank" style="margin-top:20px">Ir a mi perfil público de turnos</a>
                     </div>
                 </div>
             </div>

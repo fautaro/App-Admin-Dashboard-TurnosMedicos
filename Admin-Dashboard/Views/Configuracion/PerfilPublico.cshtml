@@ -1,0 +1,353 @@
+﻿@{
+    ViewData["Title"] = "Editar perfil público - Appoint.ar";
+}
+@using BusinessEntity.Response;
+@model GetPerfilPublicoResponse;
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='utf-8' />
+    <link href="~/css/sb-admin-2.min.css" rel="stylesheet">
+</head>
+<body>
+    <style>
+
+             #bodyPerfilPublico {
+             font-family: system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans","Liberation Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+             background-color: #e3e4e6;
+             font-color:#212529;
+             max-width:450px;
+             }
+        .btn-primary {
+            color: #fff;
+            background-color: #0d6efd;
+            border-color: #0d6efd;
+            width: 100%;
+            height: 50px; /* o establecer un valor en píxeles */
+            margin-left:10px;
+        }
+
+             .h4, h4 {
+              font-size: calc(1.275rem + .3vw);
+             }
+             .mt-4 {
+                 margin-top: 1.5rem!important;
+             }
+
+             .titulo {
+                     font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+            font-weight: 500;
+            font-size: 21px;
+            line-height: 25px;
+            color: #212529;
+             }
+             .descripcion{
+                    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+                    font-weight: 400;
+                    font-size: 14px;
+                    line-height: 21px;
+                    color: #212529;
+             }
+                #btnSiguiente {
+                    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+                    font-weight: 400;
+                    font-size: 14px;
+                    line-height: 21px;
+                    color: #ffffff;
+                    background-color: #007bff;
+                    border-color: #007bff;
+                }
+
+                #btnSiguiente:hover {
+                    background-color: #0056b3;
+                    border-color: #0056b3;
+                }
+
+
+                        .card.shadow.mb-4 {
+                    background-color: #e3e4e6; /* Cambia el color de fondo a gris */
+                }
+                        .square-button {
+            width: 100px;  /* Ajusta el ancho según tu preferencia */
+            height: 35px; /* Ajusta la altura según tu preferencia */
+            border-radius: 0; /* Quita el redondeo de las esquinas */
+            font-size: 14px; /* Ajusta el tamaño del icono o la imagen */
+            padding: 0; /* Quita el relleno interior para maximizar el espacio del botón */
+        }
+    </style>
+    <div class="content-wrapper" style="max-width: 500px; margin: 0 auto;" id="app">
+        <div class="card shadow mb-4">
+            <!-- Card Header - Dropdown -->
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold text-primary">Editar perfil público</h6>
+                <div class="dropdown no-arrow">
+                    <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
+                         aria-labelledby="dropdownMenuLink">
+                        <div class="dropdown-header">Editar:</div>
+                        <a class="dropdown-item" data-toggle="modal" data-target="#editarModalTitulo">Titulo</a>
+                        <a class="dropdown-item" data-toggle="modal" data-target="#editarModalDescripcion">Descripción</a>
+                        <a class="dropdown-item" data-toggle="modal" data-target="#editarModalFoto">Imagen de perfil</a>
+                        <div class="dropdown-header">Finalizar:</div>
+
+                        <a class="dropdown-item" href="@Url.Action("Configuracion", "PerfilPublico")">Guardar Cambios</a>
+                    </div>
+                </div>
+            </div>
+            <!-- Card Body -->
+            <div class="container mt-5 mb-5 d-flex justify-content-center" id="bodyPerfilPublico">
+                <div class="card px-1 py-4">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <h4 class="information mt-4 titulo" style="text-align: center; margin-bottom: 20px;">
+                                        <span id="tituloText">{{titulo}}</span>
+                                        <input type="text" id="tituloInput" style="display: none;">
+                                    </h4>
+                                    <div style="text-align: center;">
+                                        @if (Model.ImagenPerfil != null)
+                                        {
+                                            <img src="@($"data:image/png;base64,{Convert.ToBase64String(Model.ImagenPerfil)}")" alt="Imagen" class="img-fluid rounded-circle mb-3" style="max-width: 200px;" id="imgPerfil"/>
+                                        }
+                                        else
+                                        {
+                                            <img src="~/img/blank.webp" class="img-fluid rounded-circle mb-3" style="max-width: 200px;" id="imgPerfil"/>
+                                        }
+                                    </div>
+                                    <div style="margin-top: 17px;">
+                                        <p style="text-align: center;" class="descripcion">
+                                            <span id="descripcionText">{{descripcion}}</span>
+                                            <input type="text" id="descripcionInput" style="display: none;">
+                                        </p>
+                                    </div>
+
+                                    <hr>
+                                </div>
+                            </div>
+                            <div class="row" style="margin-top: 15px; margin-bottom: -10px;">
+                                <div class="d-grid gap-2 col-12 mx-auto">
+                                    <button class="btn btn-primary btn-block confirm-button"
+                                            id="btnSiguiente">
+                                        Reservar turno
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <span class="d-flex justify-content-center" v-if="edit">
+                <!-- Botón de confirmación con tilde -->
+                <button class="btn btn-success square-button" id="confirmButton">
+                    <i class="fas fa-check"></i> Guardar
+                </button>
+                <!-- Botón de cancelación con cruz -->
+                <button class="btn btn-danger square-button" id="cancelButton" onclick="window.location.reload()">
+                    <i class="fas fa-times"></i> Cancelar
+                </button>
+
+            </span>
+            <!-- End Card Body -->
+            <!-- Modals -->
+            <!-- Modal Titulo -->
+            <div class="modal fade" id="editarModalTitulo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" ref="editarModalTitulo">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Editar Título</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="btnCloseModalTitulo">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <input type="text" class="form-control" id="nuevoTitulo" placeholder="Nuevo Título" v-model="nuevoTitulo">
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                            <button type="button" class="btn btn-success" id="confirmarEdicion" v-on:click="editarTitulo()" data-dismiss="modal">Confirmar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Modal Descripcion -->
+            <div class="modal fade" id="editarModalDescripcion" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" ref="editarModalDescripcion">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Editar Descripción</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="btnCloseModalDescripcion">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+
+                            <textarea class="form-control" id="nuevoTitulo" placeholder="Editar descripción" v-model="nuevaDescripcion" rows="5" maxlength="500"></textarea>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                            <button type="button" class="btn btn-success" id="editarDescripcion" v-on:click="editarDescripcion()" data-dismiss="modal">Confirmar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Modal Foto -->
+            <div class="modal fade" id="editarModalFoto" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" ref="editarModalFoto">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Editar Imagen de perfil</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="btnCloseModalFoto">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form enctype="multipart/form-data">
+                                <div class="form-group">
+                                    <label for="imagenPerfil">Seleccionar imagen:</label>
+                                    <input type="file" accept="image/*" @@change="handleImageChange">
+                                </div>
+                            </form>
+
+@*                            <img :src="previewImage" class="img-fluid mb-3" id="imagePreview" />
+*@
+@*                            <img :src="previewImage" class="img-fluid mb-3" id="imagePreview" />
+*@
+                            <div class="preview-container mt-3" v-if="previewImage">
+                                <img :src="previewImage" class="img-fluid mb-3" id="imagePreview" />
+                            </div>
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                            <button type="button" class="btn btn-success" id="editarDescripcion" v-on:click="editarFoto()" data-dismiss="modal">Confirmar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- End Modals -->
+
+        </div>
+    </div>
+    <script src="~/js/vue.global.js"></script>
+    <script src="~/js/sweetalert2.all.min.js"></script>
+
+    <script>
+        const app = Vue.createApp({
+            data() {
+                return {
+                    titulo: @Html.Raw(Json.Serialize(Model.Titulo)),
+                    descripcion: @Html.Raw(Json.Serialize(Model.Descripcion)),
+                    nuevoTitulo: "",
+                    nuevaDescripcion: "",
+                    nuevaFoto: "",
+                    previewImage: null,
+                    edit: false
+                }
+            },
+            mounted() {
+            },
+            methods: {
+
+                editarTitulo() {
+                    this.titulo = this.nuevoTitulo;
+                    this.edit = true;
+                },
+                editarDescripcion() {
+                    this.descripcion = this.nuevaDescripcion;
+                    this.edit = true;
+
+                },
+                editarFoto() {
+                    this.edit = true;
+
+                    const imgPerfil = document.getElementById('imgPerfil');
+                    imgPerfil.src = this.previewImage; 
+
+                },
+                handleImageChange(event) {
+                    const file = event.target.files[0];
+                    if (file) {
+                        this.previewImage = URL.createObjectURL(file);
+
+                    } else {
+                        this.previewImage = null;
+                    }
+                },
+
+                confirmarCambios() {
+                    let obj = {
+                        titulo: this.nuevoTitulo,
+                        descripcion: this.nuevaDescripcion,
+                        foto: this.previewImage
+                    }
+                    Swal.fire({
+                        title: 'Confirmar cambios',
+                        text: `¿Está seguro de que desea guardar los cambios?`,
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Confirmar',
+                        cancelButtonText: 'Atrás',
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            Swal.fire({
+                                title: "Guardando cambios",
+                            })
+                            Swal.showLoading()
+                            fetch(`@Url.Action("GuardarPerfilPublico", "Configuracion")`, {
+                                method: "POST",
+                                headers: {
+                                    "Content-Type": "application/json"
+                                },
+                                body: JSON.stringify(obj)
+                            })
+                                .then(response => response.json())
+                                .then(success => {
+                                    Swal.hideLoading()
+                                    if (success) {
+                                        Swal.fire(
+                                            'Cambios confirmados',
+                                            'Los cambios han sido guardados correctamente.',
+                                            'success'
+                                        ).then((result) => {
+                                            window.location.reload();
+                                        });
+                                    } else {
+                                        Swal.fire(
+                                            'Cambios no guardados',
+                                            'No ha sido posible guardar los cambios.',
+                                            'info'
+                                        )
+                                    }
+                                })
+                                .catch(error => {
+                                    Swal.hideLoading()
+                                    Swal.fire(
+                                        'Turno no cancelado',
+                                        'No ha sido posible cancelar el turno.',
+                                        'info'
+                                    ).then((result) => {
+                                        window.location.reload();
+                                    });
+                                });
+                        }
+                    })
+                },
+
+            }
+        });
+
+        app.mount('#app');
+
+
+
+    </script>
+</body>
+</html>

@@ -16,6 +16,7 @@ namespace BusinessEntity.Services
         private MailService _mailService;
         private readonly DateTime fechaActual = DateTime.Now;
 
+
         public PerfilService(DbWrapper dbWrapper, ValidationService validationService, TokenService tokenService, MailService mailService)
         {
             _dbWrapper = dbWrapper;
@@ -24,25 +25,50 @@ namespace BusinessEntity.Services
             _mailService = mailService;
         }
 
+        public async Task<GetPerfilPublicoResponse> GetItemsPerfilPublico(string id, string email)
+        {
+            var response = new GetPerfilPublicoResponse();
+            try
+            {
+                var Profesional = await _dbWrapper.ValidateUser(id);
 
-        public async Task<GetItemsPerfilReducidoResponse> GetItemsPerfilReducido(string AuthenticatedUser)
+                response.Success = true;
+                response.ImagenPerfil = Profesional.Imagen;
+                response.Titulo = Profesional.Titulo;
+                response.Descripcion = Profesional.Descripcion;
+
+                return response;
+
+
+
+            }
+            catch (Exception ex)
+            {
+                response.Success = false;
+                throw;
+            }
+
+        }
+
+        public async Task<GetItemsPerfilReducidoResponse> GetItemsPerfilReducido(string id, string email)
         {
             var response = new GetItemsPerfilReducidoResponse();
 
             try
             {
-                var user = await _dbWrapper.ValidateUser(AuthenticatedUser);
+                var user = await _dbWrapper.ValidateUser(id);
 
                 var Profesion = await _dbWrapper.GetProfesion(user);
 
 
                 response.Success = true;
 
-                response.NombreUsuario = user.Nombre;
+                response.NombreUsuario = $"{user.Nombre} {user.Apellido}";
                 response.ImagenPerfil = user.Imagen;
+                response.Email = email;
                 response.Intervalo = $"{user.Intervalo} minutos";
                 response.Activo = user.Activo == true ? "Sí" : "No";
-                response.PerfilPublico = $"fautaro.bsite.net/{user.Alias}";
+                response.PerfilPublico = $"https://fautaro.bsite.net/{user.Alias}";
 
                 if (Profesion != null)
                 {
@@ -52,7 +78,6 @@ namespace BusinessEntity.Services
                 {
                     response.Profesion = "No hay datos registrados";
                 }
-
 
                 return response;
 
