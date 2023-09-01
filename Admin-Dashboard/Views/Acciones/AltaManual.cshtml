@@ -1,4 +1,7 @@
-﻿    @{
+﻿@using BusinessEntity.Response
+@model ProfesionalResponse
+
+@{
     ViewData["Title"] = "Alta Manual de turno";
 }
 
@@ -7,99 +10,629 @@
 <head>
     <meta charset='utf-8' />
     <link href="~/css/sb-admin-2.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.10.0/css/bootstrap-datepicker.min.css" integrity="sha512-34s5cpvaNG3BknEWSuOncX28vz97bRI59UnVtEEpFX536A7BtZSJHsDyFoCl8S7Dt2TPzcrCEoHBGeM4SUBDBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="~/lib/jquery-timepicker/jquery.timepicker.css">
     <link rel="stylesheet" href="~/css/sweetalert2.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/@@vuepic/vue-datepicker@latest/dist/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
 </head>
 <body>
-    
 
-    <!-- Content Row -->
-    <div class="row">
-        <!-- Area Chart -->
-        <div class="col-xl-12 col-lg-12">
-            <div class="card shadow mb-4">
-                <!-- Card Header - Dropdown -->
-                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                    <h6 class="m-0 font-weight-bold text-primary">Nuevo turno</h6>
-                </div>
-                <!-- Card Body -->
-                <div class="card-body">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-md-6 offset-md-3">
-                                <form>
+
+    <style>
+        .fade-enter-active,
+        .fade-leave-active {
+            transition: opacity 0.5s ease;
+        }
+
+        .fade-enter-from,
+        .fade-leave-to {
+            opacity: 0;
+        }
+
+        html {
+            font-family: 'Nunito', sans-serif;
+        }
+
+        .center-text {
+            margin: 0 auto;
+            text-align: center;
+        }
+
+    </style>
+    <div id="app">
+        @*    Pag 0*@
+        <transition name="fade" mode="out-in">
+            @* Pag 1 - Botones de selección de día y horario*@
+            <div class="page-one" id="page-one" v-if="pag == 1">
+                <div class="container mt-6 mb-6 d-flex justify-content-center ">
+                    <div class="card px-1 py-4">
+                        <div class="card-body">
+                            <h5 class="information mt-4">Por favor, seleccione un día y horario</h5>
+                            <div class="row">
+                                <div class="col-sm-12">
                                     <div class="form-group">
-                                        <label for="Nombre">Nombre</label>
-                                        <input type="text" class="form-control" id="Nombre" placeholder="Ingrese el nombre">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="Apellido">Apellido</label>
-                                        <input type="text" class="form-control" id="Apellido" placeholder="Ingrese el apellido">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="telefono">Teléfono</label>
-                                        <input type="tel" class="form-control" id="telefono" placeholder="Ingrese su número de teléfono">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="email">Email</label>
-                                        <input type="email" class="form-control" id="email" placeholder="Ingrese su dirección de correo electrónico">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="fecha">Fecha</label>
-                                        <div class="input-group date">
-                                            <input type="text" class="form-control datepicker" id="fecha" data-provide="datepicker" placeholder="Seleccione una fecha">
-                                            <div class="input-group-append">
-                                                <span class="input-group-text"><i class="fas fa-calendar"></i></span>
+                                        <div v-if="pag == 1 && fechaSeleccionada != ''">
+                                            <div class="input-group">
+                                                <input type="text" disabled class="form-control" v-on:click="getDiasBloqueados(true)" v-model="fechaSeleccionada" style="text-align:left">
+                                                <button type="button" class="btn btn-success btn-edit" v-on:click="getDiasBloqueados(true)"><i class="fa-solid fa-pen-to-square" style="color:white"></i></button>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="fecha">Hora</label>
-                                        <div class="input-group date">
-                                            <input type="text" class="form-control timepicker" id="hora" placeholder="Seleccione una hora">
-                                            <div class="input-group-append">
-                                                <span class="input-group-text"><i class="fas fa-clock"></i></span>
-                                            </div>
+                                        <div v-else>
+                                            <input type="button" class="form-control" placeholder="Día" v-on:click="getDiasBloqueados(false)" value="Día" style="text-align:left">
                                         </div>
                                     </div>
-                                    <div class="form-group" style="text-align:center">
-                                        <button type="submit" class="btn btn-primary">Guardar Turno</button>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="form-group">
+                                        <div v-if="pag == 1 && horaSeleccionada != ''">
+                                            <div class="input-group">
+                                                <input type="text" disabled class="form-control" v-on:click="setHorario()" v-model="horaSeleccionada" style="text-align:left">
+                                                <button type="button" class="btn btn-success btn-edit" v-on:click="setHorario(true)"><i class="fa-solid fa-pen-to-square" style="color:white"></i></button>
+                                            </div>
+                                        </div>
+                                        <div v-else-if="pag == 1 && fechaSeleccionada == ''">
+                                            <input class="form-control" disabled type="button" placeholder="Horario" v-on:click="setHorario()" value="Horario" style="text-align:left">
+                                        </div>
+                                        <div v-else>
+                                            <input class="form-control" type="button" placeholder="Horario" v-on:click="setHorario(false)" value="Horario" style="text-align:left">
+                                        </div>
                                     </div>
-                                </form>
+                                    <!-- Spinner de espera -->
+                                    <div class="d-flex justify-content-center" v-if="wait">
+                                        <div class="spinner-border text-primary" role="status"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <br />
+                            <div class="row">
+                                <div class="d-grid gap-2 col-12 mx-auto">
+                                    <button class="btn btn-primary btn-block confirm-button" id="btnSiguiente" v-on:click="botonInicial()">Siguiente</button>
+                                </div>
+
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+            @*  Pag 2 -  Paso Seleccionar dia*@
+            <div class="page-two" id="page-two" v-else-if="pag == 2">
+                <div class="container mt-5 mb-5 d-flex justify-content-center">
+                    <div class="card px-1 py-4" style="min-width:380px">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-sm-12 d-flex align-items-center">
+                                    <button type="button" class="btn-close" aria-label="Close" v-on:click="goFirstPage(false)"></button>
+                                    <h5 class="information mt-4 ms-3">Por favor, seleccione un día</h5>
+                                </div>
+                            </div>
+                            <br />
+
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <template v-if="pag == 2">
+                                        <Datepicker style="justify-content:center" v-model="fechaSeleccionada" model-type="dd/MM/yyyy" inline locale="es" :min-date="new Date()" :enable-time-picker="false" auto-apply :disabled-dates="fechasBloqueadas" :disabled-week-days="[6, 0]" />
+                                    </template>
+                                </div>
+                            </div>
+                            <br />
+                            <div v-if="pag == 2 && showError && fechaSeleccionada == ''">
+                                <p style="text-align:center">Por favor, ingrese una fecha</p>
+                            </div>
+                            <div class="row">
+                                <div class="d-grid gap-2 col-12 mx-auto">
+                                    <button class="btn btn-primary btn-block confirm-button" v-on:click="getHorasDisponibles()" disabled id="btnSiguiente" v-if="fechaSeleccionada == ''">Siguiente</button>
+                                    <button class="btn btn-primary btn-block confirm-button" v-on:click="getHorasDisponibles()" id="btnSiguiente" v-else>Siguiente</button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @*  Pag 3  Paso Seleccionar Horario*@
+            <div class="page-three" id="page-three" v-else-if="pag == 3">
+                <div class="container mt-5 mb-5 d-flex justify-content-center">
+                    <div class="card px-1 py-4" style="min-width:380px">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-sm-12 d-flex align-items-center">
+                                    <button type="button" class="btn-close" aria-label="Close" v-on:click="goFirstPage(false)"></button>
+                                    <h5 class="information mt-4 ms-3">Por favor, seleccione un horario</h5>
+                                </div>
+                            </div>
+                            <br />
+                            <div>
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <button style="margin-bottom:10px" v-for="hora in horasDisponibles"
+                                                    :key="hora"
+                                                    type="button"
+                                                    class="form-control"
+                                                    v-on:click="selectHora(hora)">
+                                                {{ hora }}
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <br />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @*Pag 4 - Paso Final*@
+            <div class="page-four" id="page-four" v-else-if="pag == 4">
+                <div class="container mt-5 mb-5 d-flex justify-content-center">
+                    <div class="card px-1 py-4">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-sm-12 d-flex align-items-center">
+                                    <button type="button" class="btn-close" aria-label="Close" v-on:click="goFirstPage(false)"></button>
+                                    <h5 class="information mt-4 center-text">Resumen del turno</h5>
+                                </div>
+                            </div>
+                            <br />
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="form-group">
+                                        <label>Fecha:</label>
+                                        <input class="form-control" disabled type="text" v-model="fechaSeleccionada">
+                                    </div>
+                                </div>
+                                <div class="col-sm-12">
+                                    <div class="form-group">
+                                        <label>Hora:</label>
+                                        <input class="form-control" disabled type="text" v-model="horaSeleccionada">
+                                    </div>
+                                </div>
+                            </div>
+                            <br />
+                            <h5 class="information mt-4 center-text">Por favor, ingresa los datos del paciente</h5>
+                            <br />
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="form-group">
+                                        <label>Nombre:</label>
+                                        <input class="form-control" type="text" v-model="pacNombre">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="form-group">
+                                        <label>Apellido:</label>
+                                        <input class="form-control" type="text" v-model="pacApellido">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="form-group" style="margin-top:10px">
+                                        <label>Teléfono:</label>
+                                        <div class="input-group"> <input class="form-control" type="number" v-model="computedDataTelefono"> </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="form-group" style="margin-top:10px">
+                                        <label>Email:</label>
+                                        <div class="input-group"> <input class="form-control" type="text" v-model="pacEmail"> </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class=" d-flex flex-column text-center px-5 mt-3 mb-3">
+                                <small class="agree-text"></small>
+                                <a href="#" class="terms"></a>
+                            </div>
+                            <div v-if="pag == 4 && showError && (pacNombre == '' || pacApellido == '' || pacTelefono == '' || pacEmail == '' || fechaSeleccionada == '' || horaSeleccionada == '')">
+                                <p style="text-align:center">Por favor, complete todos los campos</p>
+
+                            </div>
+                            <p style="text-align:center" v-if="showErrorMail">Por favor, ingrese un correo electrónico válido.</p>
+                            <p style="text-align:center" v-if="showErrorNombre">Por favor, escriba un nombre o apellido válido.</p>
+
+                            <div class="d-grid gap-2 col-12 mx-auto">
+                                <button class="btn btn-primary btn-block confirm-button" v-on:click="btnConfirmarTurno()">Confirmar turno</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @* Pag 5 - Cargando*@
+            <div class="page-five" id="page-five" v-else-if="pag == 5">
+                <div class="container mt-5 mb-5 d-flex justify-content-center">
+                    <div class="card px-1 py-4">
+                        <div class="card-body" style="margin-bottom:15px">
+                            <h5 class="information mt-4">Confirmando turno</h5>
+                            <div class="row" style="margin-top:30px">
+                                <div class="col-sm-12">
+                                    <div class="form-group">
+                                        <div class="d-flex justify-content-center">
+                                            <div class="spinner-border text-primary" role="status">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @* Pag 6 - Success o Error*@
+            <div class="page-six" id="page-six" v-else-if="pag == 6">
+                <div class="container mt-5 mb-5 d-flex justify-content-center">
+                    <div class="card px-1 py-4" v-if="reservaSuccess">
+                        <div class="card-body">
+                            <h5 class="information mt-4">¡Tu turno ha sido confirmado correctamente!</h5>
+                            <div class="row" style="margin-top:20px">
+                                <div class="col-sm-12">
+                                    <div class="form-group">
+                                        <div class="d-flex justify-content-center">
+                                            <div class="success-message">
+                                                El turno ha sido confirmado
+                                            </div>
+                                        </div>
+                                        <div class="d-flex justify-content-center">
+                                            <div class="swal2-icon swal2-success swal2-icon-show" style="display: flex;">
+                                                <div class="swal2-success-circular-line-left" style="background-color: rgb(255, 255, 255);"></div>
+                                                <span class="swal2-success-line-tip"></span> <span class="swal2-success-line-long"></span>
+                                                <div class="swal2-success-ring"></div> <div class="swal2-success-fix" style="background-color: rgb(255, 255, 255);"></div>
+                                                <div class="swal2-success-circular-line-right" style="background-color: rgb(255, 255, 255);"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div v-else>
+                        <div class="card px-1 py-4">
+                            <div class="card-body">
+                                <div class="col-sm-12" style="margin-left:5px">
+                                    <button type="button" class="btn-close" aria-label="Close" v-on:click="goFirstPage(true)"></button>
+                                </div>
+                                <h5 class="information mt-4">No pudimos confirmar tu turno</h5>
+                                <div class="row" style="margin-top:10px">
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <div class="d-flex justify-content-center">
+                                                <div class="swal2-icon swal2-info swal2-icon-show" style="display: flex;">
+                                                    <div class="swal2-icon-content">i</div>
+                                                </div>
+                                            </div>
+                                            <div class="d-flex justify-content-center">
+                                                <div style="margin-top:8px">
+                                                    <div class="error-message" v-if="ErrorMensajeGuardarTurno" style="margin-top: 15px; text-align: center; display: flex; justify-content: center; align-items: center; height: 60px;">
+                                                        <p style="margin: 0; padding: 5px;">
+                                                            {{ ErrorMensajeGuardarTurno }}
+                                                        </p>
+                                                    </div>
+
+                                                    <div class="error-message" v-else style="margin-top: 15px; text-align: center; display: flex; justify-content: center; align-items: center; height: 60px;">
+                                                        <p style="margin: 0; padding: 5px;">
+                                                            Error al generar el turno
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            @* Pag 7 - Datos del turno*@
+            <div class="page-seven" id="page-seven" v-else-if="pag == 7">
+                <div class="container mt-5 mb-5 d-flex justify-content-center">
+                    <div class="card px-1 py-4">
+                        <div class="card-body">
+                            <h5 class="information mt-4">Resumen del turno:</h5>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="form-group" style="margin-top:10px">
+                                        <label>Fecha:</label>
+                                        <input class="form-control" disabled type="text" v-model="reservaConfirmada.fecha">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-12">
+                                <div class="form-group" style="margin-top:10px">
+                                    <label>Hora:</label>
+                                    <input class="form-control" disabled type="text" v-model="reservaConfirmada.hora">
+                                </div>
+                            </div>
+                            <div class="col-sm-12">
+                                <div class="form-group" style="margin-top:10px">
+                                    <label>Profesional:</label>
+                                    <input class="form-control" disabled type="text" v-model="reservaConfirmada.profesional">
+                                </div>
+                            </div>
+                            <div class="col-sm-12">
+                                <div class="form-group" style="margin-top:10px">
+                                    <label>Paciente:</label>
+                                    <input class="form-control" disabled type="text" v-model="reservaConfirmada.cliente">
+                                </div>
+                            </div>
+                            @*                        <div class="d-grid gap-2 col-12 mx-auto" style="margin-top:60px">
+                            <button class="btn btn-primary btn-block confirm-button" v-on:click="">Guardar en Calendar</button>
+                            </div>*@
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </transition>
     </div>
+
+    <script src="~/js/vue.global.js"></script>
     <script src="~/js/sweetalert2.all.min.js"></script>
-
+    <script src="~/js/vue-datepicker.js"></script>
+    @*<script src="https://unpkg.com/@@vuepic/vue-datepicker@latest"></script>
+    *@
     <script>
-        $(document).ready(function () {
-            $('.datepicker').datepicker();
+        const app = Vue.createApp({
+
+            data() {
+                return {
+                    //Pagina Actual
+                    pag: 1,
+                    //Fecha y Hora seleccionada
+                    fechaSeleccionada: "",
+                    horaSeleccionada: "",
+                    //Fechas y horas bloqueadas
+                    fechasBloqueadas: [], //"2023/08/15"
+                    horasDisponibles: [], //"09:00"
+                    //Variable para mostrar error
+                    showError: false,
+                    showErrorMail: false,
+                    showErrorNombre: false,
+                    ErrorMensajeGuardarTurno: "",
+                    //Variable espera
+                    wait: false,
+                    //Datos del paciente
+                    pacNombre: "",
+                    pacApellido: "",
+                    pacTelefono: "",
+                    pacEmail: "",
+                    //Response Ajax
+                    reservaSuccess: false,
+                    reservaConfirmada: {},
+
+
+                }
+            },
+            computed: {
+                computedDataTelefono: {
+                    get() {
+                        return this.pacTelefono.toString()
+                    },
+                    set(val) {
+                        this.pacTelefono = Number(val)
+                    }
+                }
+            },
+            components: {
+                Datepicker: VueDatePicker
+            },
+            methods: {
+                validarEmail(email) {
+                    const emailRegex = /^[^\s@@]+@@[^\s@@]+\.[^\s@@]+$/;
+                    if (emailRegex.test(email)) {
+                        this.showErrorMail = true
+                        return true;
+                    } else {
+                        this.showErrorMail = false
+                        return false
+                    }
+                },
+
+                validarNombreApellido(nombreApellido) {
+                    if (nombreApellido.length >= 2) {
+                        this.showErrorNombre = true;
+                        return true;
+                    } else {
+                        this.showErrorNombre = false;
+                        return false;
+                    }
+                },
+                spinner(show) {
+                    if (show) {
+                        this.wait = true;
+
+                    } else {
+                        this.wait = false;
+                    }
+                },
+                isHorarioManana(hora) {
+                    if (!hora) {
+                        return false; // O retorna lo que sea más adecuado para tu caso
+                    }
+
+                    const horaNumerica = parseInt(hora.split(":")[0]);
+                    return horaNumerica < 13;
+                },
+                getDiasBloqueados(edit) {
+                    this.spinner(true);
+                    const self = this; // Almacenar la referencia de "this"
+
+                    const Profesional = {
+                        Profesional_Id: '@Model.Profesional_Id'
+                    }
+
+                    fetch('@Url.Action("GetDiasBloqueados", "Acciones")', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(Profesional),
+                    })
+                        .then(response => response.json())
+                        .then(responseData => {
+                            if (responseData.success) {
+                                this.fechasBloqueadas = responseData.diasBloqueados;
+                                this.spinner(false);
+                                if (edit) {
+                                    this.setDia(true)
+                                } else {
+                                    this.setDia(false)
+
+                                }
+                            } else {
+                                this.spinner(false);
+                                this.pag = 6; //Pag de error
+                            }
+                        })
+                        .catch(error => {
+                            this.wait(false);
+                            this.pag = 6; //Pag de error
+                            console.error('Error al enviar la solicitud:', error);
+                        });
+                },
+                getHorasDisponibles() {
+
+                    const request = {
+                        Profesional_Id: @Model.Profesional_Id,
+                        Fecha: this.fechaSeleccionada
+                    }
+
+                    fetch('@Url.Action("GetHorasDisponibles", "Acciones")', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(request),
+                    })
+                        .then(response => response.json())
+                        .then(responseData => {
+                            if (responseData.success) {
+                                this.horasDisponibles = responseData.horasDisponibles;
+                                this.nextStep();
+                            } else {
+                                this.pag = 6; //Pag de error
+                            }
+                        })
+                        .catch(error => {
+                            this.pag = 6; //Pag de error
+                            console.error('Error al enviar la solicitud:', error);
+                        });
+                },
+                nextStep() {
+                    if (this.fechaSeleccionada == "") {
+                        this.showError = true;
+                    } else {
+                        this.botonInicial();
+                    }
+                },
+                setDia(edit) {
+                    if (edit) {
+                        this.horaSeleccionada = "";
+                    }
+                    this.pag = 2;
+                },
+                setHorario(edit) {
+                    this.pag = 3;
+                },
+                selectHora(hora) {
+                    this.horaSeleccionada = hora;
+                    this.botonInicial();
+                },
+                blanquearReserva() {
+                    this.fechaSeleccionada = "";
+                    this.horaSeleccionada = "";
+                    this.pacNombre = "";
+                    this.pacApellido = "";
+                    this.pacTelefono = "";
+                    this.pacEmail = "";
+                    this.showError = false;
+                    this.showErrorMail = false;
+                    this.showErrorNombre = false;
+                    this.ErrorMensajeGuardarTurno = "";
+                },
+                goFirstPage(error) {
+                    if (error) {
+                        this.blanquearReserva();
+                    }
+                    this.pag = 1;
+                },
+                botonInicial() {
+                    if (this.fechaSeleccionada != "" && this.horaSeleccionada != "") {
+                        this.pag = 4;
+                    }
+                    if (this.fechaSeleccionada == "" && this.horaSeleccionada != "") {
+                        this.pag = 2;
+                    }
+                    if (this.fechaSeleccionada != "" && this.horaSeleccionada == "") {
+                        this.pag = 3;
+                    }
+                    if (this.fechaSeleccionada == "" && this.horaSeleccionada == "") {
+                        this.pag = 2;
+                    }
+                },
+                btnConfirmarTurno() {
+
+                    if (this.validarEmail(this.pacEmail)) {
+                        if (this.validarNombreApellido(this.pacNombre) && this.validarNombreApellido(this.pacApellido)) {
+                            if (this.pacNombre == "" || this.pacApellido == "" || this.pacTelefono == "" || this.pacEmail == "" || this.fechaSeleccionada == "" || this.horaSeleccionada == "") {
+                                this.showError = true;
+                            } else {
+                                this.pag = 5;
+
+                                //Obj: turno
+                                const turno = {
+                                    Nombre: this.pacNombre,
+                                    Apellido: this.pacApellido,
+                                    Telefono: this.pacTelefono.toString(),
+                                    Email: this.pacEmail,
+                                    Fecha: this.fechaSeleccionada,
+                                    Hora: this.horaSeleccionada,
+                                    Profesional: '@Model.Titulo',
+                                    ProfesionalId: @Model.Profesional_Id
+                                                }
+
+                                fetch('@Url.Action("ConfirmarTurno", "Acciones")', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json', // Indica que los datos son JSON
+                                    },
+                                    body: JSON.stringify(turno), // Convierte el objeto JSON a una cadena JSON
+                                })
+                                    .then(response => response.json())
+                                    .then(responseData => {
+                                        if (responseData.success) {
+                                            this.reservaSuccess = true;
+                                            this.reservaConfirmada = responseData.turnoConfirmado
+                                            this.pag = 6;
+                                            setTimeout(() => {
+                                                this.pag = 7;
+                                            }, 3000)
+                                        } else {
+                                            this.ErrorMensajeGuardarTurno = responseData.mensaje
+                                            this.pag = 6
+                                        }
+                                    })
+                                    .catch(error => {
+                                        this.pag = 6;
+                                        console.error('Error al enviar la solicitud:', error);
+                                    });
+                            }
+                        }
+                    }
+                },
+
+            }
         });
 
-    </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js" integrity="sha512-3gJwYpMe3QewGELv8k/BX9vcqhryRdzRMxVfq6ngyWXwo03GFEzjsUm8Q7RZcHPHksttq7/GFoxjCVUjkjvPdw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.10.0/js/bootstrap-datepicker.min.js" integrity="sha512-LsnSViqQyaXpD4mBBdRYeP6sRwJiJveh2ZIbW41EBrNmKxgr/LFZIiWT6yr+nycvhvauz8c2nYMhrP80YhG7Cw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="~/lib/jquery-timepicker/jquery.timepicker.min.js"></script>
-    <script>
-
-        $('#hora').timepicker({
-            timeFormat: 'h:mm p',
-            interval: 60,
-            minTime: '10',
-            maxTime: '6:00pm',
-            defaultTime: '11',
-            startTime: '10:00',
-            dynamic: true,
-            dropdown: true,
-            scrollbar: false
-        });
-
-        $('#hora').timepicker();
+        app.mount('#app');
     </script>
 </body>
 </html>

@@ -1,4 +1,8 @@
-﻿using BusinessEntity.Services;
+﻿using BusinessEntity.Models.Request;
+using BusinessEntity.Models.Response;
+using BusinessEntity.Request;
+using BusinessEntity.Response;
+using BusinessEntity.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Text;
@@ -75,9 +79,14 @@ namespace Admin_Dashboard.Controllers
         }
 
 
-        public IActionResult AltaManual()
+        public async Task<IActionResult> AltaManual()
         {
-            return View();
+            var user = await _userManager.GetUserAsync(User);
+
+            var response = await _reservaService.GetProfesional(user.Id);
+
+            
+            return View(response);
 
         }
 
@@ -93,5 +102,63 @@ namespace Admin_Dashboard.Controllers
             return View();
 
         }
+
+
+
+        #region Alta manual de turno
+        [HttpPost]
+        public async Task<ResponseDatosTurno> ConfirmarTurno([FromBody] RequestDatosTurno turno)
+        {
+            try
+            {
+                var Response = await _reservaService.GuardarReserva(turno);
+
+                return Response;
+
+
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+
+        }
+
+        [HttpPost]
+        public async Task<ResponseGetHorasDisponibles> GetHorasDisponibles([FromBody] RequestGetHorasDisponibles request)
+        {
+            try
+            {
+                var Response = await _reservaService.GetHorasDisponibles(request);
+
+                return Response;
+
+
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+        }
+
+        [HttpPost]
+        public async Task<ResponseGetDiasBloqueados> GetDiasBloqueados([FromBody] RequestGetDiasBloqueados request)
+        {
+            try
+            {
+                var Response = await _reservaService.GetDiasBloqueados(request);
+
+                return Response;
+
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+        }
+        #endregion
     }
 }
