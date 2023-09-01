@@ -19,6 +19,12 @@ namespace Admin_Dashboard.Controllers
             _reservaService = reservaService;
 
         }
+        public async Task<IActionResult> HorariosBloqueados()
+        {
+            return View();
+
+        }
+
         public async Task<IActionResult> TurnosConfirmados()
         {
 

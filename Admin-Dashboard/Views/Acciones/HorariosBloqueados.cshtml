@@ -1,0 +1,86 @@
+﻿@{
+    ViewData["Title"] = "Horarios bloqueados";
+}
+
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='utf-8' />
+    <link href="~/css/sb-admin-2.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.10.0/css/bootstrap-datepicker.min.css" integrity="sha512-34s5cpvaNG3BknEWSuOncX28vz97bRI59UnVtEEpFX536A7BtZSJHsDyFoCl8S7Dt2TPzcrCEoHBGeM4SUBDBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="~/lib/jquery-timepicker/jquery.timepicker.css">
+</head>
+<body>
+
+
+    <!-- Content Row -->
+    <div class="row">
+        <!-- Area Chart -->
+        <div class="col-xl-12 col-lg-12">
+            <div class="card shadow mb-4">
+                <!-- Card Header - Dropdown -->
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-primary">Horarios bloqueados</h6>
+                </div>
+                <!-- Card Body -->
+                <div class="card-body">
+                    <div class="container">
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Cantidad de días</th>
+                                        <th>Día de inicio</th>
+                                        <th>Día de fin</th>
+                                        <th>Hora de Inicio</th>
+                                        <th>Hora de Fin</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>10</td>
+                                        <td>01/06/2023</td>
+                                        <td>10/06/2023</td>
+
+                                        <td>09:00 AM</td>
+                                        <td>18:00 AM</td>
+                                        <td>
+                                            <button class="btn btn-danger btn-sm">Eliminar</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>1</td>
+                                        <td>01/07/2023</td>
+                                        <td>01/07/2023</td>
+
+                                        <td>09:00 AM</td>
+                                        <td>15:00 AM</td>
+                                        <td>
+                                            <button class="btn btn-danger btn-sm">Eliminar</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>1</td>
+                                        <td>02/07/2023</td>
+                                        <td>02/07/2023</td>
+
+                                        <td>09:00 AM</td>
+                                        <td>18:00 AM</td>
+                                        <td>
+                                            <button class="btn btn-danger btn-sm">Eliminar</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js" integrity="sha512-3gJwYpMe3QewGELv8k/BX9vcqhryRdzRMxVfq6ngyWXwo03GFEzjsUm8Q7RZcHPHksttq7/GFoxjCVUjkjvPdw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.10.0/js/bootstrap-datepicker.min.js" integrity="sha512-LsnSViqQyaXpD4mBBdRYeP6sRwJiJveh2ZIbW41EBrNmKxgr/LFZIiWT6yr+nycvhvauz8c2nYMhrP80YhG7Cw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="~/lib/jquery-timepicker/jquery.timepicker.min.js"></script>
+</body>

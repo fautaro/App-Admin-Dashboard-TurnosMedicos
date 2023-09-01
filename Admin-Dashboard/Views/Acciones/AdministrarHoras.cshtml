@@ -3,155 +3,217 @@
 }
 
 <!DOCTYPE html>
-<html lang='en'>
+<html lang='es'>
 <head>
     <meta charset='utf-8' />
     <link href="~/css/sb-admin-2.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.10.0/css/bootstrap-datepicker.min.css" integrity="sha512-34s5cpvaNG3BknEWSuOncX28vz97bRI59UnVtEEpFX536A7BtZSJHsDyFoCl8S7Dt2TPzcrCEoHBGeM4SUBDBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="~/lib/jquery-timepicker/jquery.timepicker.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito&display=swap" rel="stylesheet">
+    <link href="~/css/vue-datepicker.css" rel="stylesheet">
+    <link href="~/css/awesome-notifications.css" rel="stylesheet">
+    <link href="~/css/sweetalert2.min.css" rel="stylesheet">
 </head>
 <body>
+    <style>
+        .fade-enter-active,
+        .fade-leave-active {
+            transition: opacity 0.5s ease;
+        }
 
+        .fade-enter-from,
+        .fade-leave-to {
+            opacity: 0;
+        }
+        /* custom-styles.css */
+        .col-md-12 {
+            padding-left: 0;
+            padding-right: 0;
+        }
 
-    <!-- Content Row -->
-    <div class="row">
-        <!-- Area Chart -->
-        <div class="col-xl-12 col-lg-12">
-            <div class="card shadow mb-4">
-                <!-- Card Header - Dropdown -->
-                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                    <h6 class="m-0 font-weight-bold text-primary">Configuración de Horarios No Disponibles</h6>
-                </div>
-                <!-- Card Body -->
-                <div class="card-body">
+    </style>
+    <div id="app">
+        <div class="row">
+            <div class="d-flex justify-content-center">
+                <div class="col-xl-6 col-lg-6">
+                    <!-- Usa col-md-6 para dispositivos medianos y más grandes -->
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                            <h6 class="m-0 font-weight-bold text-primary">Configuración de Horarios no disponibles</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="container">
+                                <div class="row">
+                                    <transition name="fade" mode="out-in">
+                                        <div v-if="pag == 0">
+                                            <div style="text-align:center;margin-bottom:30px">
+                                                <h4>Por favor, seleccione un día</h4>
+                                            </div>
+                                            <div class="col-md-12 d-flex justify-content-center">
+                                                <div class="secondary-card-body text-center">
+                                                    @* Dia completo*@
+                                                    <div class="form-group text-center" v-if="diaUnico">
+                                                        <Datepicker class="text-center" v-model="fechaSeleccionada" model-type="dd/MM/yyyy" inline locale="es" :min-date="new Date()" :enable-time-picker="false" auto-apply :disabled-dates="fechasBloqueadas" :disabled-week-days="[6, 0]" />
+                                                    </div>
+                                                    @* Rango de dias*@
+                                                    <div class="form-group text-center" v-else>
+                                                        <Datepicker class="text-center" v-model="fechaSeleccionadaRango" model-type="dd/MM/yyyy" inline locale="es" :min-date="new Date()" :enable-time-picker="false" auto-apply :disabled-dates="fechasBloqueadas" :disabled-week-days="[6, 0]" range />
+                                                    </div>
+                                                    <div class="form-group form-check">
+                                                        <input type="checkbox" class="form-check-input" v-on:click="checkDiaUnico" id="diaCompleto">
+                                                        <label class="form-check-label" for="diaCompleto">Bloquear un solo día</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div v-else-if="pag == 1">
+                                            <div style="text-align:center;margin-bottom:30px">
+                                                @* Dia completo*@
+                                                <h4 v-if="diaUnico">Por favor, seleccione el horario para el día {{fechaSeleccionada}}</h4>
+                                                @* Rango de dias*@
+                                                <h4 v-else>
+                                                    Por favor, seleccione el horario para el rango {{ fechaSeleccionadaRango[0] }} al {{fechaSeleccionadaRango[1]}}
+                                                </h4>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label for="horaInicio" v-if="diaUnico">Hora de Inicio</label>
+                                                    <label for="horaInicio" v-else>Hora de Inicio - día {{ fechaSeleccionadaRango[0] }}</label>
 
-                    <div class="container">
-                        <form>
-                            <div class="form-group">
-                                <label for="fecha">Día de Inicio</label>
-                                <div class="input-group date">
-                                    <input type="text" class="form-control datepicker" id="fechaInicio" data-provide="datepicker" placeholder="Seleccione una fecha de inicio">
-                                    <div class="input-group-append">
-                                        <span class="input-group-text"><i class="fas fa-calendar"></i></span>
+                                                    <div class="input-group date">
+                                                        <select class="form-control" id="horaInicio" v-model="horaInicio">
+                                                            <option v-for="hour in hours" :key="hour">{{ hour }}</option>
+                                                        </select>
+                                                        <div class="input-group-append">
+                                                            <span class="input-group-text"><i class="fas fa-clock"></i></span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="horaFin" v-if="diaUnico">Hora de Fin</label>
+                                                    <label for="horaFin" v-else>Hora de Fin - día {{fechaSeleccionadaRango[1]}}</label>
+
+                                                    <div class="input-group date">
+                                                        <select class="form-control" id="horaFin" v-model="horaFin">
+                                                            <option v-for="hour in hours" :key="hour">{{ hour }}</option>
+                                                        </select>
+                                                        <div class="input-group-append">
+                                                            <span class="input-group-text"><i class="fas fa-clock"></i></span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </transition>
+                                </div>
+                                <div class="row mt-4">
+                                    <div class="form-group">
+                                        <button type="submit" class="btn btn-primary" v-on:click="nextPag()">Siguiente</button>
+                                        <button type="submit" class="btn btn-secondary ms-2">Limpiar</button>
                                     </div>
                                 </div>
                             </div>
-                            <div class="form-group form-check">
-                                <input type="checkbox" class="form-check-input" id="variosDias">
-                                <label class="form-check-label" for="variosDias">Seleccionar Varios Días</label>
-                            </div>
-                            <div class="form-group">
-                                <label for="fecha">Día de Fin</label>
-                                <div class="input-group date">
-                                    <input type="text" class="form-control datepicker" id="fechaFin" data-provide="datepicker" placeholder="Seleccione una fecha de fin" disabled>
-                                    <div class="input-group-append">
-                                        <span class="input-group-text"><i class="fas fa-calendar"></i></span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="fecha">Hora de Inicio</label>
-                                <div class="input-group date">
-                                    <input type="text" class="form-control timepicker" id="horaInicio" placeholder="Seleccione una hora de inicio">
-                                    <div class="input-group-append">
-                                        <span class="input-group-text"><i class="fas fa-clock"></i></span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="fecha">Hora de Fin</label>
-                                <div class="input-group date">
-                                    <input type="text" class="form-control timepicker" id="horaFin" placeholder="Seleccione una hora de fin">
-                                    <div class="input-group-append">
-                                        <span class="input-group-text"><i class="fas fa-clock"></i></span>
-                                    </div>
-                                </div>
-                            </div>
-                                                            <div class="form-group form-check">
-                                    <input type="checkbox" class="form-check-input" id="diaCompleto">
-                                    <label class="form-check-label" for="diaCompleto">Día Completo</label>
-                                </div>
-                            <div class="form-group">
-                                <button type="submit" class="btn btn-primary">Guardar</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-            <div class="card shadow mb-4">
-                <!-- Card Header - Dropdown -->
-                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                    <h6 class="m-0 font-weight-bold text-primary">Horarios bloqueados</h6>
-                </div>
-                <!-- Card Body -->
-                <div class="card-body">
-                    <div class="container">
-                        <div class="table-responsive">
-                            <table class="table table-striped">
-                                <thead>
-                                    <tr>
-                                        <th>Día</th>
-                                        <th>Hora de Inicio</th>
-                                        <th>Hora de Fin</th>
-                                        <th>Acciones</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>01/06/2023</td>
-                                        <td>09:00 AM</td>
-                                        <td>10:30 AM</td>
-                                        <td>
-                                            <button class="btn btn-primary btn-sm">Editar</button>
-                                            <button class="btn btn-danger btn-sm">Eliminar</button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>02/06/2023</td>
-                                        <td>11:00 AM</td>
-                                        <td>12:30 PM</td>
-                                        <td>
-                                            <button class="btn btn-primary btn-sm">Editar</button>
-                                            <button class="btn btn-danger btn-sm">Eliminar</button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>03/06/2023</td>
-                                        <td>02:00 PM</td>
-                                        <td>03:30 PM</td>
-                                        <td>
-                                            <button class="btn btn-primary btn-sm">Editar</button>
-                                            <button class="btn btn-danger btn-sm">Eliminar</button>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
     </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js" integrity="sha512-3gJwYpMe3QewGELv8k/BX9vcqhryRdzRMxVfq6ngyWXwo03GFEzjsUm8Q7RZcHPHksttq7/GFoxjCVUjkjvPdw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.10.0/js/bootstrap-datepicker.min.js" integrity="sha512-LsnSViqQyaXpD4mBBdRYeP6sRwJiJveh2ZIbW41EBrNmKxgr/LFZIiWT6yr+nycvhvauz8c2nYMhrP80YhG7Cw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="~/lib/jquery-timepicker/jquery.timepicker.min.js"></script>
-    <script>
 
-        $('#hora').timepicker({
-            timeFormat: 'h:mm p',
-            interval: 60,
-            minTime: '10',
-            maxTime: '6:00pm',
-            defaultTime: '11',
-            startTime: '10:00',
-            dynamic: true,
-            dropdown: true,
-            scrollbar: false
+    <script src="~/js/vue.global.js"></script>
+    <script src="~/js/vue-datepicker.js"></script>
+    <script src="~/js/sweetalert2.all.min.js"></script>
+    <script src="~/js/awesome-notifications.js"></script>
+    <script>
+        const app = Vue.createApp({
+
+            data() {
+                return {
+                    pag: 0,
+                    fechasBloqueadas: [], //"2023/08/15"
+                    horasDisponibles: [], //"09:00"
+                    selectFecha: false,
+                    //fecha
+                    diaUnico: false,
+                    fechaSeleccionadaRango: "",
+                    fechaSeleccionada: "",
+                    //hora
+                    hours: ["", "09:00:00", "10:00:00", "11:00:00", "12:00:00", "16:00:00", "17:00:00"],
+                    horaInicio: "",
+                    horaFin: "",
+                    //Notificador
+                    notifier: new AWN({
+                        durations: {
+                            global: 2000,
+                            info: null
+                        }
+                    })
+
+
+                }
+            },
+            mounted() {
+            },
+            computed: {
+
+            },
+            components: {
+                Datepicker: VueDatePicker
+            },
+            methods: {
+                nextPag() {
+                    if (this.pag == 0) {
+                        if (this.diaUnico) {
+                            if (this.fechaSeleccionada == "") {
+                                this.notifier.info('Por favor, seleccione una fecha');
+                            } else {
+                                this.pag++
+                            }
+                        } else {
+                            if (this.fechaSeleccionadaRango == "") {
+                                this.notifier.info('Por favor, seleccione un rango de fechas');
+                            } else {
+                                this.pag++
+                            }
+                        }
+                    } else if (this.pag == 1) {
+                        if (this.horaInicio == "" && this.horaFin == "") {
+                            this.notifier.info('Por favor, seleccione una hora de inicio y una hora de fin');
+                        }
+                        else if (this.horaInicio == "") {
+                            this.notifier.info('Por favor, seleccione una hora de inicio');
+                        } else if (this.horaFin == "") {
+                            this.notifier.info('Por favor, seleccione una hora de fin');
+                        } else if (this.horaInicio == this.horaFin) {
+                            this.notifier.info('La hora de inicio y la hora de fin no pueden coincidir');
+                        } else if (this.horaInicio > this.horaFin) {
+                            this.notifier.info('La hora de inicio debe ser mayor a la hora de fin');
+                        }
+                        else {
+                            this.notifier.success(this.horaInicio + "  " + this.horaFin);
+
+                        }
+                    }
+                },
+                checkDiaUnico() {
+                    if (this.diaUnico) {
+                        this.diaUnico = false;
+                        this.fechaSeleccionadaRango = "";
+                    } else {
+                        this.diaUnico = true;
+                        this.fechaSeleccionada = "";
+                    }
+                },
+
+
+
+            }
         });
 
-        $('#horaInicio').timepicker();
-        $('#horaFin').timepicker();
+        app.mount('#app');
     </script>
 </body>
+
+
 </html>
