@@ -148,7 +148,86 @@ namespace BusinessEntity.Services
 
         }
 
+        public async Task<bool> CancelarHorarioBloqueado(string user, int horarioId)
+        {
+            try
+            {
+                var Profesional = await _dbWrapper.ValidateUser(user);
 
+                if (Profesional is null || Profesional.Activo == false)
+                {
+                    return false;
+
+                }
+                var response = await _dbWrapper.CancelarHorarioBloqueado(Profesional, horarioId);
+
+                return response;
+            }
+            catch (Exception ex)
+            {
+                return false;
+                throw;
+            }
+
+
+        }
+
+        public async Task<ResponseGetHorariosBloqueados> GetHorariosBloqueados(string user)
+        {
+            ResponseGetHorariosBloqueados response = new ResponseGetHorariosBloqueados();
+
+            try
+            {
+                var Profesional = await _dbWrapper.ValidateUser(user);
+
+                if (Profesional is null || Profesional.Activo == false)
+                {
+                    response.Success = false;
+                    return response;
+                }
+                var Turnos = await _dbWrapper.GetHorariosBloqueados(Profesional);
+
+
+                if (Turnos.Count > 0)
+                {
+                    var DiasBloqueadosList = new List<DiasBloqueados>();
+                    foreach (var item in Turnos)
+                    {
+                        int diasDiferencia = 0;
+                        if (item.FechaHasta.Date > item.FechaDesde.Date)
+                        {
+                            TimeSpan diferencia = item.FechaHasta - item.FechaDesde;
+                            diasDiferencia = diferencia.Days + 1;
+                        }
+
+
+                        var Dia = new DiasBloqueados()
+                        {
+                            CantDias = diasDiferencia,
+                            HorarioBloqueadoId = item.AgendaBloqueada_Id,
+                            FechaFin = item.FechaHasta.ToString("dd/MM/yyyy"),
+                            FechaInicio = item.FechaDesde.ToString("dd/MM/yyyy"),
+                            HoraInicio = item.FechaDesde.ToString("hh:mm"),
+                            HoraFin = item.FechaHasta.ToString("hh:mm")
+                        };
+
+                        DiasBloqueadosList.Add(Dia);
+                    }
+
+                    response.DiasBloqueados = DiasBloqueadosList;
+                }
+                response.Success = true;
+
+                return response;
+
+
+            }
+            catch (Exception ex)
+            {
+                response.Success = false;
+                throw;
+            }
+        }
         public async Task<ResponseGetTurnosConfirmados> GetTurnosConfirmados(string user)
         {
             ResponseGetTurnosConfirmados response = new ResponseGetTurnosConfirmados();

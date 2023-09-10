@@ -1,6 +1,8 @@
 ﻿@{
     ViewData["Title"] = "Horarios bloqueados";
 }
+@using BusinessEntity.Response
+@model ResponseGetHorariosBloqueados
 
 <!DOCTYPE html>
 <html lang='en'>
@@ -12,75 +14,147 @@
 </head>
 <body>
 
-
-    <!-- Content Row -->
-    <div class="row">
-        <!-- Area Chart -->
-        <div class="col-xl-12 col-lg-12">
-            <div class="card shadow mb-4">
-                <!-- Card Header - Dropdown -->
-                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                    <h6 class="m-0 font-weight-bold text-primary">Horarios bloqueados</h6>
-                </div>
-                <!-- Card Body -->
-                <div class="card-body">
-                    <div class="container">
-                        <div class="table-responsive">
-                            <table class="table table-striped">
-                                <thead>
-                                    <tr>
-                                        <th>Cantidad de días</th>
-                                        <th>Día de inicio</th>
-                                        <th>Día de fin</th>
-                                        <th>Hora de Inicio</th>
-                                        <th>Hora de Fin</th>
-                                        <th>Acciones</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>10</td>
-                                        <td>01/06/2023</td>
-                                        <td>10/06/2023</td>
-
-                                        <td>09:00 AM</td>
-                                        <td>18:00 AM</td>
-                                        <td>
-                                            <button class="btn btn-danger btn-sm">Eliminar</button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>01/07/2023</td>
-                                        <td>01/07/2023</td>
-
-                                        <td>09:00 AM</td>
-                                        <td>15:00 AM</td>
-                                        <td>
-                                            <button class="btn btn-danger btn-sm">Eliminar</button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>02/07/2023</td>
-                                        <td>02/07/2023</td>
-
-                                        <td>09:00 AM</td>
-                                        <td>18:00 AM</td>
-                                        <td>
-                                            <button class="btn btn-danger btn-sm">Eliminar</button>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
+    <div id="app">
+        <!-- Content Row -->
+        <div class="row">
+            <!-- Area Chart -->
+            <div class="col-xl-12 col-lg-12">
+                <div class="card shadow mb-4">
+                    @if (!Model.Success)
+                    {
+                        <div class="row">
+                            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                <h6 class="m-0 font-weight-bold text-primary">No hay datos para su usuario. Por favor, comuníquese con el administrador.</h6>
+                            </div>
                         </div>
-                    </div>
-
+                    }
+                    else
+                    {
+                        if (Model.DiasBloqueados.Count == 0)
+                        {
+                            <div class="row">
+                                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                    <h6 class="m-0 font-weight-bold text-primary">Actualmente no hay horarios bloqueados activos.</h6>
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <!-- Card Header - Dropdown -->
+                            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                <h6 class="m-0 font-weight-bold text-primary">Horarios bloqueados</h6>
+                            </div>
+                            <!-- Card Body -->
+                            <div class="card-body">
+                                <div class="container">
+                                    <div class="table-responsive">
+                                        <table class="table table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th>Cantidad de días</th>
+                                                    <th>Día de inicio</th>
+                                                    <th>Día de fin</th>
+                                                    <th>Hora de Inicio</th>
+                                                    <th>Hora de Fin</th>
+                                                    <th>Acciones</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var item in Model.DiasBloqueados)
+                                                {
+                                                    <tr>
+                                                        <td hidden id="idBloq">@item.HorarioBloqueadoId</td>
+                                                        <td>@item.CantDias</td>
+                                                        <td>@item.FechaInicio</td>
+                                                        <td>@item.FechaFin</td>
+                                                        <td>@item.HoraInicio</td>
+                                                        <td>@item.HoraFin</td>
+                                                        <td>
+                                                            <button class="btn btn-danger btn-sm" v-on:click="eliminar(@item.HorarioBloqueadoId)">Eliminar</button>
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
                 </div>
             </div>
         </div>
     </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js" integrity="sha512-3gJwYpMe3QewGELv8k/BX9vcqhryRdzRMxVfq6ngyWXwo03GFEzjsUm8Q7RZcHPHksttq7/GFoxjCVUjkjvPdw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.10.0/js/bootstrap-datepicker.min.js" integrity="sha512-LsnSViqQyaXpD4mBBdRYeP6sRwJiJveh2ZIbW41EBrNmKxgr/LFZIiWT6yr+nycvhvauz8c2nYMhrP80YhG7Cw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="~/lib/jquery-timepicker/jquery.timepicker.min.js"></script>
+    <script src="~/js/vue.global.js"></script>
+    <script src="~/js/vue-datepicker.js"></script>
+    <script src="~/js/sweetalert2.all.min.js"></script>
+    <script>
+        const app = Vue.createApp({
+            data() {
+                return {
+                    pag: 0,
+                }
+            }
+            methods: {
+                eliminar(id) {
+                    Swal.fire({
+                        title: 'Cancelar el turno',
+                        text: `¿Está seguro de cancelar el horario bloqueado?`,
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Confirmar',
+                        cancelButtonText: 'Atrás',
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            Swal.fire({
+                                title: "Cancelando horario bloqueado",
+                            })
+                            Swal.showLoading()
+                            fetch(`/Acciones/CancelarHorarioBloqueado?id=` + id, {
+                                method: "POST",
+                                headers: {
+                                    "Content-Type": "application/json"
+                                },
+                            })
+                                .then(response => response.json())
+                                .then(success => {
+                                    Swal.hideLoading()
+                                    if (success) {
+                                        Swal.fire(
+                                            'Horario bloqueado cancelado',
+                                            'El horario bloqueado ha sido cancelado correctamente.',
+                                            'success'
+                                        ).then((result) => {
+                                            window.location.reload();
+                                        });
+                                    } else {
+                                        Swal.fire(
+                                            'horario bloqueado no cancelado',
+                                            'No ha sido posible cancelar el horario bloqueado.',
+                                            'info'
+                                        )
+                                    }
+                                })
+                                .catch(error => {
+                                    Swal.hideLoading()
+                                    Swal.fire(
+                                        'horario bloqueado no cancelado',
+                                        'No ha sido posible cancelar el horario bloqueado.',
+                                        'info'
+                                    ).then((result) => {
+                                        window.location.reload();
+                                    });
+                                });
+                        }
+                    })
+                }
+
+            }
+        });
+
+        app.mount('#app');
+    </script>
 </body>
+</html>

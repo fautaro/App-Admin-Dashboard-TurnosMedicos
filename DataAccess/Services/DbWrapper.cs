@@ -109,6 +109,55 @@ namespace DataAccess.Services
 
         #endregion
         #region Acciones
+
+        //Obtener horarios bloqueados
+        public async Task<List<AgendaBloqueada>> GetHorariosBloqueados(Profesional profesional)
+        {
+            try
+            {
+
+                var HorariosBloqueados = await _dbContext.AgendaBloqueada.Where(e => e.Activo && e.FechaDesde > fechaActual).ToListAsync();
+
+                return HorariosBloqueados;
+
+
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+        }
+
+
+        //Eliminar horario bloqueado
+
+        public async Task<bool> CancelarHorarioBloqueado(Profesional profesional, int horarioId)
+        {
+            try
+            {
+                var CancelarHorario = await _dbContext.AgendaBloqueada.Where(e => e.AgendaBloqueada_Id == horarioId && e.Profesional_Id == profesional.Profesional_Id).FirstOrDefaultAsync();
+
+                if (CancelarHorario != null)
+                {
+                    CancelarHorario.Activo = false;
+                    _dbContext.Update(CancelarHorario);
+                    await _dbContext.SaveChangesAsync();
+                    return true;
+                }
+                else
+                {
+                    return false;
+
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
+                throw;
+            }
+        }
+
         // Eliminar un turno
         public async Task<bool> CancelarTurnoById(int id)
         {

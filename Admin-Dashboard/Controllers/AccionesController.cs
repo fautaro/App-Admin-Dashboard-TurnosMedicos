@@ -23,8 +23,23 @@ namespace Admin_Dashboard.Controllers
             _reservaService = reservaService;
 
         }
+
+        [HttpPost]
+        public async Task<bool> CancelarHorarioBloqueado([FromBody]int turnoId)
+        {
+            var user = await _userManager.GetUserAsync(User);
+
+
+            var response = await _reservaService.CancelarHorarioBloqueado(user.Id, turnoId);
+
+            return response;
+
+        }
         public async Task<IActionResult> HorariosBloqueados()
         {
+            var user = await _userManager.GetUserAsync(User);
+            var response = await _reservaService.GetHorariosBloqueados(user.Id);
+
             return View();
 
         }
