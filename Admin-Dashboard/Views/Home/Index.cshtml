@@ -193,7 +193,6 @@
             },
             mounted() {
                 var Data = @Html.Raw(Json.Serialize(Model));
-                console.log(Data)
                 if (Data.success) {
                     this.agendaList = this.fillAgenda(Data.turnoList);
                 }
@@ -238,7 +237,6 @@
                 },
                 initializeCalendar() {
                     let that = this;
-                    console.log(that.agendaList)
                     let ec = new EventCalendar(document.getElementById('ec'), {
                         view: 'timeGridDay',
                         language: 'es',
@@ -257,7 +255,6 @@
                             // Rellenar el contenido del modal con la información del evento
                             const modalBody = document.getElementById('eventModalBody');
 
-                            console.log(eventExtendedProps)
                             that.modalNombre = eventExtendedProps.name;
                             that.modalEmail = eventExtendedProps.email;
                             that.modalTelefono = eventExtendedProps.phone;

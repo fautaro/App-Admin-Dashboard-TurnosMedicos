@@ -20,7 +20,7 @@
             <!-- Area Chart -->
             <div class="col-xl-12 col-lg-12">
                 <div class="card shadow mb-4">
-                    @if (!Model.Success)
+                    @if (Model.Success == false)
                     {
                         <div class="row">
                             <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
@@ -30,7 +30,7 @@
                     }
                     else
                     {
-                        if (Model.DiasBloqueados.Count == 0)
+                        if (Model.DiasBloqueados == null)
                         {
                             <div class="row">
                                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
@@ -94,11 +94,11 @@
                 return {
                     pag: 0,
                 }
-            }
+            },
             methods: {
                 eliminar(id) {
                     Swal.fire({
-                        title: 'Cancelar el turno',
+                        title: 'Cancelar el horario bloqueado',
                         text: `¿Está seguro de cancelar el horario bloqueado?`,
                         icon: 'warning',
                         showCancelButton: true,

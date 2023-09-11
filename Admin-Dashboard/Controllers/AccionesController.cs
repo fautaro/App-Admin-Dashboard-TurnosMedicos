@@ -25,12 +25,24 @@ namespace Admin_Dashboard.Controllers
         }
 
         [HttpPost]
-        public async Task<bool> CancelarHorarioBloqueado([FromBody]int turnoId)
+        public async Task<bool> CancelarHorarioBloqueado(int id)
         {
             var user = await _userManager.GetUserAsync(User);
 
 
-            var response = await _reservaService.CancelarHorarioBloqueado(user.Id, turnoId);
+            var response = await _reservaService.CancelarHorarioBloqueado(user.Id, id);
+
+            return response;
+
+        }
+
+        [HttpPost]
+
+        public async Task<bool> GuardarHorarioBloqueado([FromBody] RequestGuardarHorarioBloqueado request)
+        {
+            var user = await _userManager.GetUserAsync(User);
+
+            var response = await _reservaService.GuardarHorarioBloqueado(user.Id, request);
 
             return response;
 
@@ -40,7 +52,7 @@ namespace Admin_Dashboard.Controllers
             var user = await _userManager.GetUserAsync(User);
             var response = await _reservaService.GetHorariosBloqueados(user.Id);
 
-            return View();
+            return View(response);
 
         }
 
@@ -105,9 +117,13 @@ namespace Admin_Dashboard.Controllers
 
         }
 
-        public IActionResult AdministrarHoras()
+        public async Task<IActionResult> AdministrarHoras()
         {
-            return View();
+            var user = await _userManager.GetUserAsync(User);
+
+            var response = await _reservaService.GetProfesional(user.Id);
+
+            return View(response);
 
         }
 

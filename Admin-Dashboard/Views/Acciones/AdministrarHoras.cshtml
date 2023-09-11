@@ -1,4 +1,8 @@
-﻿@{
+﻿@using BusinessEntity.Response
+@model ProfesionalResponse
+
+
+@{
     ViewData["Title"] = "Administrar Horas";
 }
 
@@ -60,7 +64,7 @@
                                                         <Datepicker class="text-center" v-model="fechaSeleccionadaRango" model-type="dd/MM/yyyy" inline locale="es" :min-date="new Date()" :enable-time-picker="false" auto-apply :disabled-dates="fechasBloqueadas" :disabled-week-days="[6, 0]" range />
                                                     </div>
                                                     <div class="form-group form-check">
-                                                        <input type="checkbox" class="form-check-input" v-on:click="checkDiaUnico" id="diaCompleto">
+                                                        <input type="checkbox" class="form-check-input" v-on:click="checkDiaUnico()" id="diaCompleto">
                                                         <label class="form-check-label" for="diaCompleto">Bloquear un solo día</label>
                                                     </div>
                                                 </div>
@@ -75,14 +79,12 @@
                                                     Por favor, seleccione el horario para el rango {{ fechaSeleccionadaRango[0] }} al {{fechaSeleccionadaRango[1]}}
                                                 </h4>
                                             </div>
-                                            <div class="col-md-12">
+                                            <div class="col-md-12" v-if="diaUnico">
                                                 <div class="form-group">
-                                                    <label for="horaInicio" v-if="diaUnico">Hora de Inicio</label>
-                                                    <label for="horaInicio" v-else>Hora de Inicio - día {{ fechaSeleccionadaRango[0] }}</label>
-
+                                                    <label for="horaInicio">Hora de Inicio</label>
                                                     <div class="input-group date">
                                                         <select class="form-control" id="horaInicio" v-model="horaInicio">
-                                                            <option v-for="hour in hours" :key="hour">{{ hour }}</option>
+                                                            <option v-for="hour in horasDisponiblesDiaUnico" :key="hour">{{ hour }}</option>
                                                         </select>
                                                         <div class="input-group-append">
                                                             <span class="input-group-text"><i class="fas fa-clock"></i></span>
@@ -90,12 +92,10 @@
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
-                                                    <label for="horaFin" v-if="diaUnico">Hora de Fin</label>
-                                                    <label for="horaFin" v-else>Hora de Fin - día {{fechaSeleccionadaRango[1]}}</label>
-
+                                                    <label for="horaFin">Hora de Fin</label>
                                                     <div class="input-group date">
                                                         <select class="form-control" id="horaFin" v-model="horaFin">
-                                                            <option v-for="hour in hours" :key="hour">{{ hour }}</option>
+                                                            <option v-for="hour in horasDisponiblesDiaUnico" :key="hour">{{ hour }}</option>
                                                         </select>
                                                         <div class="input-group-append">
                                                             <span class="input-group-text"><i class="fas fa-clock"></i></span>
@@ -103,7 +103,30 @@
                                                     </div>
                                                 </div>
                                             </div>
-
+                                            <div class="col-md-12" v-else>
+                                                <div class="form-group">
+                                                    <label for="horaInicio">Hora de Inicio - día {{ fechaSeleccionadaRango[0] }}</label>
+                                                    <div class="input-group date">
+                                                        <select class="form-control" id="horaInicio" v-model="horaInicio">
+                                                            <option v-for="hour in horasDisponiblesRangoInicio" :key="hour">{{ hour }}</option>
+                                                        </select>
+                                                        <div class="input-group-append">
+                                                            <span class="input-group-text"><i class="fas fa-clock"></i></span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="horaFin">Hora de Fin - día {{fechaSeleccionadaRango[1]}}</label>
+                                                    <div class="input-group date">
+                                                        <select class="form-control" id="horaFin" v-model="horaFin">
+                                                            <option v-for="hour in horasDisponiblesRangoFin" :key="hour">{{ hour }}</option>
+                                                        </select>
+                                                        <div class="input-group-append">
+                                                            <span class="input-group-text"><i class="fas fa-clock"></i></span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </transition>
                                 </div>
@@ -139,7 +162,10 @@
                     fechaSeleccionadaRango: "",
                     fechaSeleccionada: "",
                     //hora
-                    hours: ["", "09:00:00", "10:00:00", "11:00:00", "12:00:00", "16:00:00", "17:00:00"],
+                    //horasDisponiblesDiaUnico: ["", "09:00:00", "10:00:00", "11:00:00", "12:00:00", "16:00:00", "17:00:00"],
+                    horasDisponiblesDiaUnico: [],
+                    horasDisponiblesRangoInicio: [],
+                    horasDisponiblesRangoFin: [],
                     horaInicio: "",
                     horaFin: "",
                     //Notificador
@@ -154,9 +180,9 @@
                 }
             },
             mounted() {
-            },
-            computed: {
-
+                let message = '<h3 style="margin-top: 0;">Bloqueo de agenda</h3><p> Esta función te permite bloquear ciertos horarios o incluso todo un día para que nadie más pueda hacer reservas en esos momentos. Pero, si ya hay reservas confirmadas en esos horarios, deberás cancelarlas manualmente desde la pantalla de "Turnos confirmados"</p><small> Haz click afuera de esta ventana para cerrarla.</small>';
+                this.notifier.modal(message)
+                this.getDiasBloqueados();
             },
             components: {
                 Datepicker: VueDatePicker
@@ -168,13 +194,35 @@
                             if (this.fechaSeleccionada == "") {
                                 this.notifier.info('Por favor, seleccione una fecha');
                             } else {
+                                const request = {
+                                    Profesional_Id: @Model.Profesional_Id,
+                                    Fecha: this.fechaSeleccionada,
+                                    inicioDiaUnico: true
+                                }
+                                this.getHorasDisponibles(request);
+
                                 this.pag++
                             }
                         } else {
                             if (this.fechaSeleccionadaRango == "") {
                                 this.notifier.info('Por favor, seleccione un rango de fechas');
                             } else {
-                                this.pag++
+                                const horasInicio = {
+                                    Profesional_Id: @Model.Profesional_Id,
+                                    Fecha: this.fechaSeleccionadaRango[0],
+                                    inicioRango: true
+                                };
+                                this.getHorasDisponibles(horasInicio);
+
+                                const horasFin = {
+                                    Profesional_Id: @Model.Profesional_Id,
+                                    Fecha: this.fechaSeleccionadaRango[1],
+                                    finRango: true
+                                };
+                                this.getHorasDisponibles(horasFin);
+
+                                this.pag++;
+
                             }
                         }
                     } else if (this.pag == 1) {
@@ -185,16 +233,88 @@
                             this.notifier.info('Por favor, seleccione una hora de inicio');
                         } else if (this.horaFin == "") {
                             this.notifier.info('Por favor, seleccione una hora de fin');
-                        } else if (this.horaInicio == this.horaFin) {
+                        } else if (this.horaInicio == this.horaFin && this.diaUnico) {
                             this.notifier.info('La hora de inicio y la hora de fin no pueden coincidir');
                         } else if (this.horaInicio > this.horaFin) {
                             this.notifier.info('La hora de inicio debe ser mayor a la hora de fin');
                         }
                         else {
-                            this.notifier.success(this.horaInicio + "  " + this.horaFin);
+                            this.guardarHorario();
 
                         }
                     }
+                },
+                guardarHorario() {
+                    let obj = {};
+                    if (this.diaUnico) {
+                        obj = {
+                            fechaInicio: this.fechaSeleccionada,
+                            fechaFin: null,
+                            horaInicio: this.horaInicio,
+                            horaFin: this.horaFin
+                        }
+                    }
+                    else {
+                        obj = {
+                            fechaInicio: this.fechaSeleccionadaRango[0],
+                            fechaFin: this.fechaSeleccionadaRango[1],
+                            horaInicio: this.horaInicio,
+                            horaFin: this.horaFin
+                        }
+                    }
+                    Swal.fire({
+                        title: 'Guardar horario bloqueado',
+                        text: `¿Está seguro de guardar el horario bloqueado?`,
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Confirmar',
+                        cancelButtonText: 'Atrás',
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            Swal.fire({
+                                title: "Guardando horario",
+                            })
+                            Swal.showLoading()
+                            fetch(`/Acciones/GuardarHorarioBloqueado`, {
+                                method: "POST",
+                                body: JSON.stringify(obj),
+                                headers: {
+                                    "Content-Type": "application/json"
+                                },
+                            }).then(response => response.json())
+                                .then(success => {
+                                    Swal.hideLoading()
+                                    if (success) {
+                                        Swal.fire(
+                                            'Horario bloqueado guardado',
+                                            'El horario bloqueado ha sido guardado correctamente.',
+                                            'success'
+                                        ).then((result) => {
+                                            window.location.href = '/Acciones/HorariosBloqueados';
+
+                                        });
+                                    } else {
+                                        Swal.fire(
+                                            'Horario bloqueado no guardado',
+                                            'No ha sido posible guardar el horario bloqueado.',
+                                            'info'
+                                        )
+                                    }
+                                })
+                                .catch(error => {
+                                    Swal.hideLoading()
+                                    Swal.fire(
+                                        'Horario bloqueado no guardado',
+                                        'No ha sido posible guardar el horario bloqueado.',
+                                        'info'
+                                    ).then((result) => {
+                                        window.location.reload();
+                                    });
+                                });
+                        }
+                    })
                 },
                 checkDiaUnico() {
                     if (this.diaUnico) {
@@ -205,7 +325,59 @@
                         this.fechaSeleccionada = "";
                     }
                 },
+                getDiasBloqueados() {
+                    const self = this;
 
+                    const Profesional = {
+                        Profesional_Id: '@Model.Profesional_Id'
+                    }
+
+                    fetch('@Url.Action("GetDiasBloqueados", "Acciones")', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(Profesional),
+                    })
+                        .then(response => response.json())
+                        .then(responseData => {
+                            if (responseData.success) {
+                                this.fechasBloqueadas = responseData.diasBloqueados;
+                            }
+                        })
+                        .catch(error => {
+                        });
+                },
+
+                getHorasDisponibles(request) {
+                    fetch('@Url.Action("GetHorasDisponibles", "Acciones")', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(request),
+                    })
+                        .then(response => response.json())
+                        .then(responseData => {
+                            if (responseData.success) {
+                                if (request.inicioRango) {
+                                    this.horasDisponiblesRangoInicio = responseData.horasDisponibles;
+                                }
+                                if (request.finRango) {
+                                    this.horasDisponiblesRangoFin = responseData.horasDisponibles;
+                                }
+                                if (request.inicioDiaUnico) {
+                                    this.horasDisponiblesDiaUnico = responseData.horasDisponibles;
+                                }
+                                return responseData.horasDisponibles;
+                            } else {
+                                throw new Error('Error en la solicitud');
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error al enviar la solicitud:', error);
+                        });
+                }
 
 
             }

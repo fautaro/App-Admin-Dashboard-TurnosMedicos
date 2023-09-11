@@ -249,7 +249,6 @@
                             URL.revokeObjectURL(blobUrl);
                         })
                         .catch(error => {
-                            console.log(error);
                             Swal.hideLoading();
                             Swal.fire(
                                 'Error al exportar turnos',
@@ -368,7 +367,6 @@
 
                             const modalBody = document.getElementById('eventModalBody');
 
-                            console.log(eventExtendedProps);
                             that.modalNombre = eventExtendedProps.name;
                             that.modalEmail = eventExtendedProps.email;
                             that.modalTelefono = eventExtendedProps.phone;
@@ -386,7 +384,6 @@
                         this.showCalendar = false;
                     } else {
                         this.showCalendar = true;
-                        console.log(this.agendaList)
                         if (!this.initializeCalendar) {
                             this.initCalendar();
                         }

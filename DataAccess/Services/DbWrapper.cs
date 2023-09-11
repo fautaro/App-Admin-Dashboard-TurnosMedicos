@@ -110,6 +110,24 @@ namespace DataAccess.Services
         #endregion
         #region Acciones
 
+        //Guardar horario bloqueado
+
+        public async Task<bool> GuardarHorarioBloqueado(AgendaBloqueada request)
+        {
+
+            try
+            {
+                await _dbContext.AgendaBloqueada.AddAsync(request);
+                await _dbContext.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+                throw;
+            }
+        }
+
         //Obtener horarios bloqueados
         public async Task<List<AgendaBloqueada>> GetHorariosBloqueados(Profesional profesional)
         {
@@ -338,7 +356,20 @@ namespace DataAccess.Services
             }
         }
 
+        public async Task<List<AgendaBloqueada>> GetHorariosBloqueadosDiaSeleccionado (int profesional_Id, DateTime fecha)
+        {
+            try
+            {
+                var AgendaBloqueada = await _dbContext.AgendaBloqueada.Where(e => e.Activo == true && (e.FechaDesde.Date == fecha.Date || e.FechaHasta.Date == fecha.Date)).ToListAsync();
 
+                return AgendaBloqueada;
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }    
+        }
         public async Task<List<Turno>> GetTurnosReservados(int profesional_Id)
         {
             try

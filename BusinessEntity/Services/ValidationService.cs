@@ -235,6 +235,7 @@ namespace BusinessEntity.Services
             //Horarios que trabaja el profesional todos los días
             var GetHorariosPermitidos = await _dbWrapper.GetHorariosPermitidos(request.Profesional_Id);
             var GetHorariosReservados = await _dbWrapper.GetTurnosReservados(request.Profesional_Id);
+            var GetHorariosBloqueados = await _dbWrapper.GetHorariosBloqueadosDiaSeleccionado(request.Profesional_Id, fechaBuscada);
 
             // Obtener los horarios reservados del día en formato TimeSpan
             var horariosReservadosDelDia = GetHorariosReservados
@@ -258,10 +259,73 @@ namespace BusinessEntity.Services
                 .ToList();
             }
 
+            // Crear una lista de horarios bloqueados en formato "hh:mm"
+            var horariosBloqueados = GetHorariosBloqueados
+                .SelectMany(bloqueado =>
+                {
+                    var horariosEnBloqueado = new List<string>();
+                    for (var fecha = bloqueado.FechaDesde; fecha < bloqueado.FechaHasta; fecha = fecha.AddMinutes(30))
+                    {
+                        horariosEnBloqueado.Add(fecha.ToString("HH:mm"));
+                    }
+                    return horariosEnBloqueado;
+                })
+                .ToList();
+
+
+            var horariosAEliminar = new List<string>();
+
+            foreach (var horario in response)
+            {
+                if (horariosBloqueados.Contains(horario))
+                {
+                    horariosAEliminar.Add(horario);
+                }
+            }
+
+            // Eliminar los horarios de la lista response
+            foreach (var horarioAEliminar in horariosAEliminar)
+            {
+                response.Remove(horarioAEliminar);
+            }
+
+
+
+
             return response;
         }
 
+        public async Task<bool> ValidarDiaCompletoBloqueado(int Profesional_Id, DateTime RangoBloqueado, bool inicio)
+        {
+            try
+            {
+                //Horarios que trabaja el profesional todos los días
+                List<Horario> GetHorariosPermitidos = await _dbWrapper.GetHorariosPermitidos(Profesional_Id);
+                var Ordered = GetHorariosPermitidos.OrderBy(e => e.Hora);
+                if (!inicio)
+                {
+                    Ordered = GetHorariosPermitidos.OrderByDescending(e => e.Hora);
 
+                }
+
+                if (RangoBloqueado.TimeOfDay == Ordered.FirstOrDefault().Hora)
+                {
+                    return true;
+
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+
+
+        }
         public async Task<bool> ValidarDiaActual(int Profesional_Id)
         {
             //Horarios que trabaja el profesional todos los días

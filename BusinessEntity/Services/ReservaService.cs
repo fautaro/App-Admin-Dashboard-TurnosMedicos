@@ -32,7 +32,7 @@ namespace BusinessEntity.Services
             _mailService = mailService;
         }
 
-        public async Task<ProfesionalResponse> GetProfesional (string user)
+        public async Task<ProfesionalResponse> GetProfesional(string user)
         {
             ProfesionalResponse response = new ProfesionalResponse();
 
@@ -148,6 +148,49 @@ namespace BusinessEntity.Services
 
         }
 
+        public async Task<bool> GuardarHorarioBloqueado(string user, RequestGuardarHorarioBloqueado request)
+        {
+            try
+            {
+                var Profesional = await _dbWrapper.ValidateUser(user);
+
+                if (Profesional is null || Profesional.Activo == false)
+                {
+                    return false;
+
+                }
+
+                if (request == null) return false;
+
+                DateTime fechaInicio = DateTime.ParseExact($"{request.fechaInicio} {request.horaInicio}", "dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture);
+
+                DateTime fechaFin = request.fechaFin != null
+                    ? DateTime.ParseExact($"{request.fechaFin} {request.horaFin}", "dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture)
+                    : DateTime.ParseExact($"{request.fechaInicio} {request.horaFin}", "dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture);
+
+
+
+                AgendaBloqueada HorarioBloqueado = new AgendaBloqueada()
+                {
+                    Activo = true,
+                    FechaDesde = fechaInicio,
+                    FechaHasta = fechaFin,
+                    Profesional_Id = Profesional.Profesional_Id
+                };
+
+
+
+                var response = await _dbWrapper.GuardarHorarioBloqueado(HorarioBloqueado);
+
+                return response;
+            }
+            catch (Exception ex)
+            {
+                return false;
+                throw;
+            }
+        }
+
         public async Task<bool> CancelarHorarioBloqueado(string user, int horarioId)
         {
             try
@@ -193,7 +236,7 @@ namespace BusinessEntity.Services
                     var DiasBloqueadosList = new List<DiasBloqueados>();
                     foreach (var item in Turnos)
                     {
-                        int diasDiferencia = 0;
+                        int diasDiferencia = 1;
                         if (item.FechaHasta.Date > item.FechaDesde.Date)
                         {
                             TimeSpan diferencia = item.FechaHasta - item.FechaDesde;
@@ -207,8 +250,8 @@ namespace BusinessEntity.Services
                             HorarioBloqueadoId = item.AgendaBloqueada_Id,
                             FechaFin = item.FechaHasta.ToString("dd/MM/yyyy"),
                             FechaInicio = item.FechaDesde.ToString("dd/MM/yyyy"),
-                            HoraInicio = item.FechaDesde.ToString("hh:mm"),
-                            HoraFin = item.FechaHasta.ToString("hh:mm")
+                            HoraInicio = item.FechaDesde.ToString("HH:mm"),
+                            HoraFin = item.FechaHasta.ToString("HH:mm")
                         };
 
                         DiasBloqueadosList.Add(Dia);
@@ -305,11 +348,41 @@ namespace BusinessEntity.Services
                 if (agendaBloqueada != null)
                 {
                     response.DiasBloqueados = new List<string>();
+
                     foreach (var rangoBloqueado in agendaBloqueada)
                     {
-                        var DiasBloqueados = await _validationService.ConvertToArrayFechas(rangoBloqueado.FechaDesde, rangoBloqueado.FechaHasta);
-                        response.DiasBloqueados.AddRange(DiasBloqueados);
+                        if (rangoBloqueado.FechaHasta.Date > rangoBloqueado.FechaDesde.Date)
+                        {
+                            bool InicioCompleto = await _validationService.ValidarDiaCompletoBloqueado(request.Profesional_Id, rangoBloqueado.FechaDesde, true);
+                            bool FinCompleto = await _validationService.ValidarDiaCompletoBloqueado(request.Profesional_Id, rangoBloqueado.FechaHasta, false);
 
+                            var DiasBloqueados = await _validationService.ConvertToArrayFechas(rangoBloqueado.FechaDesde, rangoBloqueado.FechaHasta);
+
+                            if (!InicioCompleto)
+                            {
+                                response.DiasBloqueados.RemoveAll(fecha => fecha == rangoBloqueado.FechaDesde.ToString("yyyy/MM/dd"));
+                            }
+
+                            if (!FinCompleto)
+                            {
+                                response.DiasBloqueados.RemoveAll(fecha => fecha == rangoBloqueado.FechaHasta.ToString("yyyy/MM/dd"));
+                            }
+
+                            response.DiasBloqueados.AddRange(DiasBloqueados);
+                        }
+                        else
+                        {
+                            bool DiaCompletoBloqueado = await _validationService.ValidarDiaCompletoBloqueado(request.Profesional_Id, rangoBloqueado.FechaHasta, false);
+
+                            var DiasBloqueados = await _validationService.ConvertToArrayFechas(rangoBloqueado.FechaDesde, rangoBloqueado.FechaHasta);
+                            response.DiasBloqueados.AddRange(DiasBloqueados);
+
+                            if (!DiaCompletoBloqueado)
+                            {
+                                response.DiasBloqueados.RemoveAll(fecha => fecha == rangoBloqueado.FechaDesde.ToString("yyyy/MM/dd"));
+
+                            }
+                        }
                     }
                 }
 
