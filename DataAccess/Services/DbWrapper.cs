@@ -149,7 +149,7 @@ namespace DataAccess.Services
             try
             {
 
-                var HorariosBloqueados = await _dbContext.AgendaBloqueada.Where(e => e.Activo && e.FechaDesde > fechaActual).ToListAsync();
+                var HorariosBloqueados = await _dbContext.AgendaBloqueada.Where(e => e.Activo && e.FechaDesde > fechaActual && e.Profesional_Id == profesional.Profesional_Id).ToListAsync();
 
                 return HorariosBloqueados;
 
