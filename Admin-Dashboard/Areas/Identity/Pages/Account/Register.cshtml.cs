@@ -100,10 +100,30 @@ namespace Admin_Dashboard.Areas.Identity.Pages.Account
         }
 
 
-        public async Task OnGetAsync(string returnUrl = null)
+        public async Task<IActionResult> OnGetAsync(string returnUrl = null)
         {
-            ReturnUrl = returnUrl;
-            ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+            var user = await _userManager.GetUserAsync(User);
+            if (user != null)
+            {
+                if (user.UserName.Equals("fautaro@gmail.com"))
+                {
+                    ReturnUrl = returnUrl;
+                    ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+                    return Page();
+
+                }
+                else
+                {
+                    return RedirectToPage("/Home");
+
+                }
+            } else
+            {
+                return RedirectToPage("/login");
+
+            }
+
+
         }
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
