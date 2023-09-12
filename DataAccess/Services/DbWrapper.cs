@@ -21,6 +21,21 @@ namespace DataAccess.Services
         }
         #region Metodos Generales
 
+        public async Task<Administrador> GetAdmin(string user)
+        {
+            try
+            {
+                var admin = await _dbContext.Administrador.Where(e => e.Administrador_Id == user).FirstOrDefaultAsync();
+
+                return admin;
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+        }
+
         public async Task<Profesion> GetProfesion(Profesional profesional)
         {
             try

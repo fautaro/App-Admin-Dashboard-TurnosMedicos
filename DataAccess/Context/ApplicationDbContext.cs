@@ -20,6 +20,7 @@ namespace DataAccess.Context
         public DbSet<Horario> Horario { get; set; }
         public DbSet<UsuarioProfesional> UsuarioProfesional { get; set; }
         public DbSet<Notificacion> Notificacion { get; set; }
+        public DbSet<Administrador> Administrador { get; set; }
 
 
 
@@ -124,6 +125,15 @@ namespace DataAccess.Context
                 entity.Property(e => e.Eliminado).HasColumnName("Eliminado");
 
             });
+            modelBuilder.Entity<Administrador>(entity =>
+            {
+                entity.ToTable("Administrador"); // Nombre de la tabla en la base de datos
+                entity.HasKey(e => e.Administrador_Id); // Clave primaria
+                entity.Property(e => e.Administrador_Id).HasColumnName("Administrador_Id"); // Mapeo de propiedad
+                entity.Property(e => e.Admin_Nombre).HasColumnName("Admin_Nombre"); // Mapeo de propiedad
+                entity.Property(e => e.Admin_Email).HasColumnName("Admin_Email"); // Mapeo de propiedad
+            });
+
         }
     }
 }

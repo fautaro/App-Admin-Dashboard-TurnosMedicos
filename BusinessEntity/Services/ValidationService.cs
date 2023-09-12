@@ -28,6 +28,23 @@ namespace BusinessEntity.Services
             _dbWrapper = dbWrapper;
         }
 
+        #region Validar Admin
+        public async Task<bool> ValidateAdmin(string user)
+        {
+
+            var Admin = await _dbWrapper.GetAdmin(user);
+            if (Admin != null)
+            {
+                if (Admin.Administrador_Id.Equals(user))
+                {
+                    return true;
+                }
+                return false;
+            }
+            return false;
+
+        }
+        #endregion
 
 
         #region Guardar Turno

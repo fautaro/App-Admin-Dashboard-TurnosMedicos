@@ -10,6 +10,8 @@ using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading;
 using System.Threading.Tasks;
+using BusinessEntity.Services;
+using DataAccess.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -29,13 +31,16 @@ namespace Admin_Dashboard.Areas.Identity.Pages.Account
         private readonly IUserEmailStore<IdentityUser> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+        private ValidationService _validationService;
+
 
         public RegisterModel(
             UserManager<IdentityUser> userManager,
             IUserStore<IdentityUser> userStore,
             SignInManager<IdentityUser> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            ValidationService validationService)
         {
             _userManager = userManager;
             _userStore = userStore;
@@ -43,6 +48,8 @@ namespace Admin_Dashboard.Areas.Identity.Pages.Account
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            _validationService = validationService;
+
         }
 
         /// <summary>
@@ -84,7 +91,7 @@ namespace Admin_Dashboard.Areas.Identity.Pages.Account
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
             [Required]
-            [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
+            [StringLength(100, ErrorMessage = "El {0} debe tener al menos {2} y como máximo {1} caracteres.", MinimumLength = 6)]
             [DataType(DataType.Password)]
             [Display(Name = "Password")]
             public string Password { get; set; }
@@ -94,8 +101,8 @@ namespace Admin_Dashboard.Areas.Identity.Pages.Account
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
             [DataType(DataType.Password)]
-            [Display(Name = "Confirm password")]
-            [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+            [Display(Name = "Confirmar contraseña")]
+            [Compare("Password", ErrorMessage = "La contraseña y la confirmación de contraseña no coinciden.")]
             public string ConfirmPassword { get; set; }
         }
 
@@ -103,12 +110,14 @@ namespace Admin_Dashboard.Areas.Identity.Pages.Account
         public async Task<IActionResult> OnGetAsync(string returnUrl = null)
         {
             var user = await _userManager.GetUserAsync(User);
+
             if (user != null)
             {
-                if (user.UserName.Equals("fautaro@gmail.com"))
+                var isAdmin = await _validationService.ValidateAdmin(user.Id);
+
+                if (isAdmin)
                 {
                     ReturnUrl = returnUrl;
-                    ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
                     return Page();
 
                 }
@@ -122,7 +131,6 @@ namespace Admin_Dashboard.Areas.Identity.Pages.Account
                 return RedirectToPage("/login");
 
             }
-
 
         }
 
@@ -140,7 +148,7 @@ namespace Admin_Dashboard.Areas.Identity.Pages.Account
 
                 if (result.Succeeded)
                 {
-                    _logger.LogInformation("User created a new account with password.");
+                    _logger.LogInformation("El usuario creó una nueva cuenta con contraseña.");
 
                     var userId = await _userManager.GetUserIdAsync(user);
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
@@ -151,8 +159,9 @@ namespace Admin_Dashboard.Areas.Identity.Pages.Account
                         values: new { area = "Identity", userId = userId, code = code, returnUrl = returnUrl },
                         protocol: Request.Scheme);
 
-                    await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
-                        $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                    await _emailSender.SendEmailAsync(Input.Email, "Confirma tu correo electrónico",
+                        $"Por favor, confirma tu cuenta haciendo <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clic aquí</a>.");
+
 
                     if (_userManager.Options.SignIn.RequireConfirmedAccount)
                     {
@@ -182,17 +191,18 @@ namespace Admin_Dashboard.Areas.Identity.Pages.Account
             }
             catch
             {
-                throw new InvalidOperationException($"Can't create an instance of '{nameof(IdentityUser)}'. " +
-                    $"Ensure that '{nameof(IdentityUser)}' is not an abstract class and has a parameterless constructor, or alternatively " +
-                    $"override the register page in /Areas/Identity/Pages/Account/Register.cshtml");
+                throw new InvalidOperationException($"No se puede crear una instancia de '{nameof(IdentityUser)}'. " +
+                    $"Asegúrate de que '{nameof(IdentityUser)}' no es una clase abstracta y tiene un constructor sin parámetros, o alternativamente " +
+                    $"sobrescribe la página de registro en /Areas/Identity/Pages/Account/Register.cshtml");
             }
+
         }
 
         private IUserEmailStore<IdentityUser> GetEmailStore()
         {
             if (!_userManager.SupportsUserEmail)
             {
-                throw new NotSupportedException("The default UI requires a user store with email support.");
+                throw new NotSupportedException("La interfaz de usuario predeterminada requiere un almacén de usuarios con soporte para correos electrónicos.");
             }
             return (IUserEmailStore<IdentityUser>)_userStore;
         }
