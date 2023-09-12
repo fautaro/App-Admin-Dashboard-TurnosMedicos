@@ -116,7 +116,7 @@ namespace BusinessEntity.Services
 
             icsContentBuilder.AppendLine("BEGIN:VCALENDAR");
             icsContentBuilder.AppendLine("VERSION:2.0");
-            icsContentBuilder.AppendLine($"PRODID:Appoint.ar - {Profesional.Nombre} {Profesional.Apellido}");
+            icsContentBuilder.AppendLine($"PRODID:Agendario - {Profesional.Nombre} {Profesional.Apellido}");
             icsContentBuilder.AppendLine("CALSCALE:GREGORIAN");
             icsContentBuilder.AppendLine("BEGIN:VTIMEZONE");
             icsContentBuilder.AppendLine("TZID:America/Argentina/Buenos_Aires");

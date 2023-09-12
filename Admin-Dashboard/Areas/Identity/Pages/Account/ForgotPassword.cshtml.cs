@@ -73,7 +73,7 @@ namespace Admin_Dashboard.Areas.Identity.Pages.Account
                 await _emailSender.SendEmailAsync(
                     Input.Email,
                     "Restablecer contraseña",
-                    $"Por favor, restablece tu contraseña haciendo <a href='{HtmlEncoder.Default.Encode(callbackUrl)}
+                    $"Por favor, restablece tu contraseña haciendo <a href='{HtmlEncoder.Default.Encode(callbackUrl)}");
 
                 return RedirectToPage("./ForgotPasswordConfirmation");
             }
