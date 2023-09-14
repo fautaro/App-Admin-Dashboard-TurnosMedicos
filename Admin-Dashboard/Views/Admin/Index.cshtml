@@ -1,0 +1,107 @@
+﻿@{
+    ViewData["Title"] = "Administración de usuarios";
+}
+@using BusinessEntity.Response
+@model ResponseGetUsuarios
+
+
+
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='utf-8' />
+    <link href="~/css/sb-admin-2.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.10.0/css/bootstrap-datepicker.min.css" integrity="sha512-34s5cpvaNG3BknEWSuOncX28vz97bRI59UnVtEEpFX536A7BtZSJHsDyFoCl8S7Dt2TPzcrCEoHBGeM4SUBDBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="~/lib/jquery-timepicker/jquery.timepicker.css">
+</head>
+<body>
+
+    <div id="app">
+        <!-- Content Row -->
+        <div class="row">
+            <!-- Area Chart -->
+            <div class="col-xl-12 col-lg-12">
+                <div class="card shadow mb-4">
+                    @if (Model != null)
+                    {
+                        @if (Model.Success == false)
+                        {
+                            <div class="row">
+                                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                    <h6 class="m-0 font-weight-bold text-primary">No hay datos para su usuario. Por favor, comuníquese con el administrador.</h6>
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            if (Model.Usuarios == null)
+                            {
+                                <div class="row">
+                                    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                        <h6 class="m-0 font-weight-bold text-primary">Actualmente no hay usuarios registrados.</h6>
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <!-- Card Header - Dropdown -->
+                                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                    <h6 class="m-0 font-weight-bold text-primary">Listado de usuarios</h6>
+                                </div>
+                                <!-- Card Body -->
+                                <div class="card-body">
+                                    <div class="container">
+                                        <div class="table-responsive">
+                                            <table class="table table-striped table-sm">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Id</th>
+                                                        <th>Nombre</th>
+                                                        <th>Apellido</th>
+                                                        <th>Email</th>
+                                                        <th>Id Profesional</th>
+                                                        <th>Profesion</th>
+                                                        <th style="width: 10%;">Prof. Activo</th>
+                                                        <th>Acciones</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach (var item in Model.Usuarios)
+                                                    {
+                                                        <tr>
+                                                            <td>@item.Id</td>
+                                                            <td>@item.Nombre</td>
+                                                            <td>@item.Apellido</td>
+                                                            <td>@item.Email</td>
+                                                            <td>@item.Profesional_Id</td>
+                                                            <td>@item.Profesion</td>
+                                                            <td>@item.Activo</td>
+                                                            <td>
+                                                                <button class="btn btn-danger btn-sm" @*v-on:click="eliminar(@item.HorarioBloqueadoId)"*@>Desactivar</button>
+                                                            </td>
+                                                        </tr>
+                                                    }
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        }
+
+                    }
+                    else
+                    {
+                        <div class="row">
+                            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                <h6 class="m-0 font-weight-bold text-primary">No hay datos para su usuario. Por favor, comuníquese con el administrador.</h6>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

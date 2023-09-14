@@ -1,4 +1,5 @@
 ﻿using DataAccess.Models;
+using DataAccess.ViewModels;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -22,6 +23,8 @@ namespace DataAccess.Context
         public DbSet<Notificacion> Notificacion { get; set; }
         public DbSet<Administrador> Administrador { get; set; }
 
+        //ViewModels
+        public DbSet<AdminDashboardResult> AdminDashboardResults { get; set; }
 
 
 

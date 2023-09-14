@@ -32,6 +32,7 @@ builder.Services.AddTransient<DbWrapper, DbWrapper>();
 builder.Services.AddTransient<MailService, MailService>();
 builder.Services.AddTransient<DashboardService, DashboardService>();
 builder.Services.AddTransient<PerfilService, PerfilService>();
+builder.Services.AddTransient<AdminService, AdminService>();
 
 
 var app = builder.Build();

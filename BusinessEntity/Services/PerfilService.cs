@@ -99,7 +99,7 @@ namespace BusinessEntity.Services
                 response.Email = email;
                 response.Intervalo = $"{user.Intervalo} minutos";
                 response.Activo = user.Activo == true ? "Sí" : "No";
-                response.PerfilPublico = $"https://fautaro.bsite.net/{user.Alias}";
+                response.PerfilPublico = $"https://agendario.ar/{user.Alias}";
 
                 if (Profesion != null)
                 {

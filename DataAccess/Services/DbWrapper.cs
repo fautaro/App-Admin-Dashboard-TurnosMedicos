@@ -1,5 +1,6 @@
 ﻿using DataAccess.Context;
 using DataAccess.Models;
+using DataAccess.ViewModels;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -86,7 +87,44 @@ namespace DataAccess.Services
         }
         #endregion
 
+        #region Admin Service
+        public async Task<List<AdminDashboardResult>> GetAdminDashboard()
+        {
+            try
+            {
+                var adminDashboardResults = await _dbContext.AdminDashboardResults
+                    .FromSqlRaw("EXEC AdminDashboard_Get")
+                    .ToListAsync();
 
+
+                return adminDashboardResults;
+
+
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+        }
+
+        public async Task<Administrador> ValidateAdmin(string User)
+        {
+            try
+            {
+                var user = await _dbContext.Administrador.Where(e => e.Administrador_Id == User).FirstOrDefaultAsync();
+
+                return user;
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+
+        }
+        
+        #endregion
         #region Perfil
         public async Task<bool> UpdatePerfilPublico(string id, string? Titulo, string? Descripcion, byte[]? imagen)
         {
