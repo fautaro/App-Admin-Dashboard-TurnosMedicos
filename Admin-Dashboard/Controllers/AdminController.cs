@@ -31,6 +31,30 @@ namespace Admin_Dashboard.Controllers
             return View();
         }
 
+
+        public async Task<IActionResult> ValidateAdmin()
+        {
+
+            var user =  await _userManager.GetUserAsync(User);
+            var isAdmin =  await _adminService.ValidateAdmin(user.Id);
+            return PartialView("isAdmin", isAdmin);
+
+        }
+
+        public async Task<IActionResult> Edit([FromQuery]string id)
+        {
+            var user = await _userManager.GetUserAsync(User);
+
+            if (await _adminService.ValidateAdmin(user.Id))
+            {
+                var response = await _adminService.GetEdit(id);
+                return View(response);
+
+            }
+            return View();
+
+        }
+
         public async Task<IActionResult> AgregarUsuario(string userId)
         {
             return View();

@@ -115,6 +115,8 @@ namespace Admin_Dashboard.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("Sesión iniciada correctamente.");
+
+
                     return LocalRedirect(returnUrl);
                 }
                 if (result.RequiresTwoFactor)

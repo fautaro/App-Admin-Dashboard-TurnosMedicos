@@ -1,0 +1,165 @@
+﻿@{
+    ViewData["Title"] = "Editar Usuario - Agendario";
+}
+@using BusinessEntity.Response
+@model ResponseGetEdit
+
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='utf-8' />
+    <link href="~/css/sb-admin-2.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.10.0/css/bootstrap-datepicker.min.css" integrity="sha512-34s5cpvaNG3BknEWSuOncX28vz97bRI59UnVtEEpFX536A7BtZSJHsDyFoCl8S7Dt2TPzcrCEoHBGeM4SUBDBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="~/lib/jquery-timepicker/jquery.timepicker.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+
+    <div id="app">
+        <!-- Content Row -->
+        <div class="row">
+            <!-- Area Chart -->
+            <div class="col-xl-12 col-lg-12">
+                <div class="card shadow mb-4">
+                    @if (Model != null)
+                    {
+                        @if (Model.Success == false)
+                        {
+                            <div class="row">
+                                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                    <h6 class="m-0 font-weight-bold text-primary">No hay datos para su usuario. Por favor, comuníquese con el administrador.</h6>
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            if (Model.Profesional == null)
+                            {
+                                <div class="row">
+                                    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                        <h6 class="m-0 font-weight-bold text-primary">No hemos encontrado datos para el usuario seleccionado.</h6>
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                    <h6 class="m-0 font-weight-bold text-primary">Editar usuario</h6>
+                                </div>
+                                <!-- Card Body -->
+                                <div class="card-body">
+                                    <div class="container">
+                                        <ul class="nav nav-tabs" id="secciones">
+                                            <li class="nav-item">
+                                                <a class="nav-link active" id="seccion-profesional" data-bs-toggle="tab" href="#profesional">Profesional</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link" id="seccion-horarios" data-bs-toggle="tab" href="#horarios">Horarios</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link" id="seccion-paginaPublica" data-bs-toggle="tab" href="#paginaPublica">Página Pública</a>
+
+                                            </li>
+                                        </ul>
+
+                                        <div class="tab-content">
+                                            <div class="tab-pane fade show active" id="profesional">
+                                                <div class="tab-pane fade show active" id="profesional">
+                                                    <div class="mb-3">
+                                                        <label for="usuarioId" class="form-label">Profesional Id</label>
+                                                        <input type="text" class="form-control" id="usuarioId" name="usuarioId" value="@Model.Profesional.Profesional_Id" disabled>
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label for="nombre" class="form-label">Nombre</label>
+                                                        <input type="text" class="form-control" id="nombre" name="nombre" value="@Model.Profesional.Nombre">
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label for="apellido" class="form-label">Apellido</label>
+                                                        <input type="text" class="form-control" id="apellido" name="apellido" value="@Model.Profesional.Apellido">
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label for="profesion" class="form-label">Profesión</label>
+                                                        <select class="form-select" id="profesion" name="profesion">
+                                                            <option value="">Profesion</option>
+                                                            @foreach (var profesion in Model.Profesion)
+                                                            {
+                                                                <option value="@profesion.Profesion_Id">@profesion.Nombre</option>
+                                                            }
+                                                        </select>
+                                                    </div>
+                                                    <div class="mb-3 form-check">
+                                                        <input type="checkbox" class="form-check-input" id="activo" name="activo" @(Model.Profesional.Activo == true ? "checked" : "")>
+                                                        <label class="form-check-label" for="activo">Profesional activo</label>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+
+                                            <div class="tab-pane fade" id="horarios">
+                                                <table class="table table-responsive">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Horario</th>
+                                                            <th>Acciones</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @foreach (var horario in Model.Horario)
+                                                        {
+                                                            <tr>
+                                                                <td>@horario.Hora</td>
+                                                                <td>
+                                                                    <button class="btn btn-danger btn-sm" @*v-on:click="eliminar(@item.HorarioBloqueadoId)"*@><i class="fa-solid fa-trash-can"></i></button>
+
+                                                                </td>
+                                                            </tr>
+                                                        }
+                                                    </tbody>
+                                                </table>
+                                                <button class="btn btn-primary">Agregar nuevo horario</button>
+
+                                            </div>
+                                            <div class="tab-pane fade" id="paginaPublica">
+                                                <div style="margin-top:20px">
+                                                    <div class="mb-3">
+                                                        <label for="titulo" class="form-label">Título de pagina pública</label>
+                                                        <input type="text" class="form-control" id="titulo" name="titulo" value="@Model.Profesional.Titulo">
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label for="alias" class="form-label">Alias</label>
+                                                        <input type="text" class="form-control" id="alias" name="alias" value="@Model.Profesional.Alias">
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label for="descripcion" class="form-label">Descripción de pagina pública</label>
+                                                        <textarea class="form-control" id="descripcion" name="descripcion" rows="4">@Model.Profesional.Descripcion</textarea>
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label for="intervalo" class="form-label">Intervalo</label>
+                                                        <input type="number" class="form-control" id="intervalo" name="intervalo" value="@Model.Profesional.Intervalo">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <button class="btn btn-primary">Guardar Cambios</button>
+                                    </div>
+                                </div>
+                            }
+                        }
+
+                    }
+                    else
+                    {
+                        <div class="row">
+                            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                <h6 class="m-0 font-weight-bold text-primary">No hay datos para su usuario. Por favor, comuníquese con el administrador.</h6>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

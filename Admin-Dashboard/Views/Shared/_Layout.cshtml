@@ -1,4 +1,8 @@
-﻿<!DOCTYPE html>
+﻿
+
+
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
@@ -11,8 +15,9 @@
     <link rel="icon" type="image/x-icon" href="~/favicon.png">
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-@*    <link rel="stylesheet" href="~/Admin_Dashboard.styles.css" asp-append-version="true" />
-*@</head>
+    @*    <link rel="stylesheet" href="~/Admin_Dashboard.styles.css" asp-append-version="true" />
+    *@
+</head>
 
 
 
@@ -85,21 +90,9 @@
                     </div>
                 </div>
             </li>
-            <!-- Nav Item - Utilities Collapse Menu -->
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseAdmin"
-                   aria-expanded="true" aria-controls="collapseAdmin">
-                    <i class="fas fa-fw fa-wrench"></i>
-                    <span>Administrador</span>
-                </a>
-                <div id="collapseAdmin" class="collapse" aria-labelledby="headingAdmin"
-                     data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Perfil:</h6>
-                        <a class="collapse-item" href="@Url.Action("Index", "Admin")">Configuración de usuarios</a>
-                    </div>
-                </div>
-            </li>
+
+            <div id="dynamicContentContainer"></div>
+
             <!-- Divider -->
             <hr class="sidebar-divider">
 
@@ -145,12 +138,17 @@
 
                         <div class="topbar-divider d-none d-sm-block"></div>
 
+
+
+
+
+
                         <!-- Nav Item - User Information -->
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-@*                                <img class="img-profile rounded-circle"
-                                     src="~/img/undraw_profile.svg">*@
+                                @*                                <img class="img-profile rounded-circle"
+                                src="~/img/undraw_profile.svg">*@
                                 <span class="mr-2 d-none d-lg-inline text-gray-600 small">@User.Identity.Name</span>
                             </a>
                             <!-- Dropdown - User Information -->
@@ -251,9 +249,11 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
 
-
     <script>
 
+        $.get('@Url.Action("ValidateAdmin", "Admin")', function (content) {
+            $("#dynamicContentContainer").html(content);
+        });
 
         //Notificaciones
         let leidas = false;
@@ -363,30 +363,30 @@
                             let notificacionElement = "";
                             if (notificacion.leida) {
                                 notificacionElement = `
-                                                         <a class="dropdown-item d-flex align-items-center" href="#">
-                                                         <div class="mr-3">
-                                                             <div class="icon-circle bg-primary">
-                                                             <i class="far fa-bell" style="color: #ffffff;"></i>
-                                                             </div>
-                                                         </div>
-                                                         <div>
-                                                                     <div class="small text-gray-500">${notificacion.fecha}</div>
-                                                             <span class="mensaje font-weight-regular">${notificacion.mensaje}</span>
-                                                         </div>
-                                                        </a>`;
+                                                                                         <a class="dropdown-item d-flex align-items-center" href="#">
+                                                                                         <div class="mr-3">
+                                                                                             <div class="icon-circle bg-primary">
+                                                                                             <i class="far fa-bell" style="color: #ffffff;"></i>
+                                                                                             </div>
+                                                                                         </div>
+                                                                                         <div>
+                                                                                                     <div class="small text-gray-500">${notificacion.fecha}</div>
+                                                                                             <span class="mensaje font-weight-regular">${notificacion.mensaje}</span>
+                                                                                         </div>
+                                                                                        </a>`;
                             } else {
                                 notificacionElement = `
-                                                             <a class="dropdown-item d-flex align-items-center" href="#">
-                                                             <div class="mr-3">
-                                                                 <div class="icon-circle bg-primary">
-                                                                 <i class="far fa-bell" style="color: #ffffff;"></i>
-                                                                 </div>
-                                                             </div>
-                                                             <div>
-                                                                         <div class="small text-gray-500">${notificacion.fecha}</div>
-                                                                 <span class="mensaje font-weight-bold">${notificacion.mensaje}</span>
-                                                             </div>
-                                                         </a>`;
+                                                                                             <a class="dropdown-item d-flex align-items-center" href="#">
+                                                                                             <div class="mr-3">
+                                                                                                 <div class="icon-circle bg-primary">
+                                                                                                 <i class="far fa-bell" style="color: #ffffff;"></i>
+                                                                                                 </div>
+                                                                                             </div>
+                                                                                             <div>
+                                                                                                         <div class="small text-gray-500">${notificacion.fecha}</div>
+                                                                                                 <span class="mensaje font-weight-bold">${notificacion.mensaje}</span>
+                                                                                             </div>
+                                                                                         </a>`;
                             }
                             // Agregamos la notificación al DOM
                             listaNotificaciones.insertAdjacentHTML('beforeend', notificacionElement);

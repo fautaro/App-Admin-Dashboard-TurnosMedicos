@@ -88,6 +88,73 @@ namespace DataAccess.Services
         #endregion
 
         #region Admin Service
+        //Get UsuarioProfesional
+
+        public async Task<UsuarioProfesional> GetUsuarioProfesionalAdmin(string User)
+        {
+            try
+            {
+                var ProfesionesList = await _dbContext.UsuarioProfesional.Where(e => e.User_Id == User).FirstOrDefaultAsync();
+
+                return ProfesionesList;
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+        }
+        //Get Profesiones
+
+        public async Task<List<Profesion>> GetProfesionesAdmin()
+        {
+            try
+            {
+                var ProfesionesList = await _dbContext.Profesion.ToListAsync();
+
+                return ProfesionesList;
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+        }
+        //Get Profesional para editar
+
+        public async Task<Profesional> GetProfesionalAdmin(string User, UsuarioProfesional usprof)
+        {
+            try
+            {
+
+                var ProfesionalList = await _dbContext.Profesional.Where(e => e.Profesional_Id == usprof.Profesional_Id).FirstOrDefaultAsync();
+
+                return ProfesionalList;
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+        }
+
+        //Get listado de horarios definidos
+        public async Task<List<Horario>> GetUserHorariosAdmin(string User, UsuarioProfesional usprof)
+        {
+            try
+            {
+                var horariosList = await _dbContext.Horario.Where(e => e.Profesional_Id == usprof.Profesional_Id).ToListAsync();
+
+                return horariosList;
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+        }
+
+
         public async Task<List<AdminDashboardResult>> GetAdminDashboard()
         {
             try
