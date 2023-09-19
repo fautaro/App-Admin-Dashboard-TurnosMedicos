@@ -88,6 +88,38 @@ namespace DataAccess.Services
         #endregion
 
         #region Admin Service
+
+        //Crear profesional
+        public async Task<bool> CrearRelUsuarioProfesional(UsuarioProfesional usuarioProfesional)
+        {
+            try
+            {
+                await _dbContext.UsuarioProfesional.AddAsync(usuarioProfesional);
+                await _dbContext.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+                throw;
+            }
+        }
+
+        public async Task<int> CrearProfesional(Profesional profesional)
+        {
+            try
+            {
+                await _dbContext.Profesional.AddAsync(profesional);
+                await _dbContext.SaveChangesAsync();
+                return profesional.Profesional_Id;
+            }
+            catch (Exception ex)
+            {
+                return 0;
+                throw;
+            }
+        }
+
         //Get UsuarioProfesional
 
         public async Task<UsuarioProfesional> GetUsuarioProfesionalAdmin(string User)

@@ -1,4 +1,6 @@
-﻿using BusinessEntity.Response;
+﻿using BusinessEntity.Request;
+using BusinessEntity.Response;
+using DataAccess.Models;
 using DataAccess.Services;
 using DataAccess.ViewModels;
 using System;
@@ -26,7 +28,87 @@ namespace BusinessEntity.Services
             _tokenService = tokenService;
             _mailService = mailService;
         }
+        public async Task<bool> GuardarDatosNuevoUsuario(RequestGuardarDatosNuevoUsuario request)
+        {
+            try
+            {
+                Profesional profesional = new Profesional();
 
+                profesional.Titulo = request.titulo;
+                profesional.Activo = true;
+                profesional.Alias = request.alias;
+                profesional.Nombre = request.nombre;
+                profesional.Apellido = request.apellido;
+                profesional.Descripcion = request.descripcion;
+                profesional.Intervalo = request.intervalo;
+
+
+
+                var idNuevoUsuario = await _dbWrapper.CrearProfesional(profesional);
+
+                if (idNuevoUsuario != null && idNuevoUsuario != 0)
+                {
+                    UsuarioProfesional Uprof = new UsuarioProfesional();
+                    Uprof.User_Id = request.Usuario_Id;
+                    Uprof.Profesional_Id = idNuevoUsuario;
+
+
+                    var CrearRelUsuarioProfesional = await _dbWrapper.CrearRelUsuarioProfesional(Uprof);
+
+                    if (CrearRelUsuarioProfesional)
+                        return true;
+                    else
+                        return false;
+                }
+                return false;
+
+
+
+            }
+            catch (Exception ex)
+            {
+                return false;
+                throw;
+            }
+        }
+        public async Task<ResponseGetDatosAgregarUsuario> GetDatosNuevoUsuario(string userId)
+        {
+            ResponseGetDatosAgregarUsuario response = new ResponseGetDatosAgregarUsuario();
+
+            try
+            {
+                var Profesiones = await _dbWrapper.GetProfesionesAdmin();
+
+                if (Profesiones != null)
+                {
+                    response.Profesion = new List<ProfesionViewModel>();
+
+                    foreach (var item in Profesiones)
+                    {
+                        ProfesionViewModel profesion = new ProfesionViewModel()
+                        {
+                            Nombre = item.Nombre,
+                            Profesion_Id = item.Profesion_Id,
+                            Rubro = item.Rubro
+                        };
+                        response.Profesion.Add(profesion);
+                    }
+                }
+
+                response.Usuario_Id = userId;
+                response.Success = true;
+
+                return response;
+
+            }
+            catch (Exception ex)
+            {
+                response.Success = false;
+                return response;
+                throw;
+            }
+
+        }
         public async Task<ResponseGetUsuarios> GetAdminDashboard()
         {
             ResponseGetUsuarios response = new ResponseGetUsuarios();

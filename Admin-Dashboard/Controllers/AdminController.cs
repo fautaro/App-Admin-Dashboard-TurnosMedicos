@@ -1,4 +1,5 @@
-﻿using BusinessEntity.Services;
+﻿using BusinessEntity.Request;
+using BusinessEntity.Services;
 using DataAccess.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -16,7 +17,7 @@ namespace Admin_Dashboard.Controllers
         public AdminController(UserManager<IdentityUser> userManager, AdminService adminService)
         {
             _userManager = userManager;
-            _adminService = adminService; 
+            _adminService = adminService;
         }
         public async Task<IActionResult> Index()
         {
@@ -30,18 +31,44 @@ namespace Admin_Dashboard.Controllers
             }
             return View();
         }
+        //Paso 2: Registrar datos de usuario
+        public async Task<IActionResult> AgregarUsuario(string userId)
+        {
+            var user = await _userManager.GetUserAsync(User);
 
+            if (await _adminService.ValidateAdmin(user.Id))
+            {
+                var response = await _adminService.GetDatosNuevoUsuario(userId);
+                return View(response);
+
+            }
+            return View();
+        }
+
+        //Paso 2: Registrar datos de usuario (POST)
+        [HttpPost]
+        public async Task<bool> GuardarDatosNuevoUsuario(RequestGuardarDatosNuevoUsuario request)
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (await _adminService.ValidateAdmin(user.Id))
+            {
+                var response = await _adminService.GuardarDatosNuevoUsuario(request);
+                return true;
+
+            }
+            return false;
+        }
 
         public async Task<IActionResult> ValidateAdmin()
         {
 
-            var user =  await _userManager.GetUserAsync(User);
-            var isAdmin =  await _adminService.ValidateAdmin(user.Id);
+            var user = await _userManager.GetUserAsync(User);
+            var isAdmin = await _adminService.ValidateAdmin(user.Id);
             return PartialView("isAdmin", isAdmin);
 
         }
 
-        public async Task<IActionResult> Edit([FromQuery]string id)
+        public async Task<IActionResult> Edit([FromQuery] string id)
         {
             var user = await _userManager.GetUserAsync(User);
 
@@ -60,10 +87,5 @@ namespace Admin_Dashboard.Controllers
             return View();
         }
 
-        [HttpPost]
-        public async Task<IActionResult> GuardarNuevoUsuario()
-        {
-            return View();
-        }
     }
 }
