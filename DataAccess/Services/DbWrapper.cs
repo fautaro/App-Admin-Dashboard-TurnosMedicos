@@ -89,6 +89,27 @@ namespace DataAccess.Services
 
         #region Admin Service
 
+        //Guardar Horarios
+
+        public async Task<bool> GuardarHorariosProfesional(List<Horario> horarios)
+        {
+            try
+            {
+                if (horarios != null)
+                {
+                    await _dbContext.AddRangeAsync(horarios);
+                    await _dbContext.SaveChangesAsync();
+                    return true;
+                }
+                return false;
+
+            }
+            catch (Exception ex)
+            {
+                return false;
+                throw;
+            }
+        }
         //Crear profesional
         public async Task<bool> CrearRelUsuarioProfesional(UsuarioProfesional usuarioProfesional)
         {

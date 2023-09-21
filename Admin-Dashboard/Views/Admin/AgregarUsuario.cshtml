@@ -11,13 +11,13 @@
 <head>
     <meta charset='utf-8' />
     <link href="~/css/sb-admin-2.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.10.0/css/bootstrap-datepicker.min.css" integrity="sha512-34s5cpvaNG3BknEWSuOncX28vz97bRI59UnVtEEpFX536A7BtZSJHsDyFoCl8S7Dt2TPzcrCEoHBGeM4SUBDBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="~/lib/jquery-timepicker/jquery.timepicker.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="~/css/awesome-notifications.css" rel="stylesheet">
+    <link href="~/css/sweetalert2.min.css" rel="stylesheet">
 </head>
 <body>
 
-    <div id="app">
+    <div id="app" data-usuario-id="@Model.Usuario_Id">
         <!-- Content Row -->
         <div class="row">
             <!-- Area Chart -->
@@ -45,6 +45,12 @@
                                         <li class="nav-item">
                                             <a class="nav-link active" id="seccion-profesional" data-bs-toggle="tab" href="#profesional">Profesional</a>
                                         </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" id="seccion-horarios" data-bs-toggle="tab" href="#horarios">Horarios</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" id="seccion-pagPublica" data-bs-toggle="tab" href="#paginaPublica">Pagina pública</a>
+                                        </li>
                                     </ul>
 
                                     <div class="tab-content">
@@ -52,19 +58,19 @@
                                             <div class="tab-pane fade show active" id="profesional">
                                                 <div class="mb-3">
                                                     <label for="nombre" class="form-label">Nombre</label>
-                                                    <input type="text" class="form-control" id="nombre" name="nombre" value="" v-model="nombre">
+                                                    <input type="text" class="form-control" id="nombre" name="nombre" v-model="nombre">
                                                 </div>
                                                 <div class="mb-3">
                                                     <label for="apellido" class="form-label">Apellido</label>
-                                                    <input type="text" class="form-control" id="apellido" name="apellido" value="" v-model="apellido">
+                                                    <input type="text" class="form-control" id="apellido" name="apellido" v-model="apellido">
                                                 </div>
                                                 <div class="mb-3">
                                                     <label for="profesion" class="form-label">Profesión</label>
-                                                    <select class="form-select" id="profesion" name="profesion">
+                                                    <select class="form-select" id="profesion" name="profesion" v-model="profesion_id" v-on:change="seleccionarProfesion()">
                                                         <option value="">Profesion</option>
                                                         @foreach (var profesion in Model.Profesion)
                                                         {
-                                                            <option value="@profesion.Profesion_Id">@profesion.Nombre</option>
+                                                            <option value="@profesion.Profesion_Id" data-nombre="@profesion.Nombre">@profesion.Nombre</option>
                                                         }
                                                     </select>
                                                 </div>
@@ -73,36 +79,50 @@
                                         </div>
 
                                         <div class="tab-pane fade" id="horarios">
-                                            <table class="table table-responsive">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Horario</th>
-                                                        <th>Acciones</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                </tbody>
-                                            </table>
-                                            <button class="btn btn-primary">Agregar nuevo horario</button>
+                                            <div class="mb-3" style="margin-top:20px">
+                                                <label for="intervalo" class="form-label">Intervalo</label>
+                                                <input type="number" class="form-control" id="intervalo" name="intervalo" v-model="intervalo" v-on:change="changeIntervalo()">
+                                            </div>
+                                            <hr>
+                                            <div v-if="intervalo || intervalo != ''">
+                                                <div class="mb-3">
+                                                    <!-- Agregamos un margen top -->
+                                                    <label for="horarioInput" class="mb-2">Selecciona un horario:</label>
+                                                    <input type="time" id="horarioInput" v-model="horario" class="mb-2">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <button class="btn btn-primary" v-on:click="guardarHorario()">Agregar nuevo horario</button>
+                                                </div>
 
+                                                <table class="table table-striped mt-3">
+                                                    <thead class="table-primary">
+                                                        <tr>
+                                                            <th>Horario</th>
+                                                            <th>Acciones</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr v-for="(item, index) in horarios" :key="index">
+                                                            <td>{{ item }}</td>
+                                                            <td><button class="btn btn-secondary" v-on:click="borrarHorario(index)">Borrar</button></td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
                                         </div>
                                         <div class="tab-pane fade" id="paginaPublica">
                                             <div style="margin-top:20px">
                                                 <div class="mb-3">
                                                     <label for="titulo" class="form-label">Título de pagina pública</label>
-                                                    <input type="text" class="form-control" id="titulo" name="titulo" value="" v-model="titulo">
+                                                    <input type="text" class="form-control" id="titulo" name="titulo" v-model="titulo">
                                                 </div>
                                                 <div class="mb-3">
                                                     <label for="alias" class="form-label">Alias</label>
-                                                    <input type="text" class="form-control" id="alias" name="alias" value="" v-model="alias">
+                                                    <input type="text" class="form-control" id="alias" name="alias" v-model="alias">
                                                 </div>
                                                 <div class="mb-3">
                                                     <label for="descripcion" class="form-label">Descripción de pagina pública</label>
                                                     <textarea class="form-control" id="descripcion" name="descripcion" rows="4" v-model="descripcion"></textarea>
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label for="intervalo" class="form-label">Intervalo</label>
-                                                    <input type="number" class="form-control" id="intervalo" name="intervalo" value="" v-model="intervalo">
                                                 </div>
                                             </div>
                                         </div>
@@ -126,6 +146,9 @@
         </div>
     </div>
     <script src="~/js/vue.global.js"></script>
+    <script src="~/js/awesome-notifications.js"></script>
+    <script src="~/js/sweetalert2.all.min.js"></script>
+
     <script>
         const app = Vue.createApp({
 
@@ -133,13 +156,16 @@
                 return {
                     //Valores seleccionados por el usuario
                     profesion_id: 0,
+                    profesion_nombre: "",
                     nombre: "",
                     apellido: "",
                     //Valores Pag Publica
                     titulo: "",
                     descripcion: "",
                     alias: "",
-                    intervalo: "",
+                    intervalo: 0,
+                    horario: '', // Almacena el horario seleccionado en formato "HH:mm"
+                    horarios: [], // Almacena los horarios agregados a la tabla
                     //Notificador
                     notifier: new AWN({
                         durations: {
@@ -152,56 +178,164 @@
                 }
             },
             methods: {
-                guardarCambios() {
-                    if (this.profesion_id == "" || this.profesion_id == 0 || this.nombre == "" || this.apellido == "" || this.titulo == "" || this.descripcion == "" || this.alias == "" || this.intervalo == "") {
-                        this.notifier.info('Por favor, complete todos los campos');
-                            else {
-                        this.guardarUsuario();
 
+                seleccionarProfesion() {
+                    const selectElement = document.getElementById('profesion');
+                    const selectedOption = selectElement.options[selectElement.selectedIndex];
+                    const nombreProfesion = selectedOption.getAttribute('data-nombre');
+                    this.profesion_nombre = nombreProfesion;
+                },
+
+                changeIntervalo() {
+                    if (this.intervalo == 0 || this.intervalo == '') {
+                        this.horarios = [];
+                    }
+                },
+
+                borrarHorario(index){
+                        this.horarios.splice(index, 1);
+                },
+
+                guardarHorario() {
+                    const horario = this.horario;
+                    if (horario === "") {
+                        this.notifier.info('Por favor, agregue un horario');
+                    } else {
+                        this.horarios.push(horario);
+
+                        // Realiza las acciones necesarias con el horario seleccionado
+                        console.log("Horario seleccionado:", horario);
+
+                        // Limpia el campo de entrada
+                        this.horario = "";
+                    }
+
+
+                    //fetch(`/Admin/GuardarHorario`, {
+                    //    method: "POST",
+                    //    body: JSON.stringify(obj),
+                    //    headers: {
+                    //        "Content-Type": "application/json"
+                    //    },
+                    //}).then(response => response.json())
+                    //    .then(success => {
+                    //        Swal.hideLoading()
+                    //        if (success) {
+
+                    //        } else {
+                    //            Swal.fire(
+                    //                'Datos de nuevo usuario no guardado',
+                    //                'No ha sido posible guardar los datos del nuevo usuario.',
+                    //                'info'
+                    //            )
+                    //        }
+                    //    })
+                    //    .catch(error => {
+                    //        Swal.hideLoading()
+                    //        Swal.fire(
+                    //            'Datos de nuevo usuario no guardado',
+                    //            'No ha sido posible guardar los datos del nuevo usuario.',
+                    //            'info'
+                    //        ).then((result) => {
+                    //        });
+                    //    });
+
+                },
+                validarIntervalo() {
+                    if (this.intervalo <= 0) {
+                        this.notifier.info('El intervalo debe ser mayor que cero.');
+                        return false;
+                    }
+
+                    for (let i = 1; i < this.horarios.length; i++) {
+                        const horaAnterior = this.horarios[i - 1];
+                        const horaActual = this.horarios[i];
+
+                        const horaAnteriorParts = horaAnterior.split(':');
+                        const horaActualParts = horaActual.split(':');
+
+                        const horasAnterior = parseInt(horaAnteriorParts[0]);
+                        const minutosAnterior = parseInt(horaAnteriorParts[1]);
+                        const horasActual = parseInt(horaActualParts[0]);
+                        const minutosActual = parseInt(horaActualParts[1]);
+
+                        const diferenciaMinutos = (horasActual - horasAnterior) * 60 + (minutosActual - minutosAnterior);
+
+                        if (diferenciaMinutos < this.intervalo) {
+                            this.notifier.info('Los horarios no cumplen con el intervalo mínimo.');
+                            return false;
+                        }
+                    }
+
+                    return true;
+                },
+                guardarCambios() {
+
+                    if (this.profesion_id == "" || this.profesion_id == 0 || this.nombre == "" || this.apellido == "" || this.titulo == "" || this.descripcion == "" || this.alias == "" || this.intervalo == "" || this.intervalo == []) {
+                        this.notifier.info('Por favor, complete todos los campos');
+                    }
+                    else {
+                        if (this.validarIntervalo()) {
+                            this.guardarUsuario();
+
+                        }
                     }
                 },
                 guardarUsuario() {
-                    let obj = {
-                        profesion_Id: '@Model.Usuario_Id',
+                    let usuarioId = document.getElementById('app').getAttribute('data-usuario-id');
+
+                    let request = {
+                        usuario_id: usuarioId,
+                        profesion_Id: this.profesion_id,
                         nombre: this.nombre,
                         apellido: this.apellido,
                         titulo: this.titulo,
                         descripcion: this.descripcion,
                         alias: this.alias,
-                        intervalo: this.intervalo
+                        intervalo: this.intervalo,
+                        horarios: this.horarios
 
                     };
-
+                    console.log(JSON.stringify(request))
                     let message = `<table class="table">
-                                <tr>
-                                    <th>Profesión ID</th>
-                                    <td>${obj.profesion_Id}</td>
-                                </tr>
-                                <tr>
-                                    <th>Nombre</th>
-                                    <td>${obj.nombre}</td>
-                                </tr>
-                                <tr>
-                                    <th>Apellido</th>
-                                    <td>${obj.apellido}</td>
-                                </tr>
-                                <tr>
-                                    <th>Título</th>
-                                    <td>${obj.titulo}</td>
-                                </tr>
-                                <tr>
-                                    <th>Descripción</th>
-                                    <td>${obj.descripcion}</td>
-                                </tr>
-                                <tr>
-                                    <th>Alias</th>
-                                    <td>${obj.alias}</td>
-                                </tr>
-                                <tr>
-                                    <th>Intervalo</th>
-                                    <td>${obj.intervalo}</td>
-                                </tr>
-                                    </table>`
+                                                                         <tr>
+                                                                             <th>Profesión</th>
+                                                                             <td>${this.profesion_nombre}</td>
+                                                                         </tr>
+                                                                         <tr>
+                                                                             <th>Nombre</th>
+                                                                             <td>${request.nombre}</td>
+                                                                         </tr>
+                                                                         <tr>
+                                                                             <th>Apellido</th>
+                                                                                     <td>${request.apellido}</td>
+                                                                         </tr>
+                                                                         <tr>
+                                                                             <th>Título</th>
+                                                                             <td>${request.titulo}</td>
+                                                                         </tr>
+                                                                         <tr>
+                                                                             <th>Descripción</th>
+                                                                             <td>${request.descripcion}</td>
+                                                                         </tr>
+                                                                         <tr>
+                                                                             <th>Alias</th>
+                                                                             <td>${request.alias}</td>
+                                                                         </tr>
+                                                                         <tr>
+                                                                             <th>Intervalo</th>
+                                                                             <td>${request.intervalo}</td>
+                                                                         </tr>
+                                                                         <tr>
+                                                                             <th>Horarios</th>
+                                                                             <td>
+                                                                                 <ul>
+                                                                                     ${request.horarios.map(horario => `<li>${horario}</li>`).join('')}
+                                                                                 </ul>
+                                                                             </td>
+                                                                         </tr>
+                                                                     </table>`;
+
 
                     Swal.fire({
                         title: 'Guardar datos de usuario',
@@ -221,7 +355,7 @@
                             Swal.showLoading()
                             fetch(`/Admin/GuardarDatosNuevoUsuario`, {
                                 method: "POST",
-                                body: JSON.stringify(obj),
+                                body: JSON.stringify(request),
                                 headers: {
                                     "Content-Type": "application/json"
                                 },
@@ -256,6 +390,7 @@
                                     });
                                 });
                         }
+
                     })
                 }
             }

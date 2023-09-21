@@ -2,9 +2,7 @@
 @model RegisterModel
 @{
     ViewData["Title"] = "Crear cuenta";
-    //Layout = null;
 }
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -40,7 +38,7 @@
                             <div class="text-center">
                                 <h1 class="h4 text-gray-900 mb-4">Crear cuenta</h1>
                             </div>
-                            <form class="user" asp-route-returnUrl="@Model.ReturnUrl" method="post" action="/Ruta/De/Tu/Pagina">
+                            <form class="user" method="post">
                                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
                                 <div class="form-group">
@@ -66,13 +64,6 @@
                                 </button>
                                 <hr>
                             </form>
-                            <hr>
-                            <div class="text-center">
-                                <a class="small" asp-page="./ForgotPassword">Recuperar contraseña</a>
-                            </div>
-                            <div class="text-center">
-                                <a class="small" asp-page="/Login">Iniciar sesión</a>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -89,8 +80,8 @@
     <script src="~/lib/jquery-easing/jquery.easing.min.js"></script>
 
     <!-- Custom scripts for all pages-->
-    <script src="~/js/sb-admin-2.min.js"></script>
-
+@*    <script src="~/js/sb-admin-2.min.js"></script>
+*@
 </body>
 
 </html>

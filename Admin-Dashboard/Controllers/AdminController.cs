@@ -47,7 +47,7 @@ namespace Admin_Dashboard.Controllers
 
         //Paso 2: Registrar datos de usuario (POST)
         [HttpPost]
-        public async Task<bool> GuardarDatosNuevoUsuario(RequestGuardarDatosNuevoUsuario request)
+        public async Task<bool> GuardarDatosNuevoUsuario([FromBody]RequestGuardarDatosNuevoUsuario request)
         {
             var user = await _userManager.GetUserAsync(User);
             if (await _adminService.ValidateAdmin(user.Id))
@@ -80,11 +80,6 @@ namespace Admin_Dashboard.Controllers
             }
             return View();
 
-        }
-
-        public async Task<IActionResult> AgregarUsuario(string userId)
-        {
-            return View();
         }
 
     }

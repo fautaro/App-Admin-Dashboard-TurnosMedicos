@@ -5,6 +5,7 @@ using DataAccess.Services;
 using DataAccess.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -40,8 +41,8 @@ namespace BusinessEntity.Services
                 profesional.Nombre = request.nombre;
                 profesional.Apellido = request.apellido;
                 profesional.Descripcion = request.descripcion;
-                profesional.Intervalo = request.intervalo;
-
+                profesional.Intervalo = Convert.ToInt32(request.intervalo);
+                profesional.Profesion_Id = Convert.ToInt32(request.profesion_Id);
 
 
                 var idNuevoUsuario = await _dbWrapper.CrearProfesional(profesional);
@@ -49,21 +50,43 @@ namespace BusinessEntity.Services
                 if (idNuevoUsuario != null && idNuevoUsuario != 0)
                 {
                     UsuarioProfesional Uprof = new UsuarioProfesional();
-                    Uprof.User_Id = request.Usuario_Id;
+                    Uprof.User_Id = request.usuario_id;
                     Uprof.Profesional_Id = idNuevoUsuario;
 
 
-                    var CrearRelUsuarioProfesional = await _dbWrapper.CrearRelUsuarioProfesional(Uprof);
+                    var SuccessCrearRelUsuarioProfesional = await _dbWrapper.CrearRelUsuarioProfesional(Uprof);
 
-                    if (CrearRelUsuarioProfesional)
-                        return true;
-                    else
-                        return false;
+                    if (SuccessCrearRelUsuarioProfesional)
+                    {
+                        List<TimeSpan> tiempos = new List<TimeSpan>();
+                        foreach (string horario in request.horarios)
+                        {
+                            if (TimeSpan.TryParseExact(horario, "hh\\:mm", CultureInfo.InvariantCulture, out TimeSpan resultado))
+                            {
+                                tiempos.Add(resultado);
+                            }
+                        }
+                        List<Horario> horarios = new List<Horario>();
+
+                        tiempos.Sort();
+                        foreach (var item in tiempos)
+                        {
+                            Horario horario = new Horario()
+                            {
+                                Profesional_Id = idNuevoUsuario,
+                                Hora = item
+                            };
+                            horarios.Add(horario);
+                        }
+                        var SuccessGuardarHorarios = await _dbWrapper.GuardarHorariosProfesional(horarios);
+
+                        if (SuccessGuardarHorarios)
+                        {
+                            return true;
+                        }
+                    } 
                 }
                 return false;
-
-
-
             }
             catch (Exception ex)
             {
