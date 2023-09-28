@@ -12,8 +12,9 @@
     <link href="~/css/sb-admin-2.min.css" rel="stylesheet">
     <link href="~/css/event-calendar.min.css" rel="stylesheet">
 
-@*    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@@event-calendar/build@1.5.1/event-calendar.min.css">
-*@</head>
+    @*    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@@event-calendar/build@1.5.1/event-calendar.min.css">
+    *@
+</head>
 <body>
     <style>
         /* Estilo para la tabla striped con colores de fondo y texto distintivos */
@@ -29,6 +30,9 @@
             color: #333; /* Color del texto en las celdas */
         }
 
+        #app h1, h2,h3,h4 {
+            font-family: "Jost", sans-serif;
+        }
     </style>
     <div class="container-fluid" id="app">
         <!-- Page Heading -->
@@ -174,7 +178,7 @@
 
     </div>
     <script src="~/js/vue.global.js"></script>
-<script src="~/js/event-calendar.min.js"></script>
+    <script src="~/js/event-calendar.min.js"></script>
     <script>
         const app = Vue.createApp({
 
