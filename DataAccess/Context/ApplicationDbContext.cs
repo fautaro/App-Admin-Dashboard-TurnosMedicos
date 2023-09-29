@@ -22,6 +22,7 @@ namespace DataAccess.Context
         public DbSet<UsuarioProfesional> UsuarioProfesional { get; set; }
         public DbSet<Notificacion> Notificacion { get; set; }
         public DbSet<Administrador> Administrador { get; set; }
+        public DbSet<Evento> Evento { get; set; }
 
         //ViewModels
         public DbSet<AdminDashboardResult> AdminDashboardResults { get; set; }
@@ -136,6 +137,18 @@ namespace DataAccess.Context
                 entity.Property(e => e.Admin_Nombre).HasColumnName("Admin_Nombre"); // Mapeo de propiedad
                 entity.Property(e => e.Admin_Email).HasColumnName("Admin_Email"); // Mapeo de propiedad
             });
+
+            modelBuilder.Entity<Evento>(entity =>
+            {
+                entity.ToTable("Evento"); // Nombre de la tabla en la base de datos
+                entity.HasKey(e => e.Evento_Id); // Clave primaria
+                entity.Property(e => e.Evento_Id).HasColumnName("Evento_Id"); // Mapeo de propiedad
+                entity.Property(e => e.Usuario_Id).HasColumnName("Usuario_Id"); // Mapeo de propiedad
+                entity.Property(e => e.Detalle).HasColumnName("Detalle"); // Mapeo de propiedad
+                entity.Property(e => e.Entidad).HasColumnName("Entidad"); // Mapeo de propiedad
+                entity.Property(e => e.FechaHora).HasColumnName("FechaHora"); // Mapeo de propiedad
+            });
+
 
         }
     }
