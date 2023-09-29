@@ -85,8 +85,8 @@ namespace BusinessEntity.Services
                             <p>Lamentamos informarte que tu turno ha sido cancelado.</p>
                             <p style=""margin-bottom: 25px;"">A continuación, los detalles del turno cancelado:</p>
                             <ul style=""list-style-type: none; padding-left: 0; margin-bottom: 25px;"">
-                                <li><strong>Fecha y Hora:</strong> ${DatosTurno.FechaHora}</li>
-                                <li><strong>Profesional:</strong> ${Profesional.Nombre} {Profesional.Apellido}</li>
+                                <li><strong>Fecha y Hora:</strong> {DatosTurno.FechaHora}</li>
+                                <li><strong>Profesional:</strong> {Profesional.Nombre} {Profesional.Apellido}</li>
                             </ul>
                         </div>
                         <div style=""margin-top: 50px;"">
