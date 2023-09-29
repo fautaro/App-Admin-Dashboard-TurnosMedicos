@@ -22,10 +22,15 @@ namespace BusinessEntity.Services
         private string _smtpUsername = "mb46503";
         private string _smtpPassword = "kzhYsRFyuXt2qrfEBkHS";
 
-        public MailService(DbWrapper dbWrapper)
+        public MailService(DbWrapper dbWrapper, string smtpServer, int smtpPort, string smtpUsername, string smtpPassword)
         {
             _dbWrapper = dbWrapper;
+            _smtpServer = smtpServer;
+            _smtpPort = smtpPort;
+            _smtpUsername = smtpUsername;
+            _smtpPassword = smtpPassword;
         }
+
 
         public async Task EnviarMailCancelacionTurno(int id)
         {
