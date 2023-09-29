@@ -9,17 +9,17 @@
 <html lang='en'>
 <head>
     <meta charset='utf-8' />
-    <link href="~/css/sb-admin-2.min.css" rel="stylesheet">
+    <link href="~/css/sb-admin-2.css" rel="stylesheet">
     <link href="~/css/sweetalert2.min.css" rel="stylesheet">
     <link href="~/css/event-calendar.min.css" rel="stylesheet">
 </head>
 <body>
     <style>
-               @@media (max-width: 768px) {
-          .event-calendar {
-            transform: scale(1.2); /* Ajusta el valor según sea necesario */
-            transform-origin: top left;
-          }
+        @@media (max-width: 768px) {
+            .event-calendar {
+                transform: scale(1.2); /* Ajusta el valor según sea necesario */
+                transform-origin: top left;
+            }
         }
 
     </style>
@@ -75,8 +75,9 @@
                                         <div class="dropdown-divider"></div>
                                         <div class="dropdown-header">Acciones:</div>
                                         <a class="dropdown-item" v-on:click="exportarCalendar()">Exportar a Calendar</a>
-@*                                        <a class="dropdown-item">Exportar a Excel</a>
-*@                                    </div>
+                                        @*                                        <a class="dropdown-item">Exportar a Excel</a>
+                                *@
+                                    </div>
                                 </div>
                             </div>
 
