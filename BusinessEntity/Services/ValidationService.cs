@@ -21,13 +21,24 @@ namespace BusinessEntity.Services
     {
         private DbWrapper _dbWrapper;
         private readonly DateTime fechaActual = DateTime.Now;
+        private readonly MailService _mailService;
 
-
-        public ValidationService(DbWrapper dbWrapper)
+        public ValidationService(DbWrapper dbWrapper, MailService mailService)
         {
             _dbWrapper = dbWrapper;
+            _mailService = mailService;
+        }
+        #region recuperar clave
+
+
+        public async Task RecuperarClave(RequestRecuperarClave model)
+        {
+
+            //var Admin = await _dbWrapper.GetPasswordUser(model.email);
+
         }
 
+        #endregion
         #region Validar Admin
         public async Task<bool> ValidateAdmin(string user)
         {

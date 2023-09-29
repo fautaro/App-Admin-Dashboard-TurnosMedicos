@@ -324,9 +324,19 @@ namespace BusinessEntity.Services
         {
             bool Success;
 
-            Success = await _dbWrapper.CancelarTurnoById(id);
+            try
+            {
 
+                Success = await _dbWrapper.CancelarTurnoById(id);
+                await _mailService.EnviarMailCancelacionTurno(id);
+
+            }
+            catch (Exception ex)
+            {
+                Success = false;
+            }
             return Success;
+
         }
 
 

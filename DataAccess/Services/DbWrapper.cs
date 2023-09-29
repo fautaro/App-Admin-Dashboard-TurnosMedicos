@@ -86,7 +86,36 @@ namespace DataAccess.Services
             return Turnos;
         }
         #endregion
+        #region MailService
+        public async Task<Turno> GetDatosTurno (int id)
+        {
+            try
+            {
+                var Turno = await _dbContext.Turno.Where(e => e.Turno_Id == id).FirstOrDefaultAsync();
 
+                return Turno;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+        #endregion
+        #region Recuperar Clave
+        //public async Task<string> GetPasswordUser(string email)
+        //{
+        //    try
+        //    {
+        //        var clave = await _dbContext.
+        //    }
+        //    catch (Exception)
+        //    {
+
+        //        throw;
+        //    }
+        //}
+        #endregion
         #region Admin Service
 
         //Guardar Horarios
