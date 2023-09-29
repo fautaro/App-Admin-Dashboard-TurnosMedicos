@@ -323,7 +323,7 @@ namespace BusinessEntity.Services
 
         public async Task<bool> CancelarTurno(int id)
         {
-            bool Success;
+            bool Success = false;
 
             try
             {
@@ -331,12 +331,18 @@ namespace BusinessEntity.Services
                 Success = await _dbWrapper.CancelarTurnoById(id);
                 await _dbWrapper.GuardarEvento("Email", $"Turno {id} cancelado correctamente", "");
 
-                await _mailService.EnviarMailCancelacionTurno(id);
+                if (Success)
+                {
+                    await _mailService.EnviarMailCancelacionTurno(id);
+
+                }
+
 
             }
             catch (Exception ex)
             {
-                Success = false;
+                await _dbWrapper.GuardarEvento("Email", ex.Message, "");
+
             }
             return Success;
 

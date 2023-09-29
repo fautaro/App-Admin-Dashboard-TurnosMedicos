@@ -36,34 +36,34 @@ namespace BusinessEntity.Services
                 if (DatosTurno != null)
                 {
                     var Profesional = await _dbWrapper.GetProfesionalById(DatosTurno.Profesional_Id);
-                    string Body = @"<!DOCTYPE html>
+                    string Body = $@"<!DOCTYPE html>
                 <html>
                 <head>
                     <link rel=""stylesheet"" href=""https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"">
                     <link href=""https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Jost:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"" rel=""stylesheet"">
                     <style>
-                        body {
+                        body {{
                             font-family: Arial, sans-serif;
-                        }
-                        .container {
+                        }}
+                        .container {{
                             max-width: 600px;
                             margin: 0 auto;
                             padding: 20px;
                             border: 1px solid #ccc;
                             border-radius: 5px;
                             background-color: #37517e;
-                        }
-                        .header {
+                        }}
+                        .header {{
                             text-align: center;
                             background-color: #37517e;
                             color: white;
                             padding: 10px;
                             border-radius: 5px 5px 0 0;
-                        }
-                        .content {
+                        }}
+                        .content {{
                             padding: 20px;
-                        }
-                        .sidebar-brand-text {
+                        }}
+                        .sidebar-brand-text {{
                             font-family: Jost;
                             font-weight: 400;
                             color: white;
@@ -71,7 +71,7 @@ namespace BusinessEntity.Services
                             text-align: center;
                             background-color: #37517e;
                             margin-bottom: 30px;
-                        }
+                        }}
                     </style>
                 </head>
                 <body style=""font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 20px;"">
@@ -85,8 +85,8 @@ namespace BusinessEntity.Services
                             <p>Lamentamos informarte que tu turno ha sido cancelado.</p>
                             <p style=""margin-bottom: 25px;"">A continuación, los detalles del turno cancelado:</p>
                             <ul style=""list-style-type: none; padding-left: 0; margin-bottom: 25px;"">
-                                <li><strong>Fecha y Hora:</strong> {FechaHora}</li>
-                                <li><strong>Profesional:</strong> {profesional}</li>
+                                <li><strong>Fecha y Hora:</strong> ${DatosTurno.FechaHora}</li>
+                                <li><strong>Profesional:</strong> ${Profesional.Nombre} {Profesional.Apellido}</li>
                             </ul>
                         </div>
                         <div style=""margin-top: 50px;"">
@@ -144,7 +144,6 @@ namespace BusinessEntity.Services
             catch (Exception ex)
             {
                 await _dbWrapper.GuardarEvento("Email", ex.Message, "");
-                throw;
             }
 
 

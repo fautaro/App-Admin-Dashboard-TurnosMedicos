@@ -412,6 +412,8 @@ namespace DataAccess.Services
             }
             catch (Exception ex)
             {
+                await GuardarEvento("Turno", ex.Message, "");
+
                 return false;
                 throw;
             }
@@ -566,7 +568,7 @@ namespace DataAccess.Services
                 var turnoExistente = await _dbContext.Turno
                     .AnyAsync(e => e.Profesional_Id == profesional_Id &&
                                    e.Email == email &&
-                                   e.FechaHora >= primerDiaSemana && e.FechaHora <= ultimoDiaSemana && e.Activo);
+                                   e.FechaHora >= primerDiaSemana && e.FechaHora <= ultimoDiaSemana && e.FechaHora > fechaActual && e.Activo);
 
                 return turnoExistente;
             }
