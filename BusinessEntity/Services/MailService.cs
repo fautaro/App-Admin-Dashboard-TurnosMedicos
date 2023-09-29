@@ -30,12 +30,13 @@ namespace BusinessEntity.Services
         public async Task EnviarMailCancelacionTurno(int id)
         {
 
-
-            var DatosTurno = await _dbWrapper.GetDatosTurno(id);
-            if (DatosTurno != null)
+            try
             {
-                var Profesional = await _dbWrapper.GetProfesionalById(DatosTurno.Profesional_Id);
-                string Body = @"<!DOCTYPE html>
+                var DatosTurno = await _dbWrapper.GetDatosTurno(id);
+                if (DatosTurno != null)
+                {
+                    var Profesional = await _dbWrapper.GetProfesionalById(DatosTurno.Profesional_Id);
+                    string Body = @"<!DOCTYPE html>
                 <html>
                 <head>
                     <link rel=""stylesheet"" href=""https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"">
@@ -72,11 +73,10 @@ namespace BusinessEntity.Services
                             margin-bottom: 30px;
                         }
                     </style>
-                    <link href=""https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"" rel=""stylesheet"">
                 </head>
                 <body style=""font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 20px;"">
                     <div style=""max-width: 600px; margin: 0 auto; background-color: white; font-weight: 500; padding: 20px; border-radius: 10px; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);"">
-                        <div class=""sidebar-brand-text mx-3"">AGENDARIO</div>
+                        <div class=""sidebar-brand-text mx-3"" style=""font-family: Jost;font-weight: 400;color: white;font-size: 24px;text-align: center;background-color: #37517e;margin-bottom: 30px;"">AGENDARIO</div>
                         <div style=""text-align: center;"">
                             <h2 style=""color: #37517e;"">¡Turno Cancelado!</h2>
                         </div>
@@ -97,7 +97,7 @@ namespace BusinessEntity.Services
                 </body>
                 </html>";
 
-                var ics = $@"BEGIN:VCALENDAR
+                    var ics = $@"BEGIN:VCALENDAR
                              VERSION:2.0
                              PRODID:-//ical.marudot.com//iCal Event Maker
                              CALSCALE:GREGORIAN
@@ -112,37 +112,46 @@ namespace BusinessEntity.Services
                              END:VEVENT
                              END:VCALENDAR";
 
-                using (var client = new SmtpClient(_smtpServer, _smtpPort))
-                {
-                    client.UseDefaultCredentials = false;
-                    client.Credentials = new NetworkCredential(_smtpUsername, _smtpPassword);
-                    client.EnableSsl = true;
-
-
-                    var message = new MailMessage
+                    using (var client = new SmtpClient(_smtpServer, _smtpPort))
                     {
-                        From = new MailAddress("info@agendario.ar"),
-                        Subject = "Turno cancelado - Agendario",
-                        Body = Body,
-                        IsBodyHtml = true
-                    };
-                    message.To.Add(DatosTurno.Email);
-
-                    var icsContent = ics;
-                    var icsBytes = Encoding.UTF8.GetBytes(icsContent);
-                    var memoryStream = new MemoryStream(icsBytes);
-
-                    // Adjuntar el archivo .ics al correo
-                    var attachment = new Attachment(memoryStream, "event.ics", "text/calendar");
-                    message.Attachments.Add(attachment);
-                    await client.SendMailAsync(message);
+                        client.UseDefaultCredentials = false;
+                        client.Credentials = new NetworkCredential(_smtpUsername, _smtpPassword);
+                        client.EnableSsl = true;
 
 
+                        var message = new MailMessage
+                        {
+                            From = new MailAddress("info@agendario.ar"),
+                            Subject = "Turno cancelado - Agendario",
+                            Body = Body,
+                            IsBodyHtml = true
+                        };
+                        message.To.Add(DatosTurno.Email);
 
+                        var icsContent = ics;
+                        var icsBytes = Encoding.UTF8.GetBytes(icsContent);
+                        var memoryStream = new MemoryStream(icsBytes);
+
+                        // Adjuntar el archivo .ics al correo
+                        var attachment = new Attachment(memoryStream, "event.ics", "text/calendar");
+                        message.Attachments.Add(attachment);
+                        await client.SendMailAsync(message);
+                        await _dbWrapper.GuardarEvento("Email", $"Mail de cancelacion de turno {id} enviado a{DatosTurno.Email}", "");
+
+                    }
                 }
             }
+            catch (Exception ex)
+            {
+                await _dbWrapper.GuardarEvento("Email", ex.Message, "");
+                throw;
+            }
+
+
 
 
         }
     }
+
+
 }

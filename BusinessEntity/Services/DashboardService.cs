@@ -39,6 +39,8 @@ namespace BusinessEntity.Services
             }
             catch (Exception ex)
             {
+                await _dbWrapper.GuardarEvento("Notificacion", $"Error al marcar notificaciones como leidas: {ex}", "");
+
                 return false;
             }
         }
@@ -54,6 +56,7 @@ namespace BusinessEntity.Services
             }
             catch (Exception ex)
             {
+                await _dbWrapper.GuardarEvento("Notificacion", $"Error al obtener notificaciones: {ex}", "");
 
                 throw;
             }
@@ -83,6 +86,7 @@ namespace BusinessEntity.Services
             }
             catch (Exception ex)
             {
+                await _dbWrapper.GuardarEvento("Notificacion", $"Error al obtener detalle notificaciones: {ex}", "");
 
                 throw;
             }
@@ -106,6 +110,8 @@ namespace BusinessEntity.Services
 
             catch (Exception ex)
             {
+                await _dbWrapper.GuardarEvento("Notificacion", $"Error al borrar notificaciones: {ex}", "");
+
                 return false;
                 throw;
             }

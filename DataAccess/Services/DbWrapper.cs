@@ -21,7 +21,25 @@ namespace DataAccess.Services
             _dbContext = dbContext;
         }
         #region Metodos Generales
+        public async Task GuardarEvento(string? Entidad, string Detalle, string? Usuario_Id)
+        {
+            Evento evento = new Evento();
+            try
+            {
+                evento.Entidad = Entidad;
+                evento.Detalle = Detalle;
+                evento.Usuario_Id = Usuario_Id;
+                evento.FechaHora = DateTime.Now;
 
+                _dbContext.Evento.AddAsync(evento);
+                _dbContext.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+        }
         public async Task<Administrador> GetAdmin(string user)
         {
             try
@@ -388,6 +406,7 @@ namespace DataAccess.Services
                 TurnoACancelar.Activo = false;
                 _dbContext.Turno.Update(TurnoACancelar);
                 await _dbContext.SaveChangesAsync();
+
 
                 return true;
             }

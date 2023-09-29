@@ -90,6 +90,8 @@ namespace BusinessEntity.Services
             }
             catch (Exception ex)
             {
+                await _dbWrapper.GuardarEvento("Admin", $"Error al crear usuario: {ex}", "");
+
                 return false;
                 throw;
             }
@@ -126,6 +128,8 @@ namespace BusinessEntity.Services
             }
             catch (Exception ex)
             {
+                await _dbWrapper.GuardarEvento("Turno", $"Error al obtener datos de nuevo usuario: {ex}", "");
+
                 response.Success = false;
                 return response;
                 throw;

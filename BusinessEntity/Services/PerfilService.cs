@@ -52,6 +52,7 @@ namespace BusinessEntity.Services
             }
             catch (Exception ex) 
             {
+                await _dbWrapper.GuardarEvento("Perfil Publico", $"Error al guardar perfil público: {ex}", "");
 
                 throw;
             }

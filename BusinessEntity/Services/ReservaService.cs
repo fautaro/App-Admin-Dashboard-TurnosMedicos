@@ -78,6 +78,7 @@ namespace BusinessEntity.Services
             }
             catch (Exception ex)
             {
+                await _dbWrapper.GuardarEvento("Ics", $"Error al crear Ics: {ex}", "");
                 throw;
                 // Manejar excepciones si es necesario
             }
@@ -328,6 +329,8 @@ namespace BusinessEntity.Services
             {
 
                 Success = await _dbWrapper.CancelarTurnoById(id);
+                await _dbWrapper.GuardarEvento("Email", $"Turno {id} cancelado correctamente", "");
+
                 await _mailService.EnviarMailCancelacionTurno(id);
 
             }
@@ -476,6 +479,7 @@ namespace BusinessEntity.Services
 
                         };
                         var TurnoGeneradoDB = await _dbWrapper.AddTurno(turno);
+                        await _dbWrapper.GuardarEvento("Turno", $"Turno {TurnoGeneradoDB} creado por profesional {datosTurno.ProfesionalId} guardado correctamente", "");
 
                         response.Success = true;
                         response.Reserva_Id = TurnoGeneradoDB.Turno_Id;
@@ -503,6 +507,8 @@ namespace BusinessEntity.Services
             }
             catch (Exception ex)
             {
+                await _dbWrapper.GuardarEvento("Turno", $"Error al crear turno manual profesional: {ex}", "");
+
                 ResponseDatosTurno response = new ResponseDatosTurno();
 
                 response.Success = false;
