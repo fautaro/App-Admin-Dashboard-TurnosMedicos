@@ -45,13 +45,12 @@ namespace BusinessEntity.Services
                 <html>
                 <head>
                     <link rel=""stylesheet"" href=""https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"">
-                    <link href=""https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Jost:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"" rel=""stylesheet"">
                     <style>
                         body {{
                             font-family: Arial, sans-serif;
                         }}
                         .container {{
-                            max-width: 600px;
+                            width: 600px;
                             margin: 0 auto;
                             padding: 20px;
                             border: 1px solid #ccc;
@@ -80,10 +79,12 @@ namespace BusinessEntity.Services
                     </style>
                 </head>
                 <body style=""font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 20px;"">
-                    <div style=""max-width: 600px; margin: 0 auto; background-color: white; font-weight: 500; padding: 20px; border-radius: 10px; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);"">
-                        <div class=""sidebar-brand-text mx-3"" style=""font-family: Jost;font-weight: 400;color: white;font-size: 24px;text-align: center;background-color: #37517e;margin-bottom: 30px;"">AGENDARIO</div>
+                    <div style=""width: 600px; margin: 0 auto; background-color: white; font-weight: 500; padding: 20px; border-radius: 10px; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);"">
+                                <div style=""background-color: #37517e; text-align: center; padding: 15px; border-radius: 5px; margin-bottom: 30px;"">
+            <img src=""https://i.ibb.co/dQYtnwL/logodef.png"" alt=""logodef"" border=""0"" style=""display: block; margin: 0 auto; width: 120px; height: auto;"">
+        </div>
                         <div style=""text-align: center;"">
-                            <h2 style=""color: #37517e;"">¡Turno Cancelado!</h2>
+                            <h3 style=""color: #37517e;"">¡Turno Cancelado!</h2>
                         </div>
                         <div style=""margin-top: 20px;"">
                             <p>Hola,</p>
